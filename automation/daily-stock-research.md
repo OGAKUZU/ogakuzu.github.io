@@ -66,6 +66,37 @@ EDINET API (api.edinet-fsa.go.jp) は海外IPからのアクセスを遮断し�
   MA75（75日移動平均線）を自分の目で確認してから
 - 未公表情報は扱わない（公開情報のみ）。末尾に免責事項を明記
 
+## 保険: GitHub Actions版バックアップ
+
+Claude の課金が切れて Routine が止まった場合に備えたバックアップを
+リポジトリに同梱しています（普段は休眠していて、料金はかかりません）。
+
+- **仕組み**: `.github/workflows/daily-stock-research.yml` が毎日
+  UTC 20:00（日本時間 朝5時）に `automation/run_research.py` を実行。
+  Claude API のWeb検索ツールで同じ調査を行い、レポートを
+  `reports/YYYY-MM-DD.md` としてコミットする（スマホのGitHubアプリや
+  リポジトリページから読める）
+- **休眠条件**: リポジトリシークレット `ANTHROPIC_API_KEY` が未設定の間は
+  何もせずスキップされる
+
+### 有効化する手順（3ステップ）
+
+1. https://console.anthropic.com でAPIキーを発行（従量課金。クレジット
+   を事前チャージする方式なので使いすぎの心配が少ない）
+2. GitHubリポジトリの Settings → Secrets and variables → Actions →
+   New repository secret で `ANTHROPIC_API_KEY` を登録
+3. このブランチを main にマージ（scheduleトリガーはデフォルトブランチ
+   でのみ動作するため）。初回は Actions タブ → daily-stock-research →
+   Run workflow で手動実行して動作確認する
+
+### 費用と注意
+
+- モデルは既定で claude-opus-4-8（環境変数 `RESEARCH_MODEL` で変更可）。
+  1回の実行はWeb検索約20回＋レポート生成で、目安として数十円〜百数十円
+  程度/日（為替・調査量により変動。初回実行後にconsoleの使用量で確認を）
+- このリポジトリが公開（public）の場合、`reports/` のレポートも公開される。
+  非公開にしたい場合はリポジトリをprivateにするか、別リポジトリに分離する
+
 ## 変更・停止したいとき
 
 Claude Code のセッションで以下のように依頼してください。

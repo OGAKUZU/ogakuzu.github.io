@@ -1,0 +1,67 @@
+# 日本株モーニングリサーチ（保険用バックアップ）
+#
+# 普段は Claude Code の Routine が毎朝5時(JST)に配信するため、
+# このワークフローは ANTHROPIC_API_KEY シークレットが未設定の間は
+# 何もせずスキップされる（休眠状態）。
+#
+# 有効化する手順:
+#   1. console.anthropic.com でAPIキーを発行（従量課金）
+#   2. リポジトリの Settings → Secrets and variables → Actions で
+#      ANTHROPIC_API_KEY を登録
+#   3. このブランチを main にマージ（scheduleはデフォルトブランチでのみ動く）
+# レポートは reports/YYYY-MM-DD.md にコミットされる。
+
+name: daily-stock-research
+
+on:
+  schedule:
+    - cron: "0 20 * * *" # 毎日 UTC 20:00 = 日本時間 翌朝5:00
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+jobs:
+  research:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check API key
+        id: check
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          if [ -z "$ANTHROPIC_API_KEY" ]; then
+            echo "enabled=false" >> "$GITHUB_OUTPUT"
+            echo "::notice::ANTHROPIC_API_KEY 未設定のためスキップ（保険は休眠中）"
+          else
+            echo "enabled=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - uses: actions/checkout@v4
+        if: steps.check.outputs.enabled == 'true'
+
+      - uses: actions/setup-python@v5
+        if: steps.check.outputs.enabled == 'true'
+        with:
+          python-version: "3.12"
+
+      - name: Run research
+        if: steps.check.outputs.enabled == 'true'
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          pip install -q anthropic
+          python automation/run_research.py
+
+      - name: Commit report
+        if: steps.check.outputs.enabled == 'true'
+        run: |
+          git config user.name "stock-research-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add reports/
+          if git diff --cached --quiet; then
+            echo "変更なし"
+          else
+            git commit -m "モーニングリサーチ $(TZ=Asia/Tokyo date +%Y-%m-%d)"
+            git push
+          fi
