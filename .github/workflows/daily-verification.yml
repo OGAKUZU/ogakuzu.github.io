@@ -1,0 +1,61 @@
+# 朝イチ候補のアフター検証（保険用バックアップ）
+#
+# daily-stock-research.yml と同じく、ANTHROPIC_API_KEY シークレットが
+# 未設定の間は何もせずスキップ（休眠状態）。有効化手順も同じ。
+# 平日18時(JST)に朝のレポートの候補を検証し、
+# reports/verification-ledger.csv と reports/朝イチ検証台帳.xlsx を更新する。
+
+name: daily-verification
+
+on:
+  schedule:
+    - cron: "0 9 * * 1-5" # 平日 UTC 9:00 = 日本時間 18:00
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check API key
+        id: check
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          if [ -z "$ANTHROPIC_API_KEY" ]; then
+            echo "enabled=false" >> "$GITHUB_OUTPUT"
+            echo "::notice::ANTHROPIC_API_KEY 未設定のためスキップ（保険は休眠中）"
+          else
+            echo "enabled=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - uses: actions/checkout@v4
+        if: steps.check.outputs.enabled == 'true'
+
+      - uses: actions/setup-python@v5
+        if: steps.check.outputs.enabled == 'true'
+        with:
+          python-version: "3.12"
+
+      - name: Run verification
+        if: steps.check.outputs.enabled == 'true'
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          pip install -q anthropic openpyxl
+          python automation/run_verification.py
+
+      - name: Commit ledger
+        if: steps.check.outputs.enabled == 'true'
+        run: |
+          git config user.name "stock-research-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add reports/
+          if git diff --cached --quiet; then
+            echo "変更なし"
+          else
+            git commit -m "アフター検証 $(TZ=Asia/Tokyo date +%Y-%m-%d)"
+            git push
+          fi
