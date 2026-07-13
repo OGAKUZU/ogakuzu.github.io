@@ -11,7 +11,7 @@ Claude Code の Routine（定期実行トリガー）として動作します。
 
 - **朝のトリガーID**: `trig_01DsAFsMagM1Xha4zKksCKcC`（v3）
   （旧v1/v2はカテゴリ追加のたびに削除・再作成済み）
-- **検証トリガーID**: `trig_01GZcyhjbiV8Q9q23JUu4d4g`
+- **検証トリガーID**: `trig_01KbpBt3YMGzAmP5BkKjj5mB`
   （平日 UTC 9:00 = 日本時間 18:00。朝イチ候補を当日の値動きで答え合わせし、
   Excel台帳「朝イチ検証台帳 YYYY-MM-DD.xlsx」をドライブに保存。
   プロンプト全文は automation/verification-prompt.md）
