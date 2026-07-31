@@ -31,8 +31,12 @@ except ImportError:
     print("requests が必要です。コマンドプロンプトで:  pip install requests")
     sys.exit(1)
 
-LM_URL = os.environ.get("LMSTUDIO_URL", "http://localhost:1234/v1/chat/completions")
+LM_BASE = os.environ.get("LMSTUDIO_BASE", "http://127.0.0.1:1234/v1")
+LM_URL = LM_BASE + "/chat/completions"
+LM_MODELS_URL = LM_BASE + "/models"
 EDINET_URL = "https://api.edinet-fsa.go.jp/api/v2/documents.json"
+
+_MODEL_CACHE = {"name": None}
 
 SYSTEM_PROMPT = """あなたは日本株の初心者向け解説アシスタントです。以下を必ず守ってください。
 1. 中学生にも分かる言葉で書く。専門用語には毎回カッコで一言説明を付ける（例:「進捗率（＝年間目標のうち何%まで稼いだか）」）。
@@ -87,8 +91,25 @@ PROMPTS = {
 }
 
 
-def ask_local_llm(prompt: str, temperature: float = 0.3) -> str:
+def detect_model() -> str:
+    """LM Studio に読み込まれているモデル名を自動取得する"""
+    if _MODEL_CACHE["name"]:
+        return _MODEL_CACHE["name"]
+    try:
+        r = requests.get(LM_MODELS_URL, timeout=15)
+        r.raise_for_status()
+        data = r.json().get("data", [])
+        if data:
+            _MODEL_CACHE["name"] = data[0].get("id", "")
+            return _MODEL_CACHE["name"]
+    except Exception:
+        pass
+    return ""
+
+
+def ask_local_llm(prompt: str, temperature: float = 0.3, model: str = "") -> str:
     """LM Studio のローカルサーバーに問い合わせる"""
+    model_name = model or detect_model()
     payload = {
         "messages": [
             {"role": "system", "content": SYSTEM_PROMPT},
@@ -97,14 +118,16 @@ def ask_local_llm(prompt: str, temperature: float = 0.3) -> str:
         "temperature": temperature,
         "stream": False,
     }
+    if model_name:
+        payload["model"] = model_name
     try:
         r = requests.post(LM_URL, json=payload, timeout=600)
         r.raise_for_status()
     except requests.exceptions.ConnectionError:
         return ("❌ LM Studio につながりません。確認してください:\n"
                 "  1. LM Studio が起動しているか\n"
-                "  2. 左の「Developer(</>)」タブ →「Start Server」を押したか\n"
-                "  3. モデルが読み込まれているか")
+                "  2. 左の「Developer(</>)」タブ →「Start Server」を押したか（Status: Running）\n"
+                "  3. モデルが読み込まれているか（「+ Load Model」または Ctrl+L）")
     except Exception as e:
         return f"❌ エラー: {e}"
     try:
@@ -148,7 +171,32 @@ def main():
     p.add_argument("--edinet", action="store_true", help="EDINETの大量保有報告書を取得")
     p.add_argument("--date", help="EDINETの対象日 YYYY-MM-DD（既定=今日）")
     p.add_argument("--analyze", action="store_true", help="EDINET結果をローカルLLMで解説")
+    p.add_argument("--model", default="", help="使うモデル名（省略時は読み込み済みモデルを自動検出）")
+    p.add_argument("--check", action="store_true", help="LM Studioとの接続確認だけ行う")
     args = p.parse_args()
+
+    # --- 接続確認モード ---
+    if args.check:
+        print(f"接続先: {LM_BASE}")
+        try:
+            r = requests.get(LM_MODELS_URL, timeout=15)
+            r.raise_for_status()
+            data = r.json().get("data", [])
+        except requests.exceptions.ConnectionError:
+            print("❌ サーバーに届きません。LM Studioの Developer(</>) タブで")
+            print("   「Start Server」を押して Status: Running にしてください。")
+            return
+        except Exception as e:
+            print(f"❌ エラー: {e}")
+            return
+        if data:
+            print(f"✅ 接続OK。利用できるモデル: {data[0].get('id','')}")
+            if len(data) > 1:
+                print(f"   （他{len(data)-1}件。--model で指定できます）")
+        else:
+            print("⚠️ サーバーは動いていますが、モデルが読み込まれていません。")
+            print("   LM Studioで「+ Load Model」(Ctrl+L)からモデルを読み込んでください。")
+        return
 
     # --- EDINETモード ---
     if args.edinet:
@@ -179,7 +227,7 @@ def main():
             prompt = PROMPTS["a"].format(
                 text="以下は本日EDINETに提出された大量保有報告書の一覧です。"
                      "投資ファンドやアクティビスト（＝物言う株主）による提出があれば指摘してください。\n" + joined)
-            print(ask_local_llm(prompt))
+            print(ask_local_llm(prompt, model=args.model))
         return
 
     # --- 通常モード ---
@@ -196,7 +244,7 @@ def main():
         sys.exit(1)
 
     print("\n🤖 ローカルLLMで解読中...(30秒〜数分かかります)\n" + "=" * 50)
-    print(ask_local_llm(PROMPTS[args.mode].format(text=text)))
+    print(ask_local_llm(PROMPTS[args.mode].format(text=text), model=args.model))
     print("=" * 50)
     print("※ローカルLLMの出力です。数字は必ず原文でご確認ください。投資判断はご自身の責任で。")
 

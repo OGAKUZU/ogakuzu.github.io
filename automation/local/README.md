@@ -34,6 +34,15 @@ pip install requests
 cd C:\kabu
 ```
 
+
+### まず接続確認（うまくいかない時はこれ）
+```
+python kabu.py --check
+```
+- `✅ 接続OK。利用できるモデル: ...` → 準備完了
+- `⚠️ モデルが読み込まれていません` → LM Studioで **「+ Load Model」(Ctrl+L)**
+- `❌ サーバーに届きません` → Developer タブで **Start Server**
+
 ### 開示・決算を解読する（いちばん使う）
 ```
 python kabu.py
