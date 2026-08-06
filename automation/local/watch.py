@@ -43,12 +43,25 @@ UA = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"}
 # 株価が動きやすい重要キーワード（優先度high）
 HOT_WORDS = [
     "上方修正", "業績予想の修正", "業績予想及び配当予想の修正",
-    "自己株式の取得", "自社株買い", "配当予想の修正", "増配",
-    "株式分割", "公開買付", "TOB", "業務提携", "資本提携",
-    "受注", "M&A", "子会社化", "特別利益",
+    "配当予想の修正", "増配", "株式分割", "公開買付", "TOB",
+    "業務提携", "資本提携", "受注", "子会社化", "特別利益",
+    "自己株式の取得に係る事項", "自己株式取得に係る事項", "自社株買い",
+    "株主優待", "月次",
 ]
-# 悪材料（下げやすい）
-BAD_WORDS = ["下方修正", "減配", "無配", "特別損失", "上場廃止", "監理銘柄", "公募増資", "第三者割当"]
+# 悪材料（下げやすい）※特別調査委員会・決算延期は最重要級の警戒サイン
+BAD_WORDS = [
+    "下方修正", "減配", "無配", "特別損失", "上場廃止", "監理銘柄",
+    "公募増資", "第三者割当", "特別調査委員会", "調査委員会の設置",
+    "決算発表の延期", "提出期限延長", "不適切", "不正", "課徴金",
+    "業務停止", "民事再生", "会社更生", "債務超過",
+]
+# 定例・事務的でノイズになりやすいもの（既定では非表示。--all で表示）
+NOISE_WORDS = [
+    "に関する日々の開示事項", "譲渡制限付株式", "自己株式取得状況",
+    "自己株式の取得状況", "ストックオプション", "新株予約権の行使",
+    "決算説明資料", "決算説明会資料", "補足資料", "FACT BOOK", "ファクトブック",
+    "コーポレート・ガバナンス", "定款", "臨時報告書", "変更報告書",
+]
 
 SOURCES = """
 ━━━ 一次情報リンク集（ニュースより速い情報源） ━━━
@@ -225,10 +238,17 @@ def ask_llm(text: str) -> str:
 
 # ────────────────────────── 表示 ──────────────────────────
 
+def is_noise(title: str) -> bool:
+    """定例・事務的な開示か（既定では非表示）"""
+    return any(w in title for w in NOISE_WORDS)
+
+
 def classify(title: str) -> str:
     for w in BAD_WORDS:
         if w in title:
             return "BAD"
+    if is_noise(title):
+        return ""
     for w in HOT_WORDS:
         if w in title:
             return "HOT"
@@ -267,6 +287,7 @@ def main():
     p.add_argument("--interval", type=int, default=60, help="監視間隔（秒。既定60）")
     p.add_argument("--filter", help="この文字を含む開示だけ表示")
     p.add_argument("--hot", action="store_true", help="重要キーワードに一致するものだけ表示")
+    p.add_argument("--all", action="store_true", help="定例・事務的な開示も含めてすべて表示")
     p.add_argument("--beep", action="store_true", help="重要な新着で音を鳴らす")
     p.add_argument("--edinet", action="store_true", help="EDINETの大量保有報告書を取得")
     p.add_argument("--date", help="対象日 YYYY-MM-DD（既定=今日）")
@@ -321,6 +342,8 @@ def main():
 
         # 絞り込み
         view = items
+        if not args.all:
+            view = [i for i in view if not is_noise(i[3]) or classify(i[3]) == "BAD"]
         if args.filter:
             view = [i for i in view if args.filter in i[3]]
         if args.hot:
