@@ -13,6 +13,8 @@ AIは使わないので軽い（メモリ数十MB）。つけっぱなしにで�
   python collect.py --pdf           # 重要な開示のPDFも自動ダウンロード
   python collect.py --edinet        # EDINETの大量保有報告書も収集（要APIキー）
   python collect.py --report        # 今日集めた分の要約を表示するだけ
+  python collect.py --once --outdir "C:\\Users\\ytata\\マイドライブ\\kabu-data"
+                                    # Googleドライブ同期フォルダに保存（Claudeが読めるようになる）
 
 保存先（自動で作られます）:
   data/tdnet_YYYYMMDD.csv   … その日の全開示（Excelでそのまま開けます）
@@ -44,6 +46,18 @@ DATA_DIR = os.path.join(BASE, "data")
 PDF_DIR = os.path.join(BASE, "pdf")
 LOG_PATH = os.path.join(BASE, "collect.log")
 IMPORTANT_CSV = os.path.join(DATA_DIR, "important.csv")
+
+
+def set_output_dir(outdir: str):
+    """保存先を差し替える（Googleドライブ同期フォルダを指定するとClaudeが読めます）
+
+    優先順位: --outdir 引数 > 環境変数 KABU_DATA_DIR > 既定(スクリプトと同じ場所/data)
+    """
+    global DATA_DIR, PDF_DIR, IMPORTANT_CSV
+    outdir = os.path.expandvars(os.path.expanduser(outdir))
+    DATA_DIR = outdir
+    PDF_DIR = os.path.join(outdir, "pdf")
+    IMPORTANT_CSV = os.path.join(DATA_DIR, "important.csv")
 
 HOT_WORDS = [
     "上方修正", "業績予想の修正", "業績予想及び配当予想の修正",
@@ -308,7 +322,12 @@ def main():
     p.add_argument("--edinet", action="store_true", help="EDINET大量保有も収集")
     p.add_argument("--date", help="対象日 YYYY-MM-DD（既定=今日）")
     p.add_argument("--report", action="store_true", help="収集済みデータの要約を表示")
+    p.add_argument("--outdir", help="CSVの保存先フォルダ（Googleドライブ同期フォルダを指定するとClaudeが読めます）")
     args = p.parse_args()
+
+    outdir = args.outdir or os.environ.get("KABU_DATA_DIR")
+    if outdir:
+        set_output_dir(outdir)
 
     date_plain = (args.date or datetime.date.today().strftime("%Y-%m-%d")).replace("-", "")
 
