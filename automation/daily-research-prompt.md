@@ -1,3 +1,19 @@
+> ## ⚠️ 2026-08-25以降、正本はこちらではありません
+>
+> 手順の正本は **`.claude/skills/jp-stock-research/`**（Claude Codeのスキル）に移しました。
+> 日々の運用でこのファイルを読む必要はありません。`/jp-stock-research` で呼び出せます。
+>
+> | 探しているもの | 場所 |
+> |---|---|
+> | 手順の全体 | `.claude/skills/jp-stock-research/SKILL.md` |
+> | 期待度%の加減点表・40%ルール | `.claude/skills/jp-stock-research/references/scoring.md` |
+> | ボードの構成と書き方 | `.claude/skills/jp-stock-research/references/board-spec.md` |
+> | ID・パス・復旧手順 | `.claude/skills/jp-stock-research/references/operations.md` |
+>
+> このファイルは**他のAIサービスに手で貼り付けて使うため**、および経緯の記録として残しています。
+
+---
+
 # 日本株モーニングリサーチ v3 完全プロンプト（引き継ぎ用）
 
 これは毎朝5時のRoutineに設定されているプロンプトの完全なコピーです。
