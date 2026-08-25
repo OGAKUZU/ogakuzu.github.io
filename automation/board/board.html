@@ -163,32 +163,34 @@ footer{font-size:11px;color:var(--ink-3);line-height:1.65;border-top:1px solid v
 
   <div class="top">
     <h1>朝イチ判定ボード</h1>
-    <div class="stamp">次の寄り付き 8/26 (水)</div>
+    <div class="stamp">8/25 (火) 答え合わせ済み</div>
   </div>
 
-  <!-- ===== 判定 ===== -->
+  <!-- ===== 答え合わせ ===== -->
   <section class="verdict">
-    <div class="verdict-bar"></div>
+    <div class="verdict-bar" style="background:var(--up)"></div>
     <div class="verdict-in">
-      <div class="eyebrow">今日の判定</div>
-      <p class="verdict-line">ようす見の日</p>
-      <p class="verdict-why">見込みがいちばん高い株でも <b>40%</b>。<br>明日の夜に<b>大きなイベントが2つ</b>控えています。<b>買うなら少なめに。</b></p>
+      <div class="eyebrow">今日の結果</div>
+      <p class="verdict-line" style="color:var(--up)">日経 ＋328円<br><span style="font-size:.55em">私の判定は △ 半分正解</span></p>
+      <p class="verdict-why">
+        朝は「<b>ようす見の日</b>」と書きました。<b>買うのは止めませんでした</b>——ここは正解です。<br>
+        でも上がりました。<b>慎重に寄りすぎました。</b>
+      </p>
     </div>
   </section>
 
-  <!-- ===== 行動リスト ===== -->
   <section class="plan">
-    <div class="plan-h">📋 今日やること（この順番で）</div>
+    <div class="plan-h">🔍 何が起きたのか</div>
     <ol class="steps">
-      <li><b>9:00〜9:15 は何もしない。</b><span class="sub">朝いちばんは値段が荒れます。ここで買うと高値をつかみます。</span></li>
-      <li><b>9:15 に下の1銘柄だけ見る。</b><span class="sub">朝の最初の値段より上がっていれば候補。下なら見送り。</span></li>
-      <li><b>買うなら、いつもの半分の金額で。</b><span class="sub">ようす見の日なので、量を減らします。</span></li>
-      <li><b>注文を出す前に、やめる値段を決める。</b><span class="sub">決めてから買う。買ってから考えない。</span></li>
+      <li><b>上がった理由は、新しい good ニュースではありません。</b><span class="sub">「売られすぎた株が買い戻された」だけです。商いは少ないままでした。</span></li>
+      <li><b>これで3回目です。</b><span class="sub">8/20・8/21・8/25。6営業日のうち3回、同じ形で上がりました。</span></li>
+      <li><b>私は「良いニュースが出た株」ばかり探していました。</b><span class="sub">だから、この上がり方を毎回取り逃しています。</span></li>
+      <li><b>ルールを1つ足しました。</b><span class="sub">商いが少ない日は「売られすぎた株が戻っていないか」も必ず見る。</span></li>
     </ol>
   </section>
 
-  <!-- ===== 買う候補 ===== -->
-  <div class="sec-label">Buy list ／ 買うならこれ</div>
+  <!-- ===== 今朝の候補はどうなったか ===== -->
+  <div class="sec-label">Result ／ 今朝の候補の結果</div>
 
   <article class="card">
     <div class="card-top">
@@ -205,35 +207,32 @@ footer{font-size:11px;color:var(--ink-3);line-height:1.65;border-top:1px solid v
     <p class="why"><b>ずっと配当ゼロだった会社が、はじめて配当を出します。</b><br>会社が「これから毎年払える」と自信を持った合図です。</p>
 
     <div class="order">
-      <div class="oh">注文の作り方</div>
+      <div class="oh">結果</div>
       <dl>
-        <dt>買う時間</dt><dd>9:15 すぎ（朝いちばんは買わない）</dd>
-        <dt>買い方</dt><dd><b>値段を決めて注文</b>（成行はダメ）</dd>
-        <dt>金額</dt><dd>いつもの<b>半分</b></dd>
-        <dt class="stop">やめる値段</dt><dd class="stop">買った値段の <b>−4%</b></dd>
-        <dt class="take">利益の目安</dt><dd class="take"><b>+6%</b> か、その日の終わりで手じまい</dd>
-        <dt>買わない条件</dt><dd>朝の最初の値段が<b>前日より +8% 以上</b>なら見送り</dd>
+        <dt>朝の気配</dt><dd class="up"><b>2,578円（＋4.0%）</b>の買い気配</dd>
+        <dt>買わない条件</dt><dd>＋8%以上なら見送り → <b>かからず</b></dd>
+        <dt>終値</dt><dd class="na"><b>取得不可</b></dd>
       </dl>
+      <p class="why" style="padding-top:0"><b>終値は書きません。</b>調べた3つの情報源が、それぞれ違う数字を出していました。<b>どれかが正しくても、どれか分からないものは載せません。</b></p>
     </div>
   </article>
 
-  <!-- ===== 買わない ===== -->
-  <section class="no">
-    <div class="no-h">✋ 今日は買わないもの</div>
-    <ul>
-      <li><b>半導体</b> — 明日の夜にエヌビディアの決算。<b>結果を見ずに買うのは賭け</b>です</li>
-      <li><b>INPEX（1605）</b> — 原油が下がりました。<b>追い風が逆風に変わっています</b></li>
-      <li><b>JSH（150A）</b> — 材料が古すぎます（8月上旬）</li>
-      <li><b>ロジネットジャパン（9027）</b> — <b>札幌の取引所だけ</b>の株。売買が成立しません</li>
-      <li><b>急に上がっている、理由の分からない株</b></li>
-    </ul>
-  </section>
-
   <!-- ===== 相場 ===== -->
   <section class="strip">
-    <div class="cell"><span class="k">日経平均 8/25</span><span class="v na">集計中</span><span class="d na">引け後に更新</span></div>
+    <div class="cell"><span class="k">日経平均 8/25</span><span class="v up">65,856.43</span><span class="d up">＋328.34 (＋0.50%)</span></div>
     <div class="cell"><span class="k">日経平均 8/24</span><span class="v">65,528.09</span><span class="d dn">−488.27</span></div>
-    <div class="cell"><span class="k">NYダウ 8/24</span><span class="v up">＋182</span><span class="d na">水準は取得不可</span></div>
+    <div class="cell"><span class="k">上がった理由</span><span class="v" style="font-size:12px;font-family:inherit">売られすぎの<br>買い戻し</span><span class="d na">商いは低調</span></div>
+  </section>
+
+  <!-- ===== 明日 ===== -->
+  <section class="no">
+    <div class="no-h" style="color:var(--hold)">⚠️ 明日(8/26)は勝負の日ではありません</div>
+    <ul>
+      <li><b>明日の夜、エヌビディアの決算と米PCE</b>が出ます</li>
+      <li>東京がその結果を織り込むのは <b>8/27（木）の朝</b>です</li>
+      <li><b>明日、半導体を持ち越すのは「結果を見ずに賭ける」こと</b>になります</li>
+      <li>明日のボードは <b>朝6:15</b> に更新します</li>
+    </ul>
   </section>
 
   <!-- ===== イベント ===== -->
@@ -287,8 +286,10 @@ footer{font-size:11px;color:var(--ink-3);line-height:1.65;border-top:1px solid v
         <tr><td class="num">8/20</td><td>休む日</td><td class="up">日経 +1.4% ×</td></tr>
         <tr><td class="num">8/21</td><td>買っていい日</td><td class="up">日宣 +4.2% ◎</td></tr>
         <tr><td class="num">8/24</td><td>ようす見</td><td class="dn">日経 −0.7% ◎</td></tr>
+        <tr><td class="num">8/25</td><td>ようす見（全休にせず）</td><td class="up">日経 +0.5% △</td></tr>
       </table></div>
-      <p><b>5回中4回。</b>外した8/20をきっかけに、ルールを1つ足しました。</p>
+      <p><b>6回中4回◎、1回△、1回×。</b></p>
+      <p>8/20で外したあと「<b>自分で挙げた買い場の条件が出た日は、休む判定をやめる</b>」というルールを足しました。<b>8/21と8/25で2回とも効いています。</b></p>
     </div>
   </details>
 
