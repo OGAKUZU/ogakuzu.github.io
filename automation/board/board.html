@@ -145,35 +145,35 @@ footer{font-size:11px;color:var(--ink-3);line-height:1.65;border-top:1px solid v
 
   <div class="top">
     <h1>朝イチ判定ボード</h1>
-    <div class="stamp">2026-08-26 (水) 6:15</div>
+    <div class="stamp">8/26 (水) 答え合わせ済み</div>
   </div>
 
-  <!-- ===== 判定 ===== -->
+  <!-- ===== 答え合わせ ===== -->
   <section class="verdict">
-    <div class="verdict-bar"></div>
+    <div class="verdict-bar" style="background:var(--up)"></div>
     <div class="verdict-in">
-      <div class="eyebrow">今日の判定</div>
-      <p class="verdict-line">動いていい日<br><span style="font-size:.5em;color:var(--ink-2)">ただし、今日中に手じまい</span></p>
+      <div class="eyebrow">今日の結果</div>
+      <p class="verdict-line" style="color:var(--up)">日経 ＋405円<br><span style="font-size:.5em">私の判定は ◎ 当たり</span></p>
       <p class="verdict-why">
-        <b>昨日の宿題に答えが出ました。原油安は「中東の緊張がやわらいだ」ほうでした。</b><br>
-        米国はこれで3日続伸。<b>私が「買い場の条件」に挙げていたものが、はっきり出ています。</b>
+        朝は「<b>動いていい日</b>」と書きました。<b>日経は+0.62%で続伸、ミロクも大幅続伸</b>です。<br>
+        <b>でも、私の見落としが2つ見つかりました。</b>下に書きます。
       </p>
     </div>
   </section>
 
-  <!-- ===== 行動 ===== -->
+  <!-- ===== 反省 ===== -->
   <section class="plan">
-    <div class="plan-h">📋 今日やること（この順番で）</div>
+    <div class="plan-h">🔍 私の見落とし2つ</div>
     <ol class="steps">
-      <li><b>9:00〜9:15 は何もしない。</b><span class="sub">朝いちばんは値段が荒れます。</span></li>
-      <li><b>下の1銘柄が、前日終値からどれだけ上で始まったか見る。</b><span class="sub">これが今日いちばん大事な確認です。理由は下の「注文の作り方」に。</span></li>
-      <li><b>買うなら、いつもの半分〜7割の金額で。</b><span class="sub">今夜エヌビディアの決算があります。</span></li>
-      <li><b>今日の終わりまでに手じまう。</b><span class="sub">持ち越すと、結果を見ずに賭けることになります。</span></li>
+      <li><b>「4.7倍」の中身は、本業ではありませんでした。</b><span class="sub">持っていた株を売った利益（約22億円）と、補助金です。<b>来年も続く利益ではありません。</b></span></li>
+      <li><b>昨日つくったルールを、今日つかい忘れました。</b><span class="sub">「商いが少ない日は、売られすぎた株の戻りも見る」——今日がまさにその日で、実際に金融株と出遅れ株が買われました。</span></li>
+      <li><b>ルールを2つ足しました。</b><span class="sub">①一時的な利益による上方修正は減点 ②足したルールは翌日に必ず使ったか確認する</span></li>
+      <li><b>当たった判定もあります。</b><span class="sub">「昨日すでに上がっていたら見送り」と書いた注意は正しく、実際に昨日から上がっていました。</span></li>
     </ol>
   </section>
 
-  <!-- ===== 買う候補 ===== -->
-  <div class="sec-label">Buy list ／ 買うならこれ</div>
+  <!-- ===== 結果 ===== -->
+  <div class="sec-label">Result ／ 今朝の候補の結果</div>
 
   <article class="card">
     <div class="card-top">
@@ -190,50 +190,41 @@ footer{font-size:11px;color:var(--ink-3);line-height:1.65;border-top:1px solid v
     <p class="why"><b>「今年の利益は、思っていたより4.7倍多くなりそうです」と会社が発表しました。</b><br>しかも<b>21年ぶりの最高益</b>になる見込みです。</p>
 
     <div class="order">
-      <div class="oh">注文の作り方</div>
+      <div class="oh">結果</div>
       <dl>
-        <dt>買う時間</dt><dd>9:15 すぎ（朝いちばんは買わない）</dd>
-        <dt>買い方</dt><dd><b>値段を決めて注文</b>（成行はダメ）</dd>
-        <dt>金額</dt><dd>いつもの<b>半分〜7割</b></dd>
-        <dt class="stop">やめる値段</dt><dd class="stop">買った値段の <b>−4%</b></dd>
-        <dt class="take">利益の目安</dt><dd class="take"><b>+6%</b>、遅くとも<b>今日の終わりで手じまい</b></dd>
-        <dt>買わない条件</dt><dd>朝の最初の値段が<b>前日より +8% 以上</b>なら見送り</dd>
+        <dt>値動き</dt><dd class="up"><b>大幅続伸</b>（終値は取得不可）</dd>
+        <dt>昨日から</dt><dd><b>すでに上がっていました</b>＝場中の発表でした</dd>
+        <dt class="stop">中身</dt><dd class="stop"><b>本業ではなく、株の売却益と補助金</b></dd>
       </dl>
+      <p class="why" style="padding-top:0"><b>純利益 6.1億円 → 28.4億円</b>。増えた分のほとんどは<b>持っていた上場株2銘柄を売った利益（約22億円）と補助金</b>でした。<b>来年も続く利益ではありません。</b></p>
     </div>
   </article>
 
   <div class="ask">
-    <b>⚠️ 今日は1つだけ、私が確認できていないことがあります。</b><br>
-    <b>この発表が、昨日の何時に出たか分かりませんでした。</b>もし昨日の場中（9時〜15時）に出ていたなら、<b>昨日のうちに買われ終わっています</b>。<br><br>
-    <b>見分け方は簡単です。</b>チャートで<b>昨日の値動き</b>を見てください。<br>
-    ・昨日すでに大きく上がっている → <b>今日は見送り</b><br>
-    ・昨日はほとんど動いていない → <b>今日が本番</b>
+    <b>⚠️ ここが今日いちばんの学びです。</b><br><br>
+    「<b>利益4.7倍・21年ぶり最高益</b>」という見出しは、とても強く見えます。<br>
+    でも中身は<b>「持っていた株を売ったら儲かった」</b>でした。<br><br>
+    <b>本業（銃と工作機械をつくって売る）が良くなったわけではありません。</b><br>
+    だから<b>この利益は来年には消えます。</b><br><br>
+    <b>上方修正を見たら、必ず「本業で稼いだのか」を確かめてください。</b>ルールに追加しました（−10点）。
   </div>
-
-  <!-- ===== 買わない ===== -->
-  <section class="no">
-    <div class="no-h">✋ 今日は買わないもの</div>
-    <ul>
-      <li><b>半導体</b> — 今夜エヌビディアの決算。東京が織り込むのは<b>明日8/27の朝</b>です</li>
-      <li><b>持ち越し全般</b> — <b>今日は「日帰り」の日</b>。明日の朝は結果次第で大きく動きます</li>
-      <li><b>INPEX（1605）</b> — 原油が下がっています。<b>逆風</b>のままです</li>
-      <li><b>急に上がっている、理由の分からない株</b></li>
-    </ul>
-  </section>
 
   <!-- ===== 相場 ===== -->
   <section class="strip">
-    <div class="cell"><span class="k">日経平均 8/25</span><span class="v up">65,856.43</span><span class="d up">＋328.34</span></div>
+    <div class="cell"><span class="k">日経平均 8/26</span><span class="v up">66,262.16</span><span class="d up">＋405.73 (＋0.62%)</span></div>
+    <div class="cell"><span class="k">上がった中身</span><span class="v" style="font-size:12px;font-family:inherit">金融株と<br>出遅れ株</span><span class="d na">売買代金は4カ月ぶり低水準</span></div>
     <div class="cell"><span class="k">NYダウ 8/25</span><span class="v up">53,577.40</span><span class="d up">＋160.24 3日続伸</span></div>
-    <div class="cell"><span class="k">NASDAQ 8/25</span><span class="v up">26,151.30</span><span class="d up">＋171.11</span></div>
   </section>
 
-  <!-- ===== イベント ===== -->
-  <section class="events">
-    <div class="ev hot"><span class="when">今夜</span><span class="what">エヌビディア決算（米引け後）／ 米PCE</span><span class="lv">★★★</span></div>
-    <div class="ev hot"><span class="when">8/27 朝</span><span class="what"><b>東京がその結果を織り込む</b></span><span class="lv">★★★</span></div>
-    <div class="ev hot"><span class="when">8/28</span><span class="what">FRB議長の講演（ジャクソンホール）</span><span class="lv">★★★</span></div>
-    <div class="ev"><span class="when">8月末</span><span class="what">概算要求（AI・半導体・防衛）</span><span class="lv">★★</span></div>
+  <!-- ===== 明日 ===== -->
+  <section class="no">
+    <div class="no-h" style="color:var(--up)">⚠️ 明日(8/27)は、今週いちばん動く日です</div>
+    <ul>
+      <li><b>今夜エヌビディアの決算</b>が出ます。東京が織り込むのは<b>明日の朝</b>です</li>
+      <li><b>朝の寄り付きから大きく動きます。</b>いつも以上に<b>9:15までは何もしない</b>ことをおすすめします</li>
+      <li>その翌日 <b>8/28にはFRB議長の講演</b>もあります</li>
+      <li>明日のボードは <b>朝6:15</b>。結果を見てから判定を出します</li>
+    </ul>
   </section>
 
   <!-- ===== たたみ ===== -->
@@ -299,9 +290,10 @@ footer{font-size:11px;color:var(--ink-3);line-height:1.65;border-top:1px solid v
         <tr><td class="num">8/21</td><td>買っていい日</td><td class="up">日宣 +4.2% ◎</td></tr>
         <tr><td class="num">8/24</td><td>ようす見</td><td class="dn">日経 −0.7% ◎</td></tr>
         <tr><td class="num">8/25</td><td>ようす見</td><td class="up">日経 +0.5% △</td></tr>
+        <tr><td class="num">8/26</td><td><b>動いていい日</b></td><td class="up">日経 +0.6% ◎</td></tr>
       </table></div>
-      <p><b>6回中 ◎4・△1・×1。</b></p>
-      <p>8/20で外したあと「<b>自分で挙げた買い場の条件が出た日は、休む判定をやめる</b>」というルールを足しました。<b>今日はそれを3回目に使っています。</b></p>
+      <p><b>7回中 ◎5・△1・×1。</b></p>
+      <p>8/20で外したあと「<b>自分で挙げた買い場の条件が出た日は、休む判定をやめる</b>」というルールを足しました。<b>8/21・8/25・8/26と3回とも効いています。</b></p>
     </div>
   </details>
 
