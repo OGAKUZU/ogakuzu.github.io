@@ -1,0 +1,57 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "permissions": {
+    "defaultMode": "acceptEdits",
+    "allow": [
+      "WebSearch",
+      "WebFetch",
+      "Read",
+      "Glob",
+      "Grep",
+      "Skill",
+      "Artifact",
+      "PushNotification",
+      "SendUserFile",
+      "Edit(automation/**)",
+      "Edit(.claude/**)",
+      "Write(automation/**)",
+      "Write(.claude/**)",
+      "Bash(git status*)",
+      "Bash(git diff*)",
+      "Bash(git log*)",
+      "Bash(git add*)",
+      "Bash(git commit*)",
+      "Bash(git push -u origin claude/jp-stock-research-automation-ww63u1*)",
+      "Bash(git fetch*)",
+      "Bash(git rev-parse*)",
+      "Bash(git branch*)",
+      "Bash(git ls-remote*)",
+      "Bash(python3 *)",
+      "Bash(curl -sS*)",
+      "mcp__Google_Drive__search_files",
+      "mcp__Google_Drive__download_file_content",
+      "mcp__Google_Drive__read_file_content",
+      "mcp__Google_Drive__list_recent_files",
+      "mcp__Google_Drive__get_file_metadata",
+      "mcp__Google_Drive__create_file",
+      "mcp__github__pull_request_read",
+      "mcp__github__get_file_contents",
+      "mcp__github__list_branches"
+    ],
+    "ask": [
+      "Bash(git push --force*)",
+      "Bash(git reset --hard*)",
+      "mcp__github__merge_pull_request",
+      "mcp__github__create_pull_request",
+      "mcp__Google_Drive__trash_file",
+      "mcp__Google_Drive__share_file"
+    ],
+    "deny": [
+      "Bash(rm -rf *)",
+      "Read(./.env)",
+      "Read(./**/.env)",
+      "Read(./**/*token*)",
+      "Read(./**/*secret*)"
+    ]
+  }
+}
