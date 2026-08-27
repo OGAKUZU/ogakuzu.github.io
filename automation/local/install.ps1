@@ -53,7 +53,13 @@ foreach ($f in $files) {
     $out = Join-Path $dest $f.name
     try {
         $r = Invoke-WebRequest -Uri ($base + $f.url) -UseBasicParsing
-        $text = [System.Text.Encoding]::UTF8.GetString($r.Content)
+        # PowerShell 5.1 では text/* の .Content は文字列、環境によってはバイト配列になる
+        if ($r.Content -is [byte[]]) {
+            $text = [System.Text.Encoding]::UTF8.GetString($r.Content)
+        } else {
+            $text = [string]$r.Content
+        }
+        $text = $text.TrimStart([char]0xFEFF)   # 先頭のBOMを落とす
         if ($f.name -like "*.bat") {
             # .bat はコマンドプロンプトの文字コード(Shift-JIS)で保存しないと文字化けする
             [System.IO.File]::WriteAllText($out, $text, [System.Text.Encoding]::GetEncoding(932))
