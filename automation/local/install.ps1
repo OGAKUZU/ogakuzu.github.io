@@ -1,8 +1,8 @@
 ﻿# ============================================================
 #  install.ps1 -- 開示の自動収集を、1行で入れるためのスクリプト
 #
-#  使い方（コマンドプロンプトに1行貼るだけ）:
-#    powershell -NoProfile -ExecutionPolicy Bypass -Command "iwr https://raw.githubusercontent.com/OGAKUZU/ogakuzu.github.io/main/automation/local/install.ps1 -OutFile $env:TEMP\kabu_install.ps1 -UseBasicParsing; & $env:TEMP\kabu_install.ps1"
+#  使い方（PowerShellに1行貼るだけ。ファイルに保存しないので文字化けしない）:
+#    iex ((iwr 'https://raw.githubusercontent.com/OGAKUZU/ogakuzu.github.io/main/automation/local/install.ps1' -UseBasicParsing).Content)
 #
 #  やること:
 #    1. collect.py のある場所を探す
@@ -34,7 +34,7 @@ if (-not $dest) {
         Write-Host "[NG] そのフォルダに collect.py がありません: $typed" -ForegroundColor Red
         Write-Host ""
         Read-Host "Enterキーで終了します"
-        exit 1
+        return
     }
     $dest = $typed
 }
@@ -65,7 +65,7 @@ foreach ($f in $files) {
         Write-Host ("[NG] {0} を取得できませんでした: {1}" -f $f.name, $_.Exception.Message) -ForegroundColor Red
         Write-Host ""
         Read-Host "Enterキーで終了します"
-        exit 1
+        return
     }
 }
 
