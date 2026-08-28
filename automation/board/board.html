@@ -145,33 +145,47 @@ footer{font-size:11px;color:var(--ink-3);line-height:1.65;border-top:1px solid v
 
   <div class="top">
     <h1>朝イチ判定ボード</h1>
-    <div class="stamp">2026-08-28 (金) 6:15</div>
+    <div class="stamp">8/28 (金) 答え合わせ済み</div>
   </div>
 
-  <!-- ===== 判定 ===== -->
+  <!-- ===== 答え合わせ ===== -->
   <section class="verdict">
-    <div class="verdict-bar" style="background:var(--down)"></div>
+    <div class="verdict-bar" style="background:var(--up)"></div>
     <div class="verdict-in">
-      <div class="eyebrow">今日の判定</div>
-      <p class="verdict-line" style="color:var(--down)">休む日</p>
+      <div class="eyebrow">今日の結果</div>
+      <p class="verdict-line" style="color:var(--up)">日経 ＋273円<br><span style="font-size:.5em">私の判定は × 外れ</span></p>
       <p class="verdict-why">
-        いちばん高い候補でも <b>25%</b>。今夜<b>FRB議長の講演</b>があり、<b>週末をまたぎます</b>。<br>
-        さらに<b>昨夜の米国市場の結果が、私には取得できていません</b>（後述）。<b>見えていない日に張らない。</b>
-      </p>
-      <p class="verdict-why" style="margin-top:10px;padding-top:10px;border-top:1px solid var(--line)">
-        <b style="color:var(--up)">⚠️ 13:10 追記 — 今朝の候補を1つ訂正します。</b><br>
-        自動収集が直り、昨日の開示<b>167件</b>を読めました。その中に答えがありました。
+        「休む日」と書きましたが、<b>相場は反発しました</b>（66,405.56円）。<br>
+        <b>AI・半導体が買われ</b>、アドバンテストとリクルートHDの2銘柄で約242円分を押し上げています。
       </p>
     </div>
   </section>
 
+  <!-- ===== 原因 ===== -->
+  <section class="plan">
+    <div class="plan-h">🔍 なぜ外したか（言い訳なしで）</div>
+    <ol class="steps">
+      <li><b>「休む日」にした最大の理由は、材料の薄さではありませんでした。</b><span class="sub">「昨夜の米国市場が取得できていない」——これを一番の理由に挙げました。</span></li>
+      <li><b>その米国は、実は上がっていました。</b><span class="sub">エヌビディアの好決算を評価して<b>NYダウ +105ドル</b>。知っていれば、半導体が買われる展開を読めました。</span></li>
+      <li><b>「見えていないから休む」は、上げの日を取り逃します。</b><span class="sub">データが無いことは「判定材料が減った」だけで、<b>「下がる」根拠ではありません</b>。私はそれを弱気に読み替えました。</span></li>
+      <li><b>ルールを足しました。</b><span class="sub">取得不可が主な理由になる日は「休む日」と書かず、<b>「寄り付き待ち」</b>とする。9:15の実際の動きを見て決める。</span></li>
+    </ol>
+  </section>
+
+  <div class="ask">
+    <b>ただし、間違っていなかったこともあります。</b><br><br>
+    採用を拒んだ「NYダウ 52,210.08」という数字は<b>やはり誤りでした</b>（実際は前日比+105ドル）。<b>矛盾したデータを捨てた判断は正しかった</b>のです。<br><br>
+    <b>問題は「捨てたこと」ではなく、「捨てた結果を弱気に翻訳したこと」</b>でした。<br><br>
+    もう1つ。<b>FRB議長は「ウォーシュ氏」で確定</b>しました。8/25以降、パウエル説とウォーシュ説が混ざっていたので<b>氏名を書かずにいました</b>。<b>断定を避けたのは正解</b>でした。
+  </div>
+
   <!-- ===== 行動 ===== -->
   <section class="plan">
-    <div class="plan-h">📋 今日やること（3つだけ）</div>
+    <div class="plan-h">📋 月曜に向けて</div>
     <ol class="steps">
-      <li><b>新しく買わない。</b><span class="sub">今日は「休む」が正解の日です。</span></li>
-      <li><b>持っている短期の株があるなら、引けまでに手じまうか考える。</b><span class="sub">土日は何もできません。月曜の朝に大きく空くことがあります。</span></li>
-      <li><b>下の2銘柄は、月曜まで見るだけ。</b><span class="sub">良い材料ですが、今日買う理由にはなりません。</span></li>
+      <li><b>今夜、ウォーシュFRB議長の講演があります。</b><span class="sub">月曜の朝は、その内容を織り込んで大きく空くことがあります。</span></li>
+      <li><b>今夜20時と23時に、自動収集が初めて本番で動きます。</b><span class="sub">今日の引け後の開示が、そのまま月曜の候補になります。</span></li>
+      <li><b>月曜6:15のボードが、初めて「全部見た上での判定」になります。</b></li>
     </ol>
   </section>
 
@@ -237,14 +251,14 @@ footer{font-size:11px;color:var(--ink-3);line-height:1.65;border-top:1px solid v
 
   <!-- ===== 相場 ===== -->
   <section class="strip">
-    <div class="cell"><span class="k">日経平均 8/27</span><span class="v dn">66,131.98</span><span class="d dn">−130.18 3日ぶり反落</span></div>
-    <div class="cell"><span class="k">NYダウ 8/26</span><span class="v dn">−113.52</span><span class="d dn">−0.21% 4日ぶり反落</span></div>
-    <div class="cell"><span class="k">NYダウ 8/27</span><span class="v na">取得不可</span><span class="d na">情報源が矛盾</span></div>
+    <div class="cell"><span class="k">日経平均 8/28</span><span class="v up">66,405.56</span><span class="d up">＋273.58 反発</span></div>
+    <div class="cell"><span class="k">上げた中身</span><span class="v" style="font-size:12px;font-family:inherit">AI・半導体</span><span class="d up">2銘柄で＋242円</span></div>
+    <div class="cell"><span class="k">NYダウ 8/27</span><span class="v up">＋105</span><span class="d na">朝は取得できず</span></div>
   </section>
 
   <!-- ===== イベント ===== -->
   <section class="events">
-    <div class="ev hot"><span class="when">今夜</span><span class="what"><b>FRB議長の講演（ジャクソンホール）</b>／今週最後のイベント</span><span class="lv">★★★</span></div>
+    <div class="ev hot"><span class="when">今夜</span><span class="what"><b>ウォーシュFRB議長の講演（ジャクソンホール）</b></span><span class="lv">★★★</span></div>
     <div class="ev hot"><span class="when">月曜の朝</span><span class="what"><b>その結果を東京が織り込む</b>。大きく空く可能性</span><span class="lv">★★★</span></div>
     <div class="ev"><span class="when">8月末</span><span class="what">概算要求（AI・半導体・防衛）</span><span class="lv">★★</span></div>
     <div class="ev"><span class="when">9月</span><span class="what">日銀会合 ／ FOMC</span><span class="lv">★★★</span></div>
@@ -329,9 +343,12 @@ footer{font-size:11px;color:var(--ink-3);line-height:1.65;border-top:1px solid v
         <tr><td class="num">8/25</td><td>ようす見</td><td class="up">日経 +0.5% △</td></tr>
         <tr><td class="num">8/26</td><td>動いていい日</td><td class="up">日経 +0.6% ◎</td></tr>
         <tr><td class="num">8/27</td><td>ようす見（材料出尽くし）</td><td class="dn">日経 −0.2% ◎◎</td></tr>
+        <tr><td class="num">8/28</td><td><b>休む日</b></td><td class="up">日経 +0.4% <b>×</b></td></tr>
       </table></div>
-      <p><b>8回中 ◎6・△1・×1。</b></p>
-      <p><b>「休む日」と書いた3回のうち2回は当たり、1回（8/20）は外しました。</b>その反省から「自分で挙げた買い場の条件が出た日は休む判定をやめる」というルールを足しています。<b>今日はその条件が出ていないので、素直に休みます。</b></p>
+      <p><b>9回中 ◎6・△1・×2。</b></p>
+      <p><b>「休む日」と書いた4回のうち、2回当たり、2回外しました（8/20と8/28）。</b></p>
+      <p><b>2回の外し方が、まったく違います。</b>8/20は<b>自分のルール同士が矛盾</b>していました。8/28は<b>データが無いことを弱気に読み替えた</b>——ルールではなく、情報の欠けが原因です。</p>
+      <p><b>どちらも同じ方向に外しています。「休む」に寄りすぎる癖がある</b>ということです。</p>
     </div>
   </details>
 
