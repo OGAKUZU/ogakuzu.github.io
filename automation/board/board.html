@@ -145,35 +145,43 @@ footer{font-size:11px;color:var(--ink-3);line-height:1.65;border-top:1px solid v
 
   <div class="top">
     <h1>朝イチ判定ボード</h1>
-    <div class="stamp">2026-09-01 (火) 6:15</div>
+    <div class="stamp">9/1 (火) 答え合わせ済み</div>
   </div>
 
-  <!-- ===== 判定 ===== -->
+  <!-- ===== 答え合わせ ===== -->
   <section class="verdict">
-    <div class="verdict-bar" style="background:var(--hold)"></div>
+    <div class="verdict-bar" style="background:var(--up)"></div>
     <div class="verdict-in">
-      <div class="eyebrow">今日の判定</div>
-      <p class="verdict-line" style="color:var(--hold)">選ぶ日<br><span style="font-size:.5em;color:var(--ink-2)">全体は弱い。株主還元の1銘柄だけ</span></p>
+      <div class="eyebrow">今日の結果</div>
+      <p class="verdict-line" style="color:var(--up)">六甲バター ＋8.00%<br><span style="font-size:.5em;color:var(--ink-2)">判定も銘柄も ◎◎ 当たり</span></p>
       <p class="verdict-why">
-        昨夜の米国は <b>−374ドルで続落</b>（53,185.90）。<b>利上げ観測が続いています。</b><br>
-        ただし今日の候補は<b>配当と優待</b>——<b>金利とは関係のない材料</b>です。
+        <b>今朝40%を付けた六甲バター（2266）が、終値1,161円（+86円・+8.00%）の大幅反発</b>。<br>
+        理由も<b>「配当方針変更による増配と株主優待拡充」</b>——<b>書いたとおりでした。</b>
       </p>
     </div>
   </section>
 
-  <!-- ===== 行動 ===== -->
+  <!-- ===== 何が効いたか ===== -->
   <section class="plan">
-    <div class="plan-h">📋 今日やること（この順番で）</div>
+    <div class="plan-h">🎯 今日効いたこと（3つとも昨日〜今朝つくったもの）</div>
     <ol class="steps">
-      <li><b>9:00〜9:15 は何もしない。</b><span class="sub">昨日は朝−1500円から戻して−93円でした。<b>朝の値段はあてになりません。</b></span></li>
-      <li><b>相場全体には乗らない。</b><span class="sub">米国が−374ドル。半導体・グロースは逆風が続いています。</span></li>
-      <li><b>買うなら下の1銘柄だけ、いつもの半分で。</b><span class="sub">ちょうど40%——「買う／休む」の線の上です。無理をする日ではありません。</span></li>
-      <li><b>買う前に、やめる値段を決める。</b></li>
+      <li><b>「%を付ける前に、必ず原文を開く」</b><span class="sub">昨日の東北新社の失敗で決めた手順です。<b>原文を確認できた1銘柄だけに%を付け、それが+8.00%でした。</b></span></li>
+      <li><b>「優待が100株から取れるようになったら +10点」</b><span class="sub">今朝つくったばかりのルールです。<b>その日のうちに当たりました。</b></span></li>
+      <li><b>「9:00〜9:15は何もしない」</b><span class="sub">日経は寄りで−426円、一時−700円安。そこから戻して終値−96.59円。<b>2日続けてこの形です。</b></span></li>
+      <li><b>「全体には乗らず、選ぶ」</b><span class="sub">実際に買われたのは<b>資源エネルギー・内需・電力</b>。全体ではなくセクターの日でした。</span></li>
     </ol>
   </section>
 
+  <div class="ask">
+    <b>⚠️ ただし、40%は低すぎました。理由がはっきりしています。</b><br><br>
+    私は「<b>米国株が−374ドルだから逆風</b>」として <b>−10点</b> しました。<br>
+    でも六甲バターは<b>食品＝内需の株</b>。<b>米国の金利とは関係ありません。</b><br><br>
+    実際その日は<b>内需株に買いが入っています。</b>−10がなければ<b>50%</b>で、実績にずっと近い数字でした。<br><br>
+    <b>ルールを直しました。</b>外部環境の追い風／逆風は、<b>日経やダウの騰落ではなく、その銘柄のセクターに対して判定します。</b>
+  </div>
+
   <!-- ===== 候補 ===== -->
-  <div class="sec-label">Buy list ／ 買うならこれ</div>
+  <div class="sec-label">Result ／ 今朝の候補の結果</div>
 
   <article class="card">
     <div class="card-top">
@@ -181,7 +189,7 @@ footer{font-size:11px;color:var(--ink-3);line-height:1.65;border-top:1px solid v
         <span class="n">六甲バター</span>
         <span class="meta"><span class="code">2266</span><span class="mkt">東証 ※区分は未確認</span></span>
       </div>
-      <div class="pct">40<span>%</span><span class="cap">うまくいく見込み</span></div>
+      <div class="pct" style="color:var(--up)">＋8.00<span>%</span><span class="cap">朝の見込みは40%</span></div>
     </div>
     <div class="meter-box">
       <div class="meter"><i style="width:40%;background:var(--hold)"></i><span class="thr"></span></div>
@@ -190,12 +198,13 @@ footer{font-size:11px;color:var(--ink-3);line-height:1.65;border-top:1px solid v
     <p class="why"><b>株主優待と配当方針を、同時に強くしました。</b>8/31の15:30、引け後の発表です。</p>
 
     <div class="order">
-      <div class="oh">何が変わったか</div>
+      <div class="oh">結果と、判明した数字</div>
       <dl>
         <dt>優待（前）</dt><dd><b>1,000株</b>以上で自社製品3,000円相当</dd>
         <dt class="take">優待（後）</dt><dd class="take"><b>100株</b>以上を1年保有でQUOカード1,000円分</dd>
         <dt class="take">配当方針</dt><dd class="take"><b>下限1株20円・配当性向40%以上</b>という数値目標を新設</dd>
-        <dt>発表</dt><dd>8/31 15:30（引け後）＝<b>今日が初日</b></dd>
+        <dt class="take">終値</dt><dd class="take"><b>1,161円（＋86円・＋8.00%）</b></dd>
+        <dt class="take">年間配当</dt><dd class="take"><b>20円 → 30.5円</b>（朝は未確認だった数字）</dd>
       </dl>
     </div>
   </article>
@@ -221,9 +230,9 @@ footer{font-size:11px;color:var(--ink-3);line-height:1.65;border-top:1px solid v
 
   <!-- ===== 相場 ===== -->
   <section class="strip">
-    <div class="cell"><span class="k">日経平均 8/31</span><span class="v dn">66,311.93</span><span class="d dn">−93.63 反落</span></div>
-    <div class="cell"><span class="k">NYダウ 8/31</span><span class="v dn">53,185.90</span><span class="d dn">−374.09 続落</span></div>
-    <div class="cell"><span class="k">相場の主題</span><span class="v dn" style="font-size:12px;font-family:inherit">利上げ観測</span><span class="d dn">半導体に逆風</span></div>
+    <div class="cell"><span class="k">日経平均 9/1</span><span class="v dn">66,215.34</span><span class="d dn">−96.59 続落</span></div>
+    <div class="cell"><span class="k">今日の値幅</span><span class="v dn" style="font-size:12px;font-family:inherit">寄り−426円<br>一時−700円安</span><span class="d up">そこから戻した</span></div>
+    <div class="cell"><span class="k">買われたもの</span><span class="v up" style="font-size:12px;font-family:inherit">資源エネ<br>内需・電力</span><span class="d dn">東エレクは押し下げ</span></div>
   </section>
 
   <!-- ===== イベント ===== -->
@@ -285,8 +294,9 @@ footer{font-size:11px;color:var(--ink-3);line-height:1.65;border-top:1px solid v
         <tr><td class="num">8/27</td><td>ようす見（材料出尽くし）</td><td class="dn">日経 −0.2% ◎◎</td></tr>
         <tr><td class="num">8/28</td><td>休む日</td><td class="up">日経 +0.4% <b>×</b></td></tr>
         <tr><td class="num">8/31</td><td>選ぶ日</td><td class="dn">朝−1500円→終値−0.1% ◎◎</td></tr>
+        <tr><td class="num">9/1</td><td><b>選ぶ日</b></td><td class="up"><b>六甲バター +8.0% ◎◎</b></td></tr>
       </table></div>
-      <p><b>10回中 ◎7・△1・×2</b>（地合いの判定）。<b>個別銘柄は8/31が × でした。</b></p>
+      <p><b>11回中 ◎8・△1・×2</b>（地合いの判定）。</p><p><b>個別銘柄で値段まで確認できたのは、8/21の日宣 +4.2% と、今日の六甲バター +8.00% の2件です。</b>どちらも当たりました。</p>
     </div>
   </details>
 
