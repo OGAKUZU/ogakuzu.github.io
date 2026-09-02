@@ -60,6 +60,9 @@ foreach ($f in $files) {
             $text = [string]$r.Content
         }
         $text = $text.TrimStart([char]0xFEFF)   # 先頭のBOMを落とす
+        # 改行を必ず CRLF にする。LFだけの .bat は cmd.exe が読み取り位置を誤り、
+        # 行の先頭数文字が欠ける（python が hon になる）。2026-09-02に実害。
+        $text = ($text -replace "`r`n", "`n") -replace "`n", "`r`n"
         if ($f.name -like "*.bat") {
             # .bat はコマンドプロンプトの文字コード(Shift-JIS)で保存しないと文字化けする
             [System.IO.File]::WriteAllText($out, $text, [System.Text.Encoding]::GetEncoding(932))
