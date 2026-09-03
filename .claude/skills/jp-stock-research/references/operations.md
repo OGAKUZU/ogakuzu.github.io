@@ -25,7 +25,23 @@ cp automation/board/board.html <scratchpadのパス>/board.html
 
 TDnetは**この実行環境からブロックされている**（プロキシが403）。EDINET APIも海外IPを遮断している。したがって**収集はユーザーのWindows PCでしか動かない。**
 
-自動化済み。`C:\kabu\タスク登録.bat` を1回実行すると、平日 **15:40 / 17:10 / 20:00 / 23:00** に自動収集する（スリープ解除あり・電源断の取りこぼしは次回起動時に回収）。
+自動化済み。平日 **15:40 / 17:10 / 20:00 / 23:00** に自動収集する（スリープ解除あり・電源断の取りこぼしは次回起動時に回収）。
+
+**実行役は `C:\kabu\collect_auto.ps1`（PowerShell）。`.bat` は使わない。**
+
+> **⚠️ .bat をこの経路に戻してはいけない（9/3確定）**
+>
+> 収集_自動.bat が `'hon' は認識されていません`（`python` の先頭3文字が欠ける）を出し続けた。実測は **CR=0 / LF=24**、先頭は `40 65 63 68 6F 20 6F 66 66 0A`＝`@echo off\n`。**LFだけの .bat は cmd.exe が読み取り位置を見失う。**
+>
+> 8/28に `chcp` を疑って外し、9/2に改行コードだと正しく突き止めたが、**PC上のファイルに修正が当たっていなかった**ため4回失敗が続いた。**「直したつもり」を実測で確かめないと、正しい診断でも失敗は続く。**
+>
+> 9/3に `automation/local/fix_task.ps1` で実行役を PowerShell に置き換え、**11:14に `tdnet_20260903.csv` がドライブに届いて復旧を確認した**（29件）。壊れた .bat は `収集_自動.bat.broken` として残してある。
+
+やり直したいときの1行（PowerShellに貼る。SHA固定URLでキャッシュを避け、先頭のBOMを落とす）:
+
+```powershell
+iex ((iwr 'https://raw.githubusercontent.com/OGAKUZU/ogakuzu.github.io/<SHA>/automation/local/fix_task.ps1' -UseBasicParsing).Content.TrimStart([char]0xFEFF))
+```
 
 手で実行してもらう場合のコマンド:
 

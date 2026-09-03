@@ -41,11 +41,15 @@ if (-not $dest) {
 Write-Host "[OK] collect.py の場所: $dest" -ForegroundColor Green
 
 # --- 2. ファイルを取ってくる ----------------------------------------------
+# 収集の実行役（収集_自動.bat）は、もう配らない。
+# LFだけの .bat を cmd.exe が誤読して python の先頭3文字を食う事故が
+# 2026-08-28から9/3まで4回続いた（実測 CR=0 / LF=24）。
+# 実行役は setup_task.ps1 が「この場で」collect_auto.ps1 として書き出す。
+# ネット越しに運ばないので、文字コードも改行コードもズレようがない。
 $base = "https://raw.githubusercontent.com/OGAKUZU/ogakuzu.github.io/main/automation/local/"
 $files = @(
     @{ url = "setup_task.ps1";                                      name = "setup_task.ps1" },
     @{ url = "%E3%82%BF%E3%82%B9%E3%82%AF%E7%99%BB%E9%8C%B2.bat";    name = "タスク登録.bat" },
-    @{ url = "%E5%8F%8E%E9%9B%86_%E8%87%AA%E5%8B%95.bat";            name = "収集_自動.bat" },
     @{ url = "%E8%A7%A3%E9%99%A4.bat";                              name = "解除.bat" }
 )
 

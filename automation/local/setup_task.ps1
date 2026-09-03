@@ -7,20 +7,49 @@ $ErrorActionPreference = "Stop"
 [Console]::OutputEncoding = [System.Text.Encoding]::UTF8
 
 $here    = Split-Path -Parent $MyInvocation.MyCommand.Path
-$runner  = Join-Path $here "収集_自動.bat"
+$runner  = Join-Path $here "collect_auto.ps1"
 $prefix  = "株の開示収集"
 
 Write-Host ""
 Write-Host "=== 株の開示収集 自動化セットアップ ===" -ForegroundColor Cyan
 Write-Host ""
 
-# --- 1. 実行役のバッチがあるか -------------------------------------------
-if (-not (Test-Path $runner)) {
-    Write-Host "[NG] 収集_自動.bat が見つかりません: $runner" -ForegroundColor Red
-    Write-Host "     collect.py と同じフォルダに置いてください。"
-    exit 1
+# --- 1. 実行役を「この場で」書き出す --------------------------------------
+#     ネット越しに運ばないので、文字コードも改行コードもズレようがない。
+#     .bat は使わない。LFだけの .bat を cmd.exe が誤読して python の
+#     先頭3文字を食う事故が2026-08-28〜9/3に4回続いた（実測 CR=0 / LF=24）。
+$body = @'
+# collect_auto.ps1 -- タスクスケジューラから呼ばれる収集の実行役
+# 手で叩く必要はありません。setup_task.ps1 が自動で作ります。
+$here = Split-Path -Parent $MyInvocation.MyCommand.Path
+Set-Location $here
+$log = Join-Path $here "collect_auto.log"
+$out = if ($args.Count -ge 1) { $args[0] } else { "" }
+
+Add-Content -Path $log -Value "" -Encoding UTF8
+Add-Content -Path $log -Value ("===== " + (Get-Date -Format "yyyy/MM/dd HH:mm:ss") + " =====") -Encoding UTF8
+
+if ([string]::IsNullOrWhiteSpace($out)) {
+    Add-Content -Path $log -Value "[WARN] outdir not set. saving to default data folder." -Encoding UTF8
+    & python collect.py --once --pdf 2>&1 | Add-Content -Path $log -Encoding UTF8
+} else {
+    & python collect.py --once --pdf --outdir $out 2>&1 | Add-Content -Path $log -Encoding UTF8
 }
-Write-Host "[OK] 実行役: $runner"
+
+Add-Content -Path $log -Value ("exit code=" + $LASTEXITCODE) -Encoding UTF8
+'@
+
+[System.IO.File]::WriteAllText($runner, $body, (New-Object System.Text.UTF8Encoding $true))
+Write-Host "[OK] 実行役を作りました: $runner"
+
+# 古い .bat が残っていたら、二度と呼ばれないように名前を変える
+$oldBat = Join-Path $here "収集_自動.bat"
+if (Test-Path $oldBat) {
+    $bak = "$oldBat.broken"
+    if (Test-Path $bak) { Remove-Item $bak -Force }
+    Rename-Item -Path $oldBat -NewName (Split-Path $bak -Leaf)
+    Write-Host "[OK] 古い 収集_自動.bat を退避しました（消してはいません）"
+}
 
 # --- 2. Python があるか ---------------------------------------------------
 try {
@@ -91,9 +120,12 @@ foreach ($k in $times.Keys) {
     $name = "$prefix-$k"
     $t    = $times[$k]
 
+    $arg = "-NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File `"$runner`""
+    if ($outdir) { $arg += " `"$outdir`"" }
+
     $action = New-ScheduledTaskAction `
-        -Execute $runner `
-        -Argument "`"$outdir`"" `
+        -Execute "powershell.exe" `
+        -Argument $arg `
         -WorkingDirectory $here
 
     # 平日のみ（土日はTDnetに開示が出ないため）
