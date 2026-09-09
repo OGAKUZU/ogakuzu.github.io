@@ -45,3 +45,26 @@
 | GitHubのrawが約5分キャッシュされる | **コミットSHAを埋め込んだURL**を渡す（`?v=` では回避できない） |
 | `.Content` の型 | PowerShell 5.1 の `Invoke-WebRequest -UseBasicParsing` は text/* を**文字列**で返す |
 | `.bat` の文字化け | コマンドプロンプトの文字コード（CP932）で保存する |
+| `.bat` の改行コード | **CRLFで保存する。** LFだけだと cmd.exe が読み取り位置を見失い、行頭の数文字が欠ける（`python` が `hon` になる）。2026-09-03に実害。**そもそも .bat を使わず PowerShell にする** |
+
+## ⛔ セッションの最初に必ず `git fetch` すること
+
+**このコンテナのクローンは、古い状態で作り直されることがあります。**
+
+2026-09-09に実際に起きました。コンテナが `5e6f9a5`（PR #1のマージ時点）でクローンし直され、
+その後の3週間分のコミットが**ローカルに無い状態**になっていました。
+
+そのとき私は「CLAUDE.md が消えた」と誤診しました。`git log --all -- CLAUDE.md` が空だったからです。
+**`--all` はローカルの ref しか見ません。origin の ref が古ければ、あるものも無いように見えます。**
+
+**何が危険か:** 古いファイルの上に書いて push すると、**その間に足したルールを消してしまいます。**
+
+**したがって、作業を始める前に必ず:**
+
+```bash
+git fetch origin claude/jp-stock-research-automation-ww63u1
+git log --oneline HEAD..origin/claude/jp-stock-research-automation-ww63u1 | head
+```
+
+**1行でも出たら、先に取り込むこと。** ファイルが無い・内容が古いと感じたら、
+「消えた」と決めつける前にこれを実行する。
