@@ -146,142 +146,106 @@ footer{font-size:11px;color:var(--ink-3);line-height:1.65;border-top:1px solid v
 
   <div class="top">
     <h1>朝イチ判定ボード</h1>
-    <div class="stamp">9/10 (木) 6:15 更新</div>
+    <div class="stamp">9/10 (木) 答え合わせ済み</div>
   </div>
 
-  <!-- ===== 判定 ===== -->
+  <!-- ===== 結果 ===== -->
   <section class="verdict">
     <div class="verdict-bar" style="background:var(--go)"></div>
     <div class="verdict-in">
-      <div class="eyebrow">今日の判定</div>
-      <p class="verdict-line" style="color:var(--go)">半導体だけは上を見る日<br><span style="font-size:.45em;color:var(--ink-2)">全体は重い。でも半導体は別</span></p>
+      <div class="eyebrow">今日の結果</div>
+      <p class="verdict-line" style="color:var(--go)">半導体が、引け際に相場をひっくり返した<br><span style="font-size:.45em;color:var(--ink-2)">一時 −956円 → 終値 ＋128円</span></p>
       <p class="verdict-why">
-        <b>ダウは3日続けて下がりました（−405.41ドル）。ナスダックも3日続落です。</b><br>
-        <b>ところが半導体（SOX）だけは＋1.30%で4日続けて上がり、途中で8/19以来の12,000台を回復しました。</b><br>
-        <b>これは9/7に私が外したのと、まったく同じ形です。</b>あの日は指数だけ見て「半導体を追うな」と書き、日経は半導体主導で＋2.12%上がりました。<b>今日は値段を取れています。</b>
+        <b>今朝「全体は重い。でも半導体だけは上を見る日」と書きました。両方そのとおりになりました。</b><br>
+        午前は売られ、10:36に <b>−956.10円（64,186.68円）</b>まで下げました。<br>
+        <b>14:30ごろ、TSMCの8月の売上が前年より＋53.3%と発表されると半導体に買いが入り、大引け間際にプラスへ転換しました。</b>
       </p>
     </div>
   </section>
 
-  <!-- ===== 前夜の値段 ===== -->
+  <!-- ===== 相場 ===== -->
   <section class="strip">
-    <div class="cell"><span class="k">NYダウ 9/9</span><span class="v dn">52,380.66</span><span class="d dn">−405.41（3日続落）</span></div>
-    <div class="cell"><span class="k">SOX 半導体 9/9</span><span class="v up">11,887.87</span><span class="d up">＋152.61（＋1.30%）4日続伸</span></div>
-    <div class="cell"><span class="k">ドル円</span><span class="v">153.56</span><span class="d">5日続落＝円高</span></div>
-    <div class="cell"><span class="k">米10年債</span><span class="v">4.85%台</span><span class="d">2023年11月以来</span></div>
-    <div class="cell"><span class="k">WTI原油</span><span class="v up">94ドル付近</span><span class="d up">イラン情勢</span></div>
+    <div class="cell"><span class="k">日経平均 9/10</span><span class="v up">65,270.95</span><span class="d up">＋128.17（3日ぶり反発）</span></div>
+    <div class="cell"><span class="k">今日の安値 10:36</span><span class="v dn">64,186.68</span><span class="d dn">一時 −956.10</span></div>
+    <div class="cell"><span class="k">非鉄金属</span><span class="v dn">−3.63%</span><span class="d dn">下落率トップ</span></div>
+  </section>
+
+  <!-- ===== 判定の答え合わせ ===== -->
+  <section class="no">
+    <div class="no-h" style="color:var(--ink)">✅ 今朝の3つは、どうだったか</div>
+    <div class="tbl-wrap" style="padding:4px 10px 12px">
+      <table>
+        <tr><th>今朝書いたこと</th><th>実際</th><th></th></tr>
+        <tr>
+          <td><b>全体は重い</b></td>
+          <td>午前に <b>−956.10円</b></td>
+          <td class="up"><b>◎</b></td>
+        </tr>
+        <tr>
+          <td><b>でも半導体だけは上</b></td>
+          <td><b>アドバンテスト ＋3.29%（33,920円）の高値引け。</b>日経を押し上げた上位は<b>アドバンテスト・リクルートHD・村田製作所・キオクシアHD・TDK</b></td>
+          <td class="up"><b>◎◎</b></td>
+        </tr>
+        <tr>
+          <td><b>石油・非鉄には乗るな（3日目）</b></td>
+          <td><b>非鉄金属 −3.63% で下落率トップ。</b>昨日＋6.88%の翌日です</td>
+          <td class="up"><b>◎◎</b></td>
+        </tr>
+      </table>
+    </div>
+    <p class="why" style="padding-top:0"><b>そのほか下げたのは、その他製品 −2.81%、建設業 −2.33% です。</b></p>
   </section>
 
   <div class="ask">
-    <b>✅ SOXが、はじめて取れました。</b><br><br>
-    <b>9/7に「毎朝かならずSOXを取る」と手順に入れて、4日間1度も取れていませんでした。今朝が初回です。</b><br><br>
-    <b>そして初回のいきなり、ダウとSOXが逆を向いていました。</b>ダウ −405ドル、SOX ＋1.30%。<b>ダウだけ見て「今日は下だ」と書いていたら、9/7とまったく同じ間違いをするところでした。</b>
+    <b>💡 今日いちばんの学びは、SOXです。</b><br><br>
+    <b>昨夜のニュースはこうでした。</b>NYダウ −405ドル、ナスダックも3日続落。<b>普通に読めば「明日の東京も下」です。</b><br><br>
+    <b>でもSOX（米国の半導体指数）だけは ＋1.30% で4日続けて上がっていました。</b><br><br>
+    <b>今日の東京は、まさにそのとおりに動きました。</b>朝は −956円まで売られ、<b>午後に半導体だけが買われて、引け際にプラスへ。</b><br><br>
+    <b>9/7に、私はこれをダウだけ見て外しました。</b>「半導体を追うな」と書いて、その日は半導体主導で ＋2.12% でした。<b>SOXを毎朝取ると決めたのはその翌日です。今朝、4日目にしてやっと取れました。</b><br><br>
+    <b>指数と、その中の半導体は、逆を向く日がある。</b>これが今週わかったいちばん大きいことです。
   </div>
 
   <!-- ===== 業種 ===== -->
-  <div class="sec-label">Sector ／ だから、どの業種が得をするか</div>
+  <div class="sec-label">Sector ／ 昨日と今日</div>
 
   <section class="no">
-    <div class="no-h" style="color:var(--ink)">📊 今朝の材料を業種に落とすと、こうなります</div>
+    <div class="no-h" style="color:var(--ink)">📊 非鉄金属：昨日＋6.88% → 今日 −3.63%</div>
     <div class="tbl-wrap" style="padding:4px 10px 12px">
       <table>
-        <tr><th>業種</th><th>今日</th><th>理由</th></tr>
-        <tr><td><b>半導体</b></td><td class="up"><b>追い風</b></td><td>SOXが4日続伸。日本の半導体はここに連れて動く</td></tr>
-        <tr><td><b>銀行・保険</b></td><td class="up"><b>追い風</b></td><td>米金利4.85%＋日銀の利上げ観測</td></tr>
-        <tr><td><b>石油・鉱業・非鉄</b></td><td class="na"><b>追い風だが3日目</b></td><td><b>9/9にもう＋5.01% / ＋2.17% / ＋6.88% 上がっています。追いかけない</b></td></tr>
-        <tr><td><b>電力・ガス</b></td><td class="na"><b>中立</b></td><td>燃料費調整制度（9/9に訂正したとおり）</td></tr>
-        <tr><td><b>自動車・機械</b></td><td class="dn"><b>逆風</b></td><td><b>円高が5日続いています</b>（輸出は円高で損）</td></tr>
-        <tr><td><b>空運・化学・陸運</b></td><td class="dn"><b>逆風</b></td><td>原油94ドル。燃料代を売値に乗せられない</td></tr>
-        <tr><td><b>不動産・REIT</b></td><td class="dn"><b>逆風</b></td><td>金利が上がると借金の負担が増える</td></tr>
+        <tr><th>業種</th><th>9/9</th><th>9/10</th></tr>
+        <tr><td><b>非鉄金属</b></td><td class="num up"><b>＋6.88%</b><br><span style="font-size:11px">上昇率1位</span></td><td class="num dn"><b>−3.63%</b><br><span style="font-size:11px">下落率1位</span></td></tr>
+        <tr><td>その他製品</td><td class="num na">—</td><td class="num dn">−2.81%</td></tr>
+        <tr><td>建設業</td><td class="num na">—</td><td class="num dn">−2.33%</td></tr>
       </table>
     </div>
-    <p class="why" style="padding-top:0"><b>円高の理由は、日銀が利上げを急ぐという見方と、ベッセント米財務長官の円安けん制発言です。</b><br>
-      <b>円高は輸出には逆風ですが、日本の半導体はSOX連動のほうが強く出ます</b>（9/7に実測しました）。</p>
+    <p class="why" style="padding-top:0"><b>1日で1位から最下位です。</b><br>
+      <b>今朝「石油・非鉄は追い風だが3日目。追いかけない」と書いたのは、ここでした。</b>上がってから買うと、いちばん損をしやすい形です。<b>ニュースで「資源が強い」と読んだ日は、たいてい終わりに近い。</b></p>
   </section>
 
-  <!-- ===== 行動 ===== -->
-  <section class="plan">
-    <div class="plan-h">今日やること</div>
-    <ol class="steps">
-      <li><b>9:00の寄り付きで、半導体が上がっているか見る</b><span class="sub">上がっていれば素直な日。上がらなければ円高が勝った日なので、追わない</span></li>
-      <li><b>石油・非鉄には、今日は乗らない</b><span class="sub">3日目です。上がってから買うと、いちばん損をしやすい形です</span></li>
-      <li><b>シェアリングテクノロジー（3989）のTOBには飛びつかない</b><span class="sub">下に計算を書きました。取れる幅は3.47%しかありません</span></li>
-    </ol>
-  </section>
-
-  <!-- ===== 昨日の引け後 ===== -->
-  <div class="sec-label">News ／ 9/9の引け後に出た材料</div>
-
+  <!-- ===== 候補の結果 ===== -->
   <article class="card">
     <div class="card-top">
       <div class="nm">
         <span class="n">シェアリングテクノロジー</span>
         <span class="meta"><span class="code">3989</span><span class="mkt">東証グロース</span></span>
       </div>
-      <div class="pct" style="color:var(--hold)">20%<span class="cap">TOBだが見送り</span></div>
+      <div class="pct" style="color:var(--ink-3)">取得<br>不可<span class="cap">朝は「見送り」20%</span></div>
     </div>
-    <div class="meter-box">
-      <div class="meter"><i style="width:20%;background:var(--hold)"></i><span class="thr"></span></div>
-      <div class="meter-legend"><span>5%</span><span>40% ＝ 買う／休むの線</span><span>85%</span></div>
-    </div>
-    <div class="tbl-wrap" style="padding:4px 10px 8px">
-      <table>
-        <tr><th></th><th>数字</th><th>意味</th></tr>
-        <tr><td>前日終値</td><td class="num"><b>1,498円</b></td><td>9/9の終値</td></tr>
-        <tr><td>TOB価格</td><td class="num"><b>1,550円</b></td><td>MBKパートナーズが買う値段</td></tr>
-        <tr><td>プレミアム</td><td class="num"><b>＋3.47%</b></td><td><b>たった52円です</b></td></tr>
-        <tr><td>今日の上限</td><td class="num">1,798円<span style="font-size:11px">（±300円）</span></td><td class="up"><b>届く。ストップ高にはならない</b></td></tr>
-      </table>
-    </div>
-    <p class="why"><b>買えます。でも、うまみがありません。</b><br>
-      <b>TOB価格1,550円が天井です。</b>それより高く買う人はいないので、株価は1,550円の手前で止まります。<b>取れるのは52円だけ。</b><br>
-      <b>しかも同じ日に「2026年9月期は無配」と配当予想を直しています。</b>買付期間は9/10〜10/27（30営業日）、下限は63.58%です。</p>
+    <p class="why"><b>今日の株価が取れませんでした。</b>株式サイトの遮断が続いています。<br>
+      <b>朝に書いた計算そのものは変わりません。</b>前日終値1,498円・TOB価格1,550円・プレミアム＋3.47%。<b>上値は1,550円で止まるので、取れる幅は52円だけです。</b></p>
   </article>
 
   <div class="ask">
-    <b>💡 今日いちばんの学びは、TOBの見方です。</b><br><br>
-    <b>9/9のアルビス（7475）はTOBでストップ高、プライム値上がり率1位でした。プレミアムが＋51%あったからです。</b><br><br>
-    <b>今日のシェアテクは、同じ「TOB」でもプレミアムが＋3.47%しかありません。</b><br><br>
-    <b>ニュースの見出しはどちらも「TOB」です。中身はまるで違います。</b><br>
-    <b>見るのは「TOB価格 ÷ 前日終値」。ここが小さいTOBは、儲かる幅も小さい。</b>それだけです。
+    <b>⚠️ 拾えなかったものがあります。</b><br><br>
+    <b>今日、上方修正（最終利益3.3倍）と大幅増配（配当10円→160円）でストップ高になった銘柄があったと報じられています。</b><br><br>
+    <b>私はその銘柄名を取得できませんでした。</b>記事の見出ししか読めないためです。<b>昨日の引け後の開示一覧から、私が拾えていなかった可能性があります。</b><br><br>
+    <b>「見つけられなかった」と「無かった」は違います。前者です。</b>
   </div>
-
-  <article class="card">
-    <div class="card-top">
-      <div class="nm">
-        <span class="n">四国化成ホールディングス</span>
-        <span class="meta"><span class="code">4099</span><span class="mkt">東証プライム</span></span>
-      </div>
-      <div class="pct" style="color:var(--down)">25%<span class="cap">売り圧力あり</span></div>
-    </div>
-    <div class="meter-box">
-      <div class="meter"><i style="width:25%;background:var(--down)"></i><span class="thr"></span></div>
-      <div class="meter-legend"><span>5%</span><span>40% ＝ 買う／休むの線</span><span>85%</span></div>
-    </div>
-    <p class="why"><b>これは、開示の一覧には出てこない銘柄です。</b><br>
-      昨日の引け後、積水樹脂（4212）と太陽ホールディングス（4626）が「投資有価証券売却益」を出しました。<b>一覧では好材料に見えます。</b><br>
-      <b>でも、この2社が売った株が四国化成HDです。</b>売出し 4,756,000株＋追加 713,400株。<b>売る側が得をした話は、売られる側にとっては需給が重くなる話です。</b><br>
-      会社は自己株買い（最大180万株・40億円、12/31まで）で受け止める構えです。受渡は9/16〜24。<b>売出価格そのものは取得不可です。</b></p>
-  </article>
-
-  <section class="no">
-    <div class="no-h" style="color:var(--ink)">📋 そのほかの引け後材料</div>
-    <div class="tbl-wrap" style="padding:4px 10px 12px">
-      <table>
-        <tr><th>銘柄</th><th>内容</th><th>見方</th></tr>
-        <tr><td><b>日清紡HD</b><br><span class="code">3105</span></td><td>純利益を上方修正</td><td class="na"><b>中身は特別利益</b><br><span style="font-size:11px">投資有価証券売却益38.21億円。本業ではなく1回きり</span></td></tr>
-        <tr><td><b>ハリマビステム</b><br><span class="code">9780</span></td><td>自己株買いの枠を拡大＋ToSTNeT-3</td><td class="up"><b>好材料</b><br><span style="font-size:11px">30万株・2億8,530万円。今朝8:45に前日終値で買います</span></td></tr>
-        <tr><td><b>大和自動車交通</b><br><span class="code">9082</span></td><td>大和ハウス工業と資本業務提携。第三者割当 490,100株</td><td class="na"><b>ただの希薄化ではない</b><br><span style="font-size:11px">割当後9.76%。相手は安定株主。発行価額は取得不可</span></td></tr>
-        <tr><td><b>APHD</b><br><span class="code">3175</span></td><td>第三者割当による新株発行</td><td class="dn"><b>悪材料</b><br><span style="font-size:11px">株が増える＝1株の価値が薄まる</span></td></tr>
-        <tr><td><b>デルタピー</b><br><span class="code">4598</span></td><td>第12回新株予約権の大量行使</td><td class="dn"><b>悪材料</b><br><span style="font-size:11px">同じく株が増える話</span></td></tr>
-      </table>
-    </div>
-  </section>
 
   <!-- ===== イベント ===== -->
   <section class="events">
-    <div class="ev hot"><span class="when">当面</span><span class="what"><b>イラン情勢</b>／原油94ドルの理由</span><span class="lv">★★★</span></div>
-    <div class="ev hot"><span class="when">9/15〜16</span><span class="what"><b>FOMC</b>／原油高で利上げの可能性</span><span class="lv">★★★</span></div>
+    <div class="ev hot"><span class="when">当面</span><span class="what"><b>イラン情勢</b>／原油とインフレの元</span><span class="lv">★★★</span></div>
+    <div class="ev hot"><span class="when">9/15〜16</span><span class="what"><b>FOMC</b></span><span class="lv">★★★</span></div>
     <div class="ev hot"><span class="when">9月</span><span class="what"><b>日銀の会合</b>／円高はここを見ています</span><span class="lv">★★★</span></div>
     <div class="ev"><span class="when">9/16〜24</span><span class="what">四国化成HDの売出しの受渡</span><span class="lv">★★</span></div>
     <div class="ev"><span class="when">9月末</span><span class="what">中間期末（配当・優待の権利が決まる日）</span><span class="lv">★★</span></div>
@@ -296,13 +260,11 @@ footer{font-size:11px;color:var(--ink-3);line-height:1.65;border-top:1px solid v
       <div class="tbl-wrap"><table>
         <tr><th>言葉</th><th>意味</th></tr>
         <tr><td><b>SOX</b>（フィラデルフィア半導体指数）</td><td>米国の半導体株を集めた指数。<b>日本の半導体株は翌日ここに連れて動きます</b></td></tr>
-        <tr><td><b>TOB</b>（公開買付け）</td><td>「この値段で買います」と決めて、市場の外で株を集めること</td></tr>
+        <tr><td><b>TSMC</b></td><td>台湾の半導体受託生産会社。世界最大。<b>毎月の売上を発表するので、業界の温度計になります</b></td></tr>
+        <tr><td><b>寄与度</b>（きよど）</td><td>その1銘柄が日経平均を何円押し上げた（下げた）か</td></tr>
+        <tr><td><b>高値引け</b>（たかねびけ）</td><td>その日のいちばん高い値段で取引が終わること。<b>強さのしるしです</b></td></tr>
         <tr><td><b>プレミアム</b></td><td>TOB価格が、いまの株価よりどれだけ高いか</td></tr>
         <tr><td><b>値幅制限</b>（ねはばせいげん）</td><td>1日に動ける上限と下限。1,498円なら±300円です</td></tr>
-        <tr><td><b>売出し</b>（うりだし）</td><td>すでにある株を、大株主がまとめて売ること。<b>株数は増えないが、売り物は増えます</b></td></tr>
-        <tr><td><b>ToSTNeT-3</b></td><td>寄り付き前の8:45に、前日終値で自社株を買う仕組み</td></tr>
-        <tr><td><b>特別利益</b></td><td>本業ではない、1回きりの利益。<b>来年も続くとは限りません</b></td></tr>
-        <tr><td><b>希薄化</b>（きはくか）</td><td>株が増えて、1株あたりの価値が薄まること</td></tr>
       </table></div>
     </div>
   </details>
@@ -316,14 +278,13 @@ footer{font-size:11px;color:var(--ink-3);line-height:1.65;border-top:1px solid v
         <tr><td>200〜500円未満</td><td class="num">±80円</td></tr>
         <tr><td>500〜700円未満</td><td class="num">±100円</td></tr>
         <tr><td>700〜1,000円未満</td><td class="num">±150円</td></tr>
-        <tr><td><b>1,000〜1,500円未満</b></td><td class="num up"><b>±300円</b>（今日のシェアテク）</td></tr>
+        <tr><td><b>1,000〜1,500円未満</b></td><td class="num">±300円（9/10のシェアテク）</td></tr>
         <tr><td>1,500〜2,000円未満</td><td class="num">±400円</td></tr>
-        <tr><td>2,000〜3,000円未満</td><td class="num">±500円<span style="font-size:11px">（9/9のアルビス）</span></td></tr>
+        <tr><td>2,000〜3,000円未満</td><td class="num">±500円（9/9のアルビス）</td></tr>
         <tr><td>3,000〜5,000円未満</td><td class="num">±700円</td></tr>
         <tr><td>5,000〜7,000円未満</td><td class="num">±1,000円</td></tr>
       </table></div>
-      <p><b>アルビス（9/9）は前日2,500円・TOB 3,780円で、上限3,000円までしか動けませんでした。</b>実際ストップ高で止まりました。<br>
-        <b>シェアテク（今日）は前日1,498円・TOB 1,550円。上限1,798円なので、値幅は問題になりません。問題は「上がる理由が52円分しかない」ことです。</b></p>
+      <p><b>TOBは、値幅制限より先に「TOB価格 ÷ 前日終値」を見てください。</b>アルビスは＋51.2%で「届かない」、シェアテクは＋3.47%で「届くが52円しか取れない」。<b>見出しはどちらも「TOB」です。</b></p>
     </div>
   </details>
 
@@ -333,13 +294,13 @@ footer{font-size:11px;color:var(--ink-3);line-height:1.65;border-top:1px solid v
       <div class="tbl-wrap"><table>
         <tr><th>業種</th><th>原油高で</th><th>なぜ</th></tr>
         <tr><td><b>石油・石炭製品</b></td><td class="up"><b>追い風</b></td><td>売っているものの値段が上がる（9/9 ＋5.01%）</td></tr>
-        <tr><td><b>鉱業・非鉄金属</b></td><td class="up"><b>追い風</b></td><td>資源全体が買われる（9/9 ＋2.17% / ＋6.88%）</td></tr>
+        <tr><td><b>鉱業・非鉄金属</b></td><td class="up"><b>追い風</b><br><span style="font-size:11px">ただし続かない</span></td><td>9/9 ＋6.88% → <b>9/10 −3.63%</b></td></tr>
         <tr><td><b>電力・ガス</b></td><td class="na"><b>ほぼ中立</b><br><span style="font-size:11px">9/9に訂正</span></td><td><b>燃料費調整制度</b>で、燃料の値上がりを料金に乗せられる</td></tr>
         <tr><td><b>空運</b></td><td class="dn"><b>逆風</b></td><td>燃料代が上がるが、<b>航空券は簡単に上げられない</b></td></tr>
         <tr><td><b>化学</b></td><td class="dn"><b>逆風</b></td><td><b>原油そのものが原料</b></td></tr>
         <tr><td><b>陸運（運送）</b></td><td class="dn"><b>逆風</b></td><td>軽油代が上がる</td></tr>
       </table></div>
-      <p><b>ポイントは「燃料代を売値に乗せられるかどうか」です。</b></p>
+      <p><b>軸は「燃料を使うか」ではなく「燃料代を売値に乗せられるか」です。</b></p>
     </div>
   </details>
 
@@ -365,19 +326,20 @@ footer{font-size:11px;color:var(--ink-3);line-height:1.65;border-top:1px solid v
         <tr><td class="num">9/7</td><td>半導体を追うな</td><td class="up">日経 <b>+2.12% ×</b></td></tr>
         <tr><td class="num">9/8</td><td>板を見て決める</td><td class="na">数えず（方向を書かず）</td></tr>
         <tr><td class="num">9/9</td><td><b>選ぶ日</b><br><span style="font-size:11px">原油高で得をする側</span></td><td class="up"><b>石油・石炭 +5.01% ◎◎</b><br><span class="na" style="font-size:11px">日経は −0.19%<br>電力の読みだけ外し</span></td></tr>
-        <tr><td class="num">9/10</td><td><b>半導体だけは上</b></td><td class="na">結果待ち</td></tr>
+        <tr><td class="num">9/10</td><td><b>半導体だけは上</b><br><span style="font-size:11px">SOXを初取得</span></td><td class="up"><b>アドバンテスト +3.29% ◎◎</b><br><span class="na" style="font-size:11px">一時−956円→終値+128.17円<br>非鉄は−3.63%で最下位</span></td></tr>
       </table></div>
-      <p><b>15回中 ◎10・△2・×3</b>（方向を書いた日だけ）。</p>
-      <p><b>×の3回はすべて「休む／追うな」と言って上がった日です。</b>だから今日は、材料が揃っている半導体について<b>はっきり「上」と書きました。</b>外したらそう書きます。</p>
+      <p><b>16回中 ◎11・△2・×3</b>（方向を書いた日だけ）。</p>
+      <p><b>×の3回はすべて「休む／追うな」と言って上がった日でした。</b>今日はその癖の出どころ（指数だけ見て決める）を直した初日です。<b>SOXを見たから、下げ材料が揃った朝に「半導体は上」と書けました。</b></p>
     </div>
   </details>
 
   <details>
     <summary><span class="tag">正直</span>取れていないもの</summary>
     <div class="body">
-      <p><b>個別銘柄の株価が、9日間取れていません。</b>株式サイトが遮断されたままです。<b>そのため今日の候補にも「いまの株価」を書けません。</b>3989の1,498円は、TOBの開示に書かれた数字です。</p>
-      <p><b>取れなかったもの：</b>四国化成HDの売出価格、大和自交の第三者割当の発行価額、APHD・デルタピーの発行株数。<b>推測で埋めません。</b></p>
-      <p><b>SOXは今朝が初回です。</b>9/7に手順へ入れて4日目でした。<b>手順に書いただけでは取れない、という事実を残しておきます。</b></p>
+      <p><b>今日ストップ高になった「最終利益3.3倍・配当10円→160円」の銘柄名が取れませんでした。</b>見出ししか読めません。<b>昨日の引け後の開示から、私が拾えていなかった可能性があります。</b></p>
+      <p><b>33業種の完全なランキングも取れていません。</b>確認できたのは非鉄金属 −3.63%（下落率トップ）、その他製品 −2.81%、建設業 −2.33% だけです。<b>今朝「銀行・保険は追い風」と書きましたが、当たったという証拠は取れていません。空運についても同じです。</b></p>
+      <p><b>個別銘柄の株価は10日間取れていません。</b>シェアテク3989、四国化成HD4099、ハリマビステム9780、いずれも今日の値段は取得不可です。</p>
+      <p><b>TOPIXの終値も取得不可です。</b>検索に出てきた「TOPIXが新高値」という記事は<b>2021年のもの</b>でした。日付を確かめて使っていません。</p>
     </div>
   </details>
 
