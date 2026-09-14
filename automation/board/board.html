@@ -146,122 +146,102 @@ footer{font-size:11px;color:var(--ink-3);line-height:1.65;border-top:1px solid v
 
   <div class="top">
     <h1>朝イチ判定ボード</h1>
-    <div class="stamp">9/14 (月) 6:15</div>
+    <div class="stamp">9/14 (月) 答え合わせ済み</div>
   </div>
 
-  <!-- ===== 判定 ===== -->
+  <!-- ===== 結果 ===== -->
   <section class="verdict">
-    <div class="verdict-bar" style="background:var(--go)"></div>
+    <div class="verdict-bar" style="background:var(--down)"></div>
     <div class="verdict-in">
-      <div class="eyebrow">今日の判定</div>
-      <p class="verdict-line" style="color:var(--go)">売られすぎた半導体の、<br>戻りだけを取る日</p>
+      <div class="eyebrow">今日の結果</div>
+      <p class="verdict-line" style="color:var(--down)">外しました。<br><span style="font-size:.45em;color:var(--ink-2)">半導体は戻らず、さらに下げました</span></p>
       <p class="verdict-why">
-        <b>金曜の東京は半導体主導で −1,259.61円 下げました。</b>その夜、<b>米国の半導体（SOX）は ＋1.80% で反発しています。</b><br>
-        <b>NYダウも ＋509.19ドル（＋0.98%）で5営業日ぶりの反発。</b>原油も103.03ドルから99ドル台に下がりました。<br>
-        <b>金曜に売られすぎた分が戻る形です。ただし「戻り」であって「上がり直し」ではありません。</b>
+        <b>今朝「売られすぎた半導体の戻りだけを取る日」と書きました。戻りませんでした。</b><br>
+        日経は <b>63,492.99円（−518.35円）で続落</b>。<b>7月30日以来、約1カ月半ぶりの安値</b>で、一時は6万3,000円を割りました。<br>
+        <b>キオクシアHD −6.37%、SUMCO −3.14%。ソフトバンクGは一時 −13%です。</b>
       </p>
     </div>
   </section>
 
-  <!-- ===== 訂正 ===== -->
+  <!-- ===== なぜ外したか ===== -->
   <div class="ask">
-    <b>⚠️ 土曜のボードの数字を1つ訂正します。</b><br><br>
-    <b>「1週間で −2,388.50円（−3.60%）」と書きました。これは月曜の終値から金曜の終値までの差です。</b><br><br>
-    <b>正しい週間の変化は、前の週の金曜（9/4）の終値 65,020.94円 から比べて −1,009.60円（−1.55%）です。</b><br><br>
-    <b>月曜が大きく上がった日（＋2.12%）だったので、そこを起点にすると下げ幅が2倍以上に見えていました。</b>下げた週なのは変わりませんが、<b>数字は1.55%であって3.60%ではありません。</b>
+    <b>⚠️ なぜ外したのか。原因は1つです。</b><br><br>
+    <b>金曜の夜、米国の半導体（SOX）は ＋1.80% で反発していました。それは事実です。</b><br><br>
+    <b>でもそのあと、土日に新しいニュースが出ていました。</b><br><br>
+    ・<b>米オープンAIのトップが、年内の上場を見送る考えを示した</b><br>
+    ・<b>AIの開発ペースが鈍るという懸念が広がった</b><br><br>
+    <b>SOXの値段は「金曜までに分かっていたこと」の値段です。土日に出た話は入っていません。</b><br><br>
+    <b>私の手順には「毎朝SOXを取る」はありますが、「土日に出たニュースを探す」がありませんでした。</b>月曜の朝だけ、この穴が空きます。<b>手順に足します。</b>
   </div>
 
-  <!-- ===== 前夜の値段 ===== -->
+  <!-- ===== 相場 ===== -->
   <section class="strip">
-    <div class="cell"><span class="k">SOX 半導体 9/11</span><span class="v up">11,823.998</span><span class="d up">＋209.83（＋1.80%）反発</span></div>
-    <div class="cell"><span class="k">NYダウ 9/11</span><span class="v up">52,573.29</span><span class="d up">＋509.19（＋0.98%）</span></div>
-    <div class="cell"><span class="k">WTI原油</span><span class="v dn">99ドル台</span><span class="d dn">9/10は103.03ドル</span></div>
-    <div class="cell"><span class="k">ドル円</span><span class="v dn">153.24</span><span class="d dn">154.48から反落＝円高</span></div>
-    <div class="cell"><span class="k">米8月CPI</span><span class="v">＋3.4%</span><span class="d">予想どおり</span></div>
-    <div class="cell"><span class="k">9月SQ値</span><span class="v">63,039</span><span class="d">下値の節目</span></div>
+    <div class="cell"><span class="k">日経平均 9/14</span><span class="v dn">63,492.99</span><span class="d dn">−518.35 続落</span></div>
+    <div class="cell"><span class="k">ソフトバンクG</span><span class="v dn">一時 −13%</span><span class="d dn">前場は5,846円（−11%）</span></div>
+    <div class="cell"><span class="k">非鉄金属</span><span class="v dn">下落トップ</span><span class="d dn">先週から続落</span></div>
   </section>
 
-  <!-- ===== 業種 ===== -->
-  <div class="sec-label">Sector ／ だから、どの業種が得をするか</div>
-
+  <!-- ===== 順逆表 ===== -->
   <section class="no">
-    <div class="no-h" style="color:var(--ink)">📊 金曜と逆向きになるのは、半導体と資源です</div>
+    <div class="no-h" style="color:var(--ink)">📊 業種の表は、半導体だけが外れました</div>
     <div class="tbl-wrap" style="padding:4px 10px 12px">
       <table>
-        <tr><th>業種</th><th>金曜</th><th>今日</th><th>理由</th></tr>
-        <tr><td><b>半導体</b></td><td class="dn">逆風</td><td class="up"><b>追い風</b></td><td><b>SOXが ＋1.80% で反発。</b>CPIが予想どおりで利上げ警戒が和らいだ</td></tr>
-        <tr><td><b>空運・化学・陸運</b></td><td class="dn">逆風</td><td class="up"><b>逆風がゆるむ</b></td><td>原油が103.03 → <b>99ドル台</b>に低下</td></tr>
-        <tr><td><b>石油・鉱業・非鉄</b></td><td class="na">追わない</td><td class="dn"><b>逆風</b></td><td>原油が下がった側。資源は先週すでに動き終わっています</td></tr>
-        <tr><td><b>自動車・機械</b></td><td class="up">追い風</td><td class="dn"><b>逆風に戻る</b></td><td>ドル円が154.48 → <b>153.24円</b>の円高</td></tr>
-        <tr><td><b>銀行・保険</b></td><td class="up">追い風</td><td class="na"><b>中立</b></td><td>CPIが予想どおりで米金利は低下。<b>ただし日銀の会合が今週</b></td></tr>
-        <tr><td><b>高配当株</b></td><td class="na">—</td><td class="up"><b>追い風</b></td><td><b>9月末の権利確定が近い。</b>金利低下も追い風</td></tr>
+        <tr><th>今朝書いたこと</th><th>実際</th><th></th></tr>
+        <tr><td><b>半導体は追い風</b></td><td class="dn"><b>キオクシアHD −6.37%、SUMCO −3.14%</b></td><td class="dn"><b>×</b></td></tr>
+        <tr><td><b>石油・鉱業・非鉄は逆風</b></td><td><b>非鉄金属が下落率トップ</b></td><td class="up"><b>◎◎</b></td></tr>
+        <tr><td><b>陸運は逆風がゆるむ</b></td><td><b>陸運業が上昇業種</b></td><td class="up"><b>◎</b></td></tr>
+        <tr><td><b>銀行・保険は中立</b></td><td>保険業が上昇業種</td><td class="na"><b>△</b>（中立と書いたので）</td></tr>
+        <tr><td><b>自動車・機械は円高で逆風</b></td><td class="na">取得不可</td><td class="na">—</td></tr>
       </table>
     </div>
-    <p class="why" style="padding-top:0"><b>金曜の下げの主因は、アドバンテスト・キオクシアHD・東京エレクトロンの半導体3銘柄でした。</b>その半導体が米国で戻っています。<b>売られた理由が消えたので、まず戻ります。</b></p>
+    <p class="why" style="padding-top:0"><b>上昇したのはサービス業（トップ）・保険業・その他製品・水産農林・陸運業。下落トップは非鉄金属でした。</b><br>
+      <b>業種の表は当たっています。でも「今日の判定」を決めたのは半導体でした。そこを外せば、表が合っていても意味がありません。</b></p>
   </section>
 
-  <!-- ===== 行動 ===== -->
-  <section class="plan">
-    <div class="plan-h">今日やること</div>
-    <ol class="steps">
-      <li><b>9:15まで待つ。今日はいつもより大事です</b><span class="sub">戻りの日は<b>寄り付きがいちばん高い</b>ことがよくあります。9/3に実際そうなりました</span></li>
-      <li><b>半導体は「戻り」だけ。追いかけない</b><span class="sub">木曜の未明にFOMCの結果が出ます。<b>水曜以降は動きにくくなります</b></span></li>
-      <li><b>今日の本命は半導体ではなく、金曜の引け後に出た増配です</b><span class="sub">下に2社。<b>幅まで確認しました</b></span></li>
-    </ol>
-  </section>
-
-  <!-- ===== 候補 ===== -->
-  <div class="sec-label">Watch ／ 今日の2社</div>
+  <!-- ===== 北川鉄工所 ===== -->
+  <div class="sec-label">Result ／ 候補はどうだったか</div>
 
   <article class="card">
     <div class="card-top">
       <div class="nm">
         <span class="n">北川鉄工所</span>
-        <span class="meta"><span class="code">6317</span><span class="mkt">東証プライム</span></span>
+        <span class="meta"><span class="code">6317</span><span class="mkt">東証スタンダード</span></span>
       </div>
-      <div class="pct" style="color:var(--go)">65<span>%</span><span class="cap">うまくいく見込み</span></div>
+      <div class="pct" style="color:var(--up)">S高<br>気配<span class="cap">朝の見込みは65%</span></div>
     </div>
-    <div class="meter-box">
-      <div class="meter"><i style="width:65%;background:var(--go)"></i><span class="thr"></span></div>
-      <div class="meter-legend"><span>5%</span><span>40% ＝ 買う／休むの線</span><span>85%</span></div>
-    </div>
-    <p class="why"><b>金曜の引け後、通期の業績予想を上に修正し、あわせて大きな増配を発表しました。</b><br>
-      <b>年間の配当が 64円 → 110円。中間配当だけでも 32円 → 50円です。</b><br>
-      <b>金曜の終値1,707円で計算すると、配当利回りは 6.44%。</b>東証プライムの平均（2%台）の2倍以上です。</p>
+    <p class="why"><b>ストップ高買い気配になりました。方向は当たりです。</b><br>
+      <b>でも私の助言は間違っていました。今朝こう書きました——「ストップ高で買えなくなる心配はありません。普通に買えるはずです」。</b><br>
+      <b>逆でした。買い注文ばかりが並んで、多くの人は買えていません。</b></p>
 
     <div class="order">
-      <div class="oh">先週おぼえた計算を、ここで使います</div>
+      <div class="oh">なぜ計算が外れたか</div>
       <dl>
-        <dt>材料を円に</dt><dd>増える配当 <b>＋46円</b></dd>
-        <dt>株価で割る</dt><dd>46 ÷ 1,707 ＝ <b>2.7%</b></dd>
-        <dt>1日の値幅</dt><dd><b>±400円 ＝ 23.4%</b>（1,500〜2,000円の株）</dd>
-        <dt class="take">答え</dt><dd class="take"><b>材料（2.7%）は値幅（23.4%）にじゅうぶん収まります</b></dd>
+        <dt>私が測った材料</dt><dd>増える配当 <b>＋46円</b>（株価の2.7%）</dd>
+        <dt class="stop">測っていなかった材料</dt><dd class="stop"><b>通期の営業利益 30億円 → 45億円（＋50%）</b><br>上期も 15億円 → 26億円</dd>
+        <dt>1日の値幅</dt><dd>±400円 ＝ <b>23.4%</b></dd>
+        <dt class="stop">答え</dt><dd class="stop"><b>利益が＋50%なら、23.4%では収まりません</b></dd>
       </dl>
-      <p class="why" style="padding-top:0"><b>つまりエアトリとは逆で、ストップ高で買えなくなる心配はありません。</b>普通に買えるはずです。<br>
-        <b>ただし、これは「最低ここまでは動く」の計算です。</b>利回り6.44%という水準そのものを安いと見る人が増えれば、もっと買われます。<b>その上限は私には計算できません。</b></p>
+      <p class="why" style="padding-top:0"><b>先週エアトリで作ったルールの「材料を円にする」を、配当の分だけでやっていました。</b><br>
+        <b>業績の上方修正も一緒に円にしなければいけません。</b>配当は＋46円でも、利益は15億円増えています。<b>桁が違いました。</b></p>
     </div>
 
     <div class="order">
-      <div class="oh">点数の内訳</div>
+      <div class="oh">もう1つの間違い</div>
       <dl>
-        <dt>出発点</dt><dd><b>40%</b></dd>
-        <dt class="take">＋20</dt><dd class="take"><b>上方修正＋増配。しかも幅を確認しました</b>（配当が＋71.9%）。<b>先週これを確認せずに点を付けて間違えたので、今週は必ず確認します</b></dd>
-        <dt class="take">＋5</dt><dd class="take"><b>高配当は今の相場と順方向。</b>9月末の権利確定が近く、金曜は米金利も下がりました</dd>
-        <dt>合計</dt><dd><b>65%</b></dd>
+        <dt class="stop">今朝の表記</dt><dd class="stop">東証<b>プライム</b></dd>
+        <dt>正しくは</dt><dd>東証<b>スタンダード</b></dd>
       </dl>
-      <p class="why" style="padding-top:0"><b>足さなかった点：業績（利益）を何%上げたのかが取得できていません。</b>配当の幅しか確認できていないので、＋25 にはしません。<br>
-        <b>もう1つ確認できていないこと：この110円が毎年続く配当なのか、今回だけの特別配当なのかが分かりません。</b>毎年続くなら株価はもっと上を目指しますが、<b>今回だけなら9月末の権利落ちで戻ります。ここは大きな違いです。</b></p>
-    </div>
-
-    <div class="order">
-      <div class="oh">注文の作り方</div>
-      <dl>
-        <dt>入る時</dt><dd><b>9:15まで待つ</b>。寄り成りは使わない</dd>
-        <dt class="stop">損切り</dt><dd class="stop">入った値段から <b>−3〜5%</b> で機械的に</dd>
-        <dt>枚数</dt><dd>いつもの<b>半分</b>（FOMCが今週のため）</dd>
-      </dl>
+      <p class="why" style="padding-top:0"><b>市場区分を間違えて書いていました。</b>値幅制限は市場に関係なく株価で決まるので計算には影響しませんが、<b>間違いは間違いなので書いておきます。</b></p>
     </div>
   </article>
+
+  <div class="ask">
+    <b>💡 今日の学びは、先週のルールの直し方です。</b><br><br>
+    <b>先週こう決めました：材料を円にして、前日終値で割って、1日の値幅と比べる。</b><br><br>
+    <b>正しかったのですが、「材料を円にする」の取りこぼしがありました。</b><br><br>
+    <b>開示に複数の良い話が入っていたら、全部を円にして足すこと。</b>今日は「増配」と「上方修正」が同じ開示に入っていて、<b>私は配当だけ見ていました。</b><br><br>
+    <b>そして結論の書き方も変えます。</b>「普通に買えます」ではなく、<b>「S高になるかもしれないので、寄り付きの板を見てから決めてください」</b>と書きます。<b>計算はあくまで目安です。</b>
+  </div>
 
   <article class="card">
     <div class="card-top">
@@ -269,67 +249,46 @@ footer{font-size:11px;color:var(--ink-3);line-height:1.65;border-top:1px solid v
         <span class="n">JMホールディングス</span>
         <span class="meta"><span class="code">3539</span><span class="mkt">東証プライム</span></span>
       </div>
-      <div class="pct" style="color:var(--hold)">50<span>%</span><span class="cap">うまくいく見込み</span></div>
+      <div class="pct" style="color:var(--ink-3)">取得<br>不可<span class="cap">朝の見込みは50%</span></div>
     </div>
-    <div class="meter-box">
-      <div class="meter"><i style="width:50%;background:var(--hold)"></i><span class="thr"></span></div>
-      <div class="meter-legend"><span>5%</span><span>40% ＝ 買う／休むの線</span><span>85%</span></div>
-    </div>
-    <p class="why"><b>金曜の引け後、増配と自己株式の取得を同時に発表しました。</b><br>
-      <b>ただし増配は 12円 → 13円。＋1円です。</b>ここはほとんど材料になりません。<br>
-      <b>本体は自己株買いのほうです。194万株・20億円。発行済株式の 3.81% にあたります。</b></p>
-    <div class="order">
-      <div class="oh">点数の内訳</div>
-      <dl>
-        <dt>出発点</dt><dd><b>40%</b></dd>
-        <dt class="take">＋5</dt><dd class="take">増配。<b>ただし＋1円なので、いつもの＋20は付けません</b></dd>
-        <dt class="take">＋10</dt><dd class="take"><b>自己株買いが発行済の3.81%</b>。規模は大きい</dd>
-        <dt class="stop">−5</dt><dd class="stop"><b>取得期間が9/14〜2027年7/31の約10か月半。</b>1日あたりの買いは薄まります</dd>
-        <dt>合計</dt><dd><b>50%</b></dd>
-      </dl>
-      <p class="why" style="padding-top:0"><b>これが先週の教訓の実践です。</b>「増配」という言葉だけなら北川鉄工所と同じですが、<b>片方は＋46円、こちらは＋1円。幅を見ないと同じ点になってしまいます。</b></p>
-    </div>
+    <p class="why"><b>今日の株価が取れませんでした。</b>株式サイトの遮断が14日続いています。<br>
+      <b>増配が＋1円と小さいので、いつもの＋20を付けなかった判断そのものは、北川鉄工所との差を見れば正しかったと思います。</b>ただし<b>結果で確かめられていません。</b></p>
   </article>
-
-  <!-- ===== 見送り ===== -->
-  <section class="no">
-    <div class="no-h">✋ 今日は買わないもの</div>
-    <ul>
-      <li><b>SCAT（3974）</b> — 通期上方修正と増配を出しましたが、<b>同じ日に「行使価額修正条項付の新株予約権の払込完了」も出しています。</b>良い話と、株が増える話が同時です。<b>両方読めるまで判定しません</b></li>
-      <li><b>光・彩（7878）</b> — 業績予想の修正と特別配当を出しましたが、<b>東証の上場廃止を申請し、名証への単独上場に移ります。</b>売買が細くなるので、値段が思うように付きません</li>
-      <li><b>G-リンカーズ（5131）</b> — SBIホールディングスとの資本業務提携。相手は安定株主ですが、<b>これは「新株の発行」なので株数が増えます。</b>9/8の萩原工業（自己株式の処分＝株数は増えない）とは別の形です</li>
-      <li><b>石油・鉱業・非鉄</b> — <b>原油が下がった側</b>です。先週すでに動き終わっています</li>
-      <li><b>特別損失を出した会社</b> — G-モルフォ（3653）、G-QDレーザ（6613）、G-さくらさく（7097）、G-メディア総研（9242）</li>
-    </ul>
-  </section>
 
   <!-- ===== イベント ===== -->
   <section class="events">
-    <div class="ev hot"><span class="when">9/17(木)<br>3:00</span><span class="what"><b>FOMCの結果</b>／日本時間の未明に出ます</span><span class="lv">★★★</span></div>
+    <div class="ev hot"><span class="when">9/17(木)<br>3:00</span><span class="what"><b>FOMCの結果</b>／日本時間の未明</span><span class="lv">★★★</span></div>
     <div class="ev hot"><span class="when">今週</span><span class="what"><b>日銀の金融政策決定会合</b>／<b>木・金で日米の答えが続けて出ます</b></span><span class="lv">★★★</span></div>
-    <div class="ev hot"><span class="when">9月末</span><span class="what"><b>中間期末</b>／配当・優待の権利が決まる日</span><span class="lv">★★★</span></div>
-    <div class="ev"><span class="when">当面</span><span class="what">イラン情勢／原油は99ドル台に低下</span><span class="lv">★★</span></div>
-    <div class="ev"><span class="when">9/29</span><span class="what">カカクコムのTOB期限（延長後）</span><span class="lv">★★</span></div>
-    <div class="ev"><span class="when">節目</span><span class="what">9月SQ値 <b>63,039円</b>が下値のめど</span><span class="lv">★★</span></div>
+    <div class="ev hot"><span class="when">当面</span><span class="what"><b>AI開発のペース</b>／<b>今日の下げの主因</b>。オープンAIの上場見送り</span><span class="lv">★★★</span></div>
+    <div class="ev"><span class="when">9月末</span><span class="what">中間期末（配当・優待の権利が決まる日）</span><span class="lv">★★</span></div>
+    <div class="ev"><span class="when">節目</span><span class="what">9月SQ値 <b>63,039円</b>／今日は一時ここに接近</span><span class="lv">★★</span></div>
   </section>
 
   <!-- ===== たたみ ===== -->
   <div class="sec-label">Detail ／ 読みたい人だけ</div>
 
   <details>
-    <summary><span class="tag">新ルール</span>増配を見たら、まず値幅で割る</summary>
+    <summary><span class="tag">改訂</span>材料を値幅で割るルール（今日直しました）</summary>
     <div class="body">
-      <p><b>先週エアトリ（6191）を取りこぼして作ったルールです。今日さっそく使いました。</b></p>
+      <p><b>手順そのものは変えません。「材料を円にする」の中身を直します。</b></p>
       <div class="tbl-wrap"><table>
-        <tr><th></th><th>エアトリ 6191</th><th>北川鉄工所 6317</th></tr>
-        <tr><td>増える配当</td><td class="num">＋150円</td><td class="num">＋46円</td></tr>
-        <tr><td>前日の終値</td><td class="num">923円</td><td class="num">1,707円</td></tr>
-        <tr><td><b>株価に対して</b></td><td class="num up"><b>16.3%</b></td><td class="num"><b>2.7%</b></td></tr>
-        <tr><td>1日に動ける幅</td><td class="num">±150円＝<b>16.3%</b></td><td class="num">±400円＝<b>23.4%</b></td></tr>
-        <tr><td><b>答え</b></td><td class="up"><b>1日に収まらない<br>→ 2日連続S高</b></td><td class="na"><b>収まる<br>→ 普通に買える</b></td></tr>
+        <tr><th></th><th>やること</th><th>北川鉄工所の場合</th></tr>
+        <tr><td class="num">1</td><td><b>その開示に入っている良い話を、全部あげる</b></td><td>①増配 ②通期の上方修正 ③上期の上方修正</td></tr>
+        <tr><td class="num">2</td><td>それぞれを円にする</td><td>①＋46円 ②営業利益＋15億円 ③＋11億円</td></tr>
+        <tr><td class="num">3</td><td>前日終値と比べる</td><td>①は2.7%。<b>②は＋50%の増益</b></td></tr>
+        <tr><td class="num">4</td><td>いちばん大きいもので判定する</td><td class="up"><b>値幅23.4%では収まらない → S高</b></td></tr>
       </table></div>
-      <p><b>同じ「増配」でも、結論が正反対になります。</b>エアトリは「2日目でも間に合う」、北川鉄工所は「1日で織り込まれるので当日に動く」。</p>
-      <p><b>TOBでは同じ計算が、また別の意味になります。</b>TOB価格という天井があるので「何日かけてもそこで止まる」。<b>増配に天井はありません。</b></p>
+      <p><b>今日は①だけで判定しました。②を見ていませんでした。</b></p>
+      <p><b>結論の書き方も変えます。</b>「収まるから普通に買える」とは書きません。<b>「計算では収まるが、寄り付きの板を見てから決める」</b>と書きます。</p>
+    </div>
+  </details>
+
+  <details>
+    <summary><span class="tag">新ルール</span>月曜の朝は、土日のニュースを別に探す</summary>
+    <div class="body">
+      <p><b>SOXの値段は「金曜までに分かっていたこと」の値段です。</b>土日に出た話は入っていません。</p>
+      <p><b>今日はその穴に落ちました。</b>SOXは＋1.80%で反発していたのに、東京の半導体は下げました。土日に<b>オープンAIの上場見送り</b>と<b>AI開発の鈍化懸念</b>が出ていたからです。</p>
+      <p><b>したがって月曜の朝だけ、手順に1つ足します：金曜の引けから月曜の朝までに出たニュースを、指数とは別に探す。</b>特に、その週に主役だったセクター（今回はAI・半導体）について探します。</p>
     </div>
   </details>
 
@@ -338,31 +297,12 @@ footer{font-size:11px;color:var(--ink-3);line-height:1.65;border-top:1px solid v
     <div class="body">
       <div class="tbl-wrap"><table>
         <tr><th>言葉</th><th>意味</th></tr>
-        <tr><td><b>配当利回り</b></td><td>配当 ÷ 株価。<b>北川鉄工所は6.44%</b>（プライムの平均は2%台）</td></tr>
-        <tr><td><b>特別配当</b></td><td><b>今回だけの配当。</b>来年は戻ります。普通の増配とは意味が違います</td></tr>
-        <tr><td><b>権利確定日</b></td><td>この日に株を持っていれば配当・優待がもらえる日。<b>9月末です</b></td></tr>
-        <tr><td><b>権利落ち</b></td><td>権利確定日の翌日。<b>配当の分だけ株価が下がるのが普通です</b></td></tr>
-        <tr><td><b>SQ値</b></td><td>先物の清算に使う値段。<b>あとから「節目」として意識されます</b></td></tr>
-        <tr><td><b>SOX</b></td><td>米国の半導体株を集めた指数</td></tr>
-        <tr><td><b>FOMC</b></td><td>米国の金利を決める会合</td></tr>
-        <tr><td><b>自己株式の取得</b></td><td>会社が自分の株を買うこと。<b>出回る株が減るので、1株の価値が上がります</b></td></tr>
-      </table></div>
-    </div>
-  </details>
-
-  <details>
-    <summary><span class="tag">値幅</span>1日に動ける幅の一覧</summary>
-    <div class="body">
-      <div class="tbl-wrap"><table>
-        <tr><th>前日の終値</th><th>1日に動ける幅</th></tr>
-        <tr><td>200〜500円未満</td><td class="num">±80円</td></tr>
-        <tr><td>500〜700円未満</td><td class="num">±100円</td></tr>
-        <tr><td>700〜1,000円未満</td><td class="num">±150円（エアトリ）</td></tr>
-        <tr><td>1,000〜1,500円未満</td><td class="num">±300円（シェアテク）</td></tr>
-        <tr><td><b>1,500〜2,000円未満</b></td><td class="num up"><b>±400円</b>（北川鉄工所）</td></tr>
-        <tr><td>2,000〜3,000円未満</td><td class="num">±500円（アルビス）</td></tr>
-        <tr><td>3,000〜5,000円未満</td><td class="num">±700円（カカクコム）</td></tr>
-        <tr><td>5,000〜7,000円未満</td><td class="num">±1,000円</td></tr>
+        <tr><td><b>ストップ高買い気配</b></td><td>上限まで買い注文が並び、<b>売る人がいないので売買が成立していない</b>状態。<b>上がっても買えません</b></td></tr>
+        <tr><td><b>SOX</b></td><td>米国の半導体株を集めた指数。<b>金曜までの情報しか入っていません</b></td></tr>
+        <tr><td><b>続落</b>（ぞくらく）</td><td>2日以上つづけて下がること</td></tr>
+        <tr><td><b>営業利益</b></td><td>本業のもうけ。<b>いちばん大事な数字です</b></td></tr>
+        <tr><td><b>SQ値</b></td><td>先物の清算に使う値段。あとから「節目」として意識されます</td></tr>
+        <tr><td><b>東証スタンダード</b></td><td>プライムより小さい会社が多い市場。<b>値幅制限のルールは同じです</b></td></tr>
       </table></div>
     </div>
   </details>
@@ -390,21 +330,22 @@ footer{font-size:11px;color:var(--ink-3);line-height:1.65;border-top:1px solid v
         <tr><td class="num">9/8</td><td>板を見て決める</td><td class="na">数えず（方向を書かず）</td></tr>
         <tr><td class="num">9/9</td><td><b>選ぶ日</b></td><td class="up"><b>石油・石炭 +5.01% ◎◎</b></td></tr>
         <tr><td class="num">9/10</td><td><b>半導体だけは上</b></td><td class="up"><b>アドバンテスト +3.29% ◎◎</b></td></tr>
-        <tr><td class="num">9/11</td><td><b>半導体から降りる</b></td><td class="dn"><b>日経 −1,259.61円 ◎◎</b><br><span class="na" style="font-size:11px">エアトリを取りこぼし</span></td></tr>
-        <tr><td class="num">9/14</td><td><b>半導体の戻りだけ取る</b></td><td class="na">結果待ち</td></tr>
+        <tr><td class="num">9/11</td><td><b>半導体から降りる</b></td><td class="dn"><b>日経 −1,259.61円 ◎◎</b></td></tr>
+        <tr><td class="num">9/14</td><td><b>半導体の戻りを取る</b></td><td class="dn">日経 <b>−518.35円 ×</b><br><span class="na" style="font-size:11px">キオクシアHD −6.37%<br>土日のニュースを見逃し</span></td></tr>
       </table></div>
-      <p><b>17回中 ◎12・△2・×3</b>（方向を書いた日だけ）。</p>
-      <p><b>×の3回は全部「休む／追うな」と言って上がった日です。今日は「戻る」側なので、その癖とは逆向きです。</b>根拠はSOXの ＋1.80% という実際の値段で、理屈ではありません。</p>
+      <p><b>18回中 ◎12・△2・×4</b>（方向を書いた日だけ）。</p>
+      <p><b>今日の×は、これまでの3回と形が違います。</b>これまでの×はすべて「休む／追うな」と言って上がった日でした。<b>今日は初めて「上がる」と言って下がりました。</b><br>
+        <b>弱気に外す癖を直そうとして、逆に振れた可能性があります。</b>次の数日、そこを見ます。</p>
     </div>
   </details>
 
   <details>
     <summary><span class="tag">正直</span>取れていないもの</summary>
     <div class="body">
-      <p><b>北川鉄工所の業績の修正幅（利益を何%上げたか）が取れていません。</b>配当の幅だけ確認して点を付けています。<b>また、110円が毎年続く配当なのか今回だけの特別配当なのかも分かりません。ここは結論が大きく変わる部分です。</b></p>
-      <p><b>シカゴの日経平均先物が取れていません。</b>検索には「6万8510円」という数字が出ましたが、<b>金曜の終値64,011円と合わないので8月の記事と判断して使いませんでした。</b></p>
-      <p><b>個別銘柄の今の株価は13日間取れていません。</b>北川鉄工所の1,707円は、配当利回りの報道から逆算できた例外です。</p>
-      <p><b>土曜のボードで週間の下げ幅を「−3.60%」と書いたのは、起点の取り方の誤りでした。</b>正しくは前週末比 <b>−1,009.60円（−1.55%）</b>です。上で訂正しました。</p>
+      <p><b>北川鉄工所が、ストップ高で引けたのか、途中で売買が成立したのかが取れていません。</b>報道は「ストップ高買い気配」までです。<b>「上がった」ことと「買えた」ことは別です。</b></p>
+      <p><b>JMホールディングス（3539）の今日の株価も取れていません。</b>14日連続です。</p>
+      <p><b>33業種の完全なランキングも取れていません。</b>確認できたのは上昇トップがサービス業、下落トップが非鉄金属であることと、上昇側の5業種だけです。</p>
+      <p><b>今朝、北川鉄工所を「東証プライム」と書きました。正しくは「東証スタンダード」です。</b>計算には影響しませんが、間違いでした。</p>
     </div>
   </details>
 
