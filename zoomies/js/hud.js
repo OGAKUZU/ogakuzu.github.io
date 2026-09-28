@@ -131,7 +131,7 @@ export class PlayerHUD {
     this.el.classList.toggle('device', !!dev);
     this.set('pw', String(Math.round(r.power)));
     this.set('wkg', (r.power / r.weight).toFixed(1));
-    this.set('src', dev ? '⚡ BLE' : ctl?.mode === 'manual' ? `⌨ 目標 ${Math.round(ctl.manualTarget)}W` : ctl?.sprinting ? '🔥 もがき中' : ctl?.keys.attack ? '💥 アタック' : ctl?.keys.rest ? '💤 休む' : '⌨ オート追走');
+    this.set('src', dev ? '⚡ BLE' : ctl?.sprinting ? '🔥 もがき中' : ctl?.mode === 'manual' ? `⌨ 目標 ${Math.round(ctl.manualTarget)}W` : ctl?.keys.attack ? '💥 アタック' : ctl?.keys.rest ? '💤 休む' : '⌨ オート追走');
     this.set('hr', r.hr > 30 ? String(Math.round(r.hr)) : '--');
     this.set('cad', r.cadence > 1 ? String(Math.round(r.cadence)) : '--');
     const wb = r.wbal.frac;

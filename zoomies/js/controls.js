@@ -76,7 +76,7 @@ export class PlayerControl {
     if (this.settings.keyboardMode === 'manual' && (this.keys.attack || this.keys.rest)) {
       this.repeatT += dt;
       if (this.repeatT > 0.35) {
-        this.manualTarget = clamp(this.manualTarget + (this.keys.attack ? 1 : -1) * 120 * dt, 0, 1500);
+        this.manualTarget = clamp(this.manualTarget + (this.keys.attack ? 1 : -1) * 60 * dt, 0, 1500);
       }
     } else this.repeatT = 0;
 
