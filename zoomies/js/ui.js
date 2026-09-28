@@ -294,6 +294,7 @@ export class UI {
     const g = this.g;
     const d = g.devices[this.devP];
     const st = kind === 'power' ? d.power : kind === 'hr' ? d.hr : d.cad;
+    if (st.connecting) return;
     if (st.connected) {
       d.disconnect(kind);
       this.refreshDevices();

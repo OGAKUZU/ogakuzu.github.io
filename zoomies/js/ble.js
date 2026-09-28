@@ -173,7 +173,7 @@ export class DeviceSet extends Emitter {
     });
     this.power.device = device;
     this.power.name = device.name || 'パワーメーター';
-    device.addEventListener('gattserverdisconnected', () => this.onDisconnect('power'));
+    device.ongattserverdisconnected = () => this.onDisconnect('power');
     await this.setupPower(device);
   }
 
@@ -190,15 +190,15 @@ export class DeviceSet extends Emitter {
         const ftms = await server.getPrimaryService(SVC.FTMS);
         try {
           const ibd = await ftms.getCharacteristic(CHR.IBD);
+          ibd.oncharacteristicvaluechanged = (e) => this.onIndoorBike(e.target.value);
           await ibd.startNotifications();
-          ibd.addEventListener('characteristicvaluechanged', (e) => this.onIndoorBike(e.target.value));
           gotPower = true;
           this.power.source = 'FTMS';
         } catch (e) { console.warn('IBD', e); }
         try {
           const cp = await ftms.getCharacteristic(CHR.FMCP);
+          cp.oncharacteristicvaluechanged = (e) => this.onControlResponse(e.target.value);
           await cp.startNotifications();
-          cp.addEventListener('characteristicvaluechanged', (e) => this.onControlResponse(e.target.value));
           this.cp = cp;
           await this.cpWrite(new Uint8Array([0x00]).buffer); // 制御権リクエスト
           await this.cpWrite(new Uint8Array([0x07]).buffer).catch(() => {}); // 開始
@@ -210,8 +210,8 @@ export class DeviceSet extends Emitter {
       try {
         const cps = await server.getPrimaryService(SVC.CPS);
         const m = await cps.getCharacteristic(CHR.CPM);
+        m.oncharacteristicvaluechanged = (e) => this.onCyclingPower(e.target.value);
         await m.startNotifications();
-        m.addEventListener('characteristicvaluechanged', (e) => this.onCyclingPower(e.target.value));
         gotPower = true;
         this.power.source = this.power.source ? 'FTMS+CPS' : 'CPS';
       } catch (e) { /* CPS なし */ }
@@ -228,7 +228,7 @@ export class DeviceSet extends Emitter {
     const device = await navigator.bluetooth.requestDevice({ filters: [{ services: [SVC.HRS] }], optionalServices: ['battery_service'] });
     this.hr.device = device;
     this.hr.name = device.name || '心拍計';
-    device.addEventListener('gattserverdisconnected', () => this.onDisconnect('hr'));
+    device.ongattserverdisconnected = () => this.onDisconnect('hr');
     await this.setupHR(device);
   }
 
@@ -239,11 +239,11 @@ export class DeviceSet extends Emitter {
       const server = await device.gatt.connect();
       const s = await server.getPrimaryService(SVC.HRS);
       const c = await s.getCharacteristic(CHR.HRM);
-      await c.startNotifications();
-      c.addEventListener('characteristicvaluechanged', (e) => {
+      c.oncharacteristicvaluechanged = (e) => {
         this.hr.bpm = parseHeartRate(e.target.value).hr;
         this.hr.t = this.now();
-      });
+      };
+      await c.startNotifications();
       this.hr.connected = true;
       this.hr.retries = 0;
     } finally {
@@ -256,7 +256,7 @@ export class DeviceSet extends Emitter {
     const device = await navigator.bluetooth.requestDevice({ filters: [{ services: [SVC.CSC] }], optionalServices: ['battery_service'] });
     this.cad.device = device;
     this.cad.name = device.name || 'ケイデンス';
-    device.addEventListener('gattserverdisconnected', () => this.onDisconnect('cad'));
+    device.ongattserverdisconnected = () => this.onDisconnect('cad');
     await this.setupCadence(device);
   }
 
@@ -267,14 +267,14 @@ export class DeviceSet extends Emitter {
       const server = await device.gatt.connect();
       const s = await server.getPrimaryService(SVC.CSC);
       const c = await s.getCharacteristic(CHR.CSCM);
-      await c.startNotifications();
-      c.addEventListener('characteristicvaluechanged', (e) => {
+      c.oncharacteristicvaluechanged = (e) => {
         const d = parseCSC(e.target.value);
         if (d.crankRevs !== undefined) {
           this.cad.rpm = this.cscCad.update(d.crankRevs, d.crankTime, this.now());
           this.cad.t = this.now();
         }
-      });
+      };
+      await c.startNotifications();
       this.cad.connected = true;
       this.cad.retries = 0;
     } finally {
@@ -320,14 +320,24 @@ export class DeviceSet extends Emitter {
       const op = dv.getUint8(1), result = dv.getUint8(2);
       if (result !== 0x01) console.warn(`FTMS 制御ポイント op=0x${op.toString(16)} result=${result}`);
       if (op === 0x00 && result === 0x05) this.power.controllable = false; // Control Not Permitted
+      const w = this._cpWait;
+      if (w && w.op === op) { this._cpWait = null; w.resolve(result); }
     }
   }
 
-  // GATT 操作は直列化
+  // GATT 操作は直列化し、制御ポイントの応答（インディケーション）を待ってから次へ
   cpWrite(buf) {
     const cp = this.cp;
     if (!cp) return Promise.reject(new Error('no control point'));
-    const run = () => (cp.writeValueWithResponse ? cp.writeValueWithResponse(buf) : cp.writeValue(buf));
+    const op = new Uint8Array(buf)[0];
+    const run = async () => {
+      const done = new Promise((resolve) => {
+        this._cpWait = { op, resolve };
+        setTimeout(() => { if (this._cpWait && this._cpWait.op === op) { this._cpWait = null; resolve(-1); } }, 1500);
+      });
+      await (cp.writeValueWithResponse ? cp.writeValueWithResponse(buf) : cp.writeValue(buf));
+      return done;
+    };
     const p = this.queue.then(run, run);
     this.queue = p.catch(() => {});
     return p;
