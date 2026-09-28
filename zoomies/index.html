@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+  <title>ZOOMIES! どうぶつ自転車バトル</title>
+  <meta name="description" content="かわいいどうぶつたちと熱いレース！パワーメーター・スマートトレーナー（Bluetooth）対応の3Dサイクリングゲーム。キーボードやタッチでも遊べます。">
+  <meta name="theme-color" content="#ff6fa5">
+  <meta property="og:title" content="ZOOMIES! どうぶつ自転車バトル">
+  <meta property="og:description" content="かわいいどうぶつたちと熱いレース！パワーメーター対応の3Dサイクリングゲーム">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🐾</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@500;800&family=Mochiy+Pop+One&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <script type="importmap">{ "imports": { "three": "./vendor/three.module.min.js" } }</script>
+</head>
+<body>
+  <div id="app">
+    <canvas id="gl"></canvas>
+    <canvas id="fx2d"></canvas>
+    <div id="hud-layer"></div>
+
+    <div id="global-hud" class="hidden">
+      <div id="countdown"></div>
+      <div id="ticker"></div>
+      <div id="topbar">
+        <button class="icon-btn" id="btn-cam" title="カメラ切替 (C)">🎥</button>
+        <button class="icon-btn" id="btn-mute" title="ミュート (M)">🔊</button>
+        <button class="icon-btn" id="btn-pause" title="ポーズ (P / Esc)">⏸</button>
+      </div>
+      <div id="cam-label"></div>
+      <div id="split-line"></div>
+    </div>
+
+    <div id="touch" class="hidden"></div>
+
+    <!-- タイトル -->
+    <section id="screen-title" class="screen">
+      <div class="title-wrap">
+        <div class="logo" aria-label="ZOOMIES!">
+          <span>Z</span><span>O</span><span>O</span><span>M</span><span>I</span><span>E</span><span>S</span><span class="bang">!</span>
+        </div>
+        <div class="subtitle">どうぶつ自転車バトル <span class="paw">🐾</span></div>
+        <div class="menu">
+          <button class="btn big primary" data-act="race">🏁 レースに出る</button>
+          <button class="btn" data-act="group">🚴 グループライド</button>
+          <button class="btn" data-act="versus">⚔️ 2人対戦（1台で）</button>
+          <button class="btn" data-act="devices">⚡ デバイス接続 <span class="dev-badge" id="title-dev"></span></button>
+          <div class="row">
+            <button class="btn small" data-act="settings">⚙️ 設定</button>
+            <button class="btn small" data-act="howto">❓ あそびかた</button>
+          </div>
+        </div>
+        <div class="title-stats" id="title-stats"></div>
+        <div class="title-foot">パワーメーター／スマートトレーナー（Bluetooth）対応 ・ キーボードやタッチでも遊べます</div>
+      </div>
+    </section>
+
+    <!-- セットアップ -->
+    <section id="screen-setup" class="screen hidden">
+      <div class="setup">
+        <div class="card rider-card">
+          <div class="card-title">🐾 ライダー <span class="ptabs" id="rider-tabs"><button data-p="0" class="on">P1</button><button data-p="1">P2</button></span></div>
+          <div class="animals" id="animals"></div>
+          <label class="field">なまえ <input id="in-name" maxlength="10" autocomplete="off"></label>
+          <div class="field">ジャージ <div class="swatches" id="sw-jersey"></div></div>
+          <div class="field">バイク <div class="swatches" id="sw-bike"></div></div>
+          <div class="field two">
+            <label>体重 <input id="in-weight" type="number" min="30" max="150" step="1"> kg</label>
+            <label>FTP <input id="in-ftp" type="number" min="50" max="600" step="5"> W</label>
+          </div>
+          <div class="hint" id="wkg-hint"></div>
+        </div>
+        <div class="setup-spacer"></div>
+        <div class="card course-card">
+          <div class="card-title" id="setup-title">🏁 レース設定</div>
+          <div class="courses" id="courses"></div>
+          <div class="field">周回 <div class="seg" id="seg-laps"></div></div>
+          <div class="field" id="field-rivals">ライバル <div class="seg" id="seg-rivals"></div></div>
+          <div class="field">つよさ <div class="seg" id="seg-diff"></div></div>
+          <div class="dev-line" id="setup-dev"></div>
+          <div class="actions">
+            <button class="btn" data-act="back">← もどる</button>
+            <button class="btn big primary" data-act="start">スタート！</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- デバイス接続 -->
+    <section id="screen-devices" class="screen modal hidden">
+      <div class="card wide">
+        <div class="card-title">⚡ デバイス接続 <span class="ptabs" id="dev-tabs"><button data-p="0" class="on">P1</button><button data-p="1">P2</button></span></div>
+        <p class="note" id="ble-note"></p>
+        <div class="dev-grid">
+          <div class="dev" data-kind="power">
+            <div class="dev-ic">⚡</div>
+            <div class="dev-t">パワーメーター<br><small>スマートトレーナー</small></div>
+            <div class="dev-name">未接続</div>
+            <div class="dev-val">-- W</div>
+            <button class="btn small dev-btn">接続する</button>
+          </div>
+          <div class="dev" data-kind="hr">
+            <div class="dev-ic">❤️</div>
+            <div class="dev-t">心拍計</div>
+            <div class="dev-name">未接続</div>
+            <div class="dev-val">-- bpm</div>
+            <button class="btn small dev-btn">接続する</button>
+          </div>
+          <div class="dev" data-kind="cad">
+            <div class="dev-ic">⟳</div>
+            <div class="dev-t">ケイデンス<br><small>センサー</small></div>
+            <div class="dev-name">未接続</div>
+            <div class="dev-val">-- rpm</div>
+            <button class="btn small dev-btn">接続する</button>
+          </div>
+        </div>
+        <div class="field check"><label><input type="checkbox" id="in-sim"> スマートトレーナーでコースの勾配を再現する（SIMモード／FTMS対応機）</label></div>
+        <div class="field">トレーナー難易度 <input type="range" id="in-tdiff" min="0" max="100" step="5"> <b id="tdiff-val">50%</b></div>
+        <div class="field">キーボード操作 <div class="seg" id="seg-kbmode"></div></div>
+        <p class="note small">接続は Chrome / Edge（PC・Android）で使えます。パワーメーターを接続すると実際のワット数で走ります。未接続ならキーボード・タッチ操作になります。</p>
+        <div class="actions"><button class="btn primary" data-act="close">OK</button></div>
+      </div>
+    </section>
+
+    <!-- 設定 -->
+    <section id="screen-settings" class="screen modal hidden">
+      <div class="card">
+        <div class="card-title">⚙️ 設定</div>
+        <div class="field">音量 <input type="range" id="in-vol" min="0" max="1" step="0.05"></div>
+        <div class="field check"><label><input type="checkbox" id="in-music"> BGM</label></div>
+        <div class="field check"><label><input type="checkbox" id="in-voice"> 実況ボイス（音声合成）</label></div>
+        <div class="field">画質 <div class="seg" id="seg-quality"></div></div>
+        <p class="note small" id="quality-note">画質の変更は再読み込み後に反映されます。</p>
+        <div class="actions">
+          <button class="btn small danger" data-act="reset">記録をリセット</button>
+          <button class="btn primary" data-act="close">OK</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- あそびかた -->
+    <section id="screen-howto" class="screen modal hidden">
+      <div class="card wide howto">
+        <div class="card-title">❓ あそびかた</div>
+        <div class="howto-grid">
+          <div>
+            <h3>🏁 レースの流れ</h3>
+            <ul>
+              <li>スタートの合図で一斉に飛び出す！ゴールラインを一番に越えたら優勝🏆</li>
+              <li><b>ドラフティング</b>：前のライダーの真後ろにつくと空気抵抗が最大35%減！ 集団の中は楽ちん。</li>
+              <li><b>スタミナ（W′）</b>：FTP以上で走ると減り、休むと回復。ゼロになると💫ヘロヘロに…</li>
+              <li>⛰ 山岳ポイント・⚡ 中間スプリントのラインを上位で通過するとポイント＆アイテム！</li>
+              <li>ライバルのアタックに反応するか、見送るか。駆け引きが勝負を決める！</li>
+            </ul>
+            <h3>🎁 アイテム</h3>
+            <ul class="items" id="howto-items"></ul>
+          </div>
+          <div>
+            <h3>⌨️ キーボード（1人）</h3>
+            <table class="keys">
+              <tr><td><kbd>↑</kbd>/<kbd>W</kbd></td><td>アタック（FTPの155%）</td></tr>
+              <tr><td><kbd>↓</kbd>/<kbd>S</kbd></td><td>休む（スタミナ回復）</td></tr>
+              <tr><td><kbd>Space</kbd></td><td>もがく！全力スプリント（連打でさらにUP）</td></tr>
+              <tr><td>押さない</td><td>オート追走（前の選手についていく）</td></tr>
+              <tr><td><kbd>E</kbd></td><td>アイテムを使う</td></tr>
+              <tr><td><kbd>←</kbd><kbd>→</kbd></td><td>横に移動</td></tr>
+              <tr><td><kbd>C</kbd> <kbd>M</kbd> <kbd>P</kbd></td><td>カメラ／ミュート／ポーズ</td></tr>
+            </table>
+            <h3>⚔️ 2人対戦（1台のPCで）</h3>
+            <p>P1：<kbd>W</kbd>アタック <kbd>S</kbd>休む <kbd>D</kbd>もがく <kbd>A</kbd>アイテム<br>P2：<kbd>↑</kbd>アタック <kbd>↓</kbd>休む <kbd>→</kbd>もがく <kbd>←</kbd>アイテム<br>パワーメーターを2台つなげば、リアルなガチンコ対決も！</p>
+            <h3>⚡ パワーメーター</h3>
+            <p>「デバイス接続」から Bluetooth のパワーメーター／スマートトレーナー（FTMS・Cycling Power 対応機）、心拍計、ケイデンスセンサーをつなげます。スマートトレーナーならコースの坂に合わせて負荷が変わります。</p>
+          </div>
+        </div>
+        <div class="actions"><button class="btn primary" data-act="close">OK</button></div>
+      </div>
+    </section>
+
+    <!-- ポーズ -->
+    <section id="screen-pause" class="screen modal hidden">
+      <div class="card narrow">
+        <div class="card-title">⏸ ポーズ中</div>
+        <div class="menu">
+          <button class="btn big primary" data-act="resume">▶ 再開</button>
+          <button class="btn" data-act="camera">🎥 カメラ切替</button>
+          <button class="btn" data-act="devices">⚡ デバイス接続</button>
+          <button class="btn danger" data-act="quit" id="btn-quit">🏳 リタイア</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- リザルト -->
+    <section id="screen-results" class="screen hidden">
+      <div class="card results">
+        <div class="res-head" id="res-head"></div>
+        <div class="res-awards" id="res-awards"></div>
+        <div class="res-stats" id="res-stats"></div>
+        <div class="res-table-wrap"><table class="res-table" id="res-table"></table></div>
+        <div class="actions">
+          <button class="btn" data-act="title">🏠 タイトルへ</button>
+          <button class="btn big primary" data-act="again">🔁 もう一度</button>
+        </div>
+      </div>
+    </section>
+
+    <div id="toast"></div>
+    <div id="loading"><div class="spin">🐾</div><div>よみこみ中…</div></div>
+    <noscript><div class="noscript">このゲームを遊ぶには JavaScript を有効にしてください。</div></noscript>
+  </div>
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>
