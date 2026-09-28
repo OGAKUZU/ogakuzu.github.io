@@ -430,6 +430,29 @@ export class World {
     return g;
   }
 
+  // ショートレース用の仮設スタートライン＋ゲート
+  addStartLine(s) {
+    const g = new THREE.Group();
+    const W = this.course.halfWidth;
+    const line = new THREE.Mesh(this.ribbon(s - 1.2, s + 1.2, W, -W, 0.045, 0.5), new THREE.MeshLambertMaterial({ map: this.checkerTex, polygonOffset: true, polygonOffsetFactor: -2 }));
+    line.receiveShadow = true;
+    g.add(line);
+    this.add(g);
+    const arch = this.arch(s, [0x3ec6ff, 0xffffff, 0xff4f8b], ['START', 'スタート'], '#1b1b2f', '#ffffff', 0.95);
+    this.group.remove(arch);
+    g.add(arch);
+    return g;
+  }
+
+  removeObject(obj) {
+    if (!obj) return;
+    obj.parent?.remove(obj);
+    obj.traverse((o) => {
+      if (o.geometry) o.geometry.dispose();
+      if (o.material && o.material.map && o.material.map !== this.checkerTex) o.material.map.dispose();
+    });
+  }
+
   buildRoadMarks() {
     const c = this.course, W = c.halfWidth;
     const checker = canvasTexture(256, 64, (g, w, h) => {
@@ -439,6 +462,7 @@ export class World {
         g.fillRect((i * w) / n, (j * h) / m, w / n + 1, h / m + 1);
       }
     });
+    this.checkerTex = checker;
     const dots = canvasTexture(256, 64, (g, w, h) => {
       g.fillStyle = '#fff';
       g.fillRect(0, 0, w, h);

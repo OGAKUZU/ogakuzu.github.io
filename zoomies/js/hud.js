@@ -148,12 +148,12 @@ export class PlayerHUD {
     this.set('gradeArrow', g >= 0.3 ? '▲' : g <= -0.3 ? '▼' : '▶');
     const gcls = g > 7 ? 'g4' : g > 4 ? 'g3' : g > 1.5 ? 'g2' : g < -1.5 ? 'gd' : 'g1';
     if (this.cache.get('gcls') !== gcls) { this.$.grade.className = 'grade ' + gcls; this.cache.set('gcls', gcls); }
-    this.set('dist', (Math.max(0, r.dist) / 1000).toFixed(2));
+    this.set('dist', (Math.max(0, r.dist - race.startDist) / 1000).toFixed(2));
     this.set('time', fmtTime(race.t));
 
     // 残り距離
     if (race.isRace) {
-      const rem = Math.max(0, race.raceDist - r.dist);
+      const rem = Math.max(0, race.finishDist - r.dist);
       this.set('togo', r.finished ? '🏁 ゴール！' : rem < 1000 ? `ゴールまで ${Math.round(rem)} m` : `ゴールまで ${(rem / 1000).toFixed(1)} km`);
     } else {
       this.set('togo', `周回 ${r.lap + 1} ・ ${(r.dist / 1000).toFixed(1)} km 走行`);
@@ -215,7 +215,7 @@ export class PlayerHUD {
         html = `<span class="seg kom">⛰ まもなく ${c.kom.name}</span> <b>${Math.round(toKom)}m</b>`;
       }
       if (race.isRace && !r.finished) {
-        const rem = race.raceDist - r.dist;
+        const rem = race.finishDist - r.dist;
         if (rem < 1000) html = `<span class="seg fin">🏁 ラスト ${rem < 200 ? 'スプリント！' : Math.round(rem) + 'm'}</span>`;
       }
     }
@@ -277,13 +277,13 @@ export class PlayerHUD {
     const W = cv.width, H = cv.height, d = this.profileDpr;
     const c = race.course;
     const total = race.isRace ? race.raceDist : c.length;
-    const offset = race.isRace ? 0 : Math.floor(Math.max(0, r.dist) / c.length) * c.length;
-    if (!this.profileData || this.profileData.total !== total) {
+    const offset = race.isRace ? race.startDist : Math.floor(Math.max(0, r.dist) / c.length) * c.length;
+    if (!this.profileData || this.profileData.total !== total || this.profileData.offset !== offset) {
       const n = 240;
       const hs = [];
-      for (let i = 0; i <= n; i++) hs.push(c.heightAt((i / n) * total));
+      for (let i = 0; i <= n; i++) hs.push(c.heightAt(offset + (i / n) * total));
       const mn = Math.min(...hs), mx = Math.max(...hs);
-      this.profileData = { total, hs, mn, mx, n };
+      this.profileData = { total, offset, hs, mn, mx, n };
     }
     const P = this.profileData;
     g.clearRect(0, 0, W, H);
@@ -291,14 +291,19 @@ export class PlayerHUD {
     const x = (dist) => pad + ((dist - offset) / total) * (W - pad * 2);
     const y = (h) => H - pad - ((h - P.mn) / Math.max(20, P.mx - P.mn)) * (H - pad * 2 - 10 * d);
     // 区間の色
-    const laps = Math.ceil(total / c.length);
-    for (let l = 0; l < laps; l++) {
-      const base = l * c.length + offset;
+    const firstLap = Math.floor(offset / c.length), lastLap = Math.ceil((offset + total) / c.length);
+    g.save();
+    g.beginPath();
+    g.rect(pad, 0, W - pad * 2, H);
+    g.clip();
+    for (let l = firstLap; l < lastLap; l++) {
+      const base = l * c.length;
       g.fillStyle = 'rgba(232,40,60,0.28)';
       g.fillRect(x(base + c.kom.s0), 0, x(base + c.kom.s1) - x(base + c.kom.s0), H);
       g.fillStyle = 'rgba(24,179,90,0.3)';
       g.fillRect(x(base + c.sprint.s0), 0, x(base + c.sprint.s1) - x(base + c.sprint.s0), H);
     }
+    g.restore();
     // 走行済み部分と未走行部分
     const grad = g.createLinearGradient(0, 0, 0, H);
     grad.addColorStop(0, 'rgba(255,255,255,0.95)');
@@ -321,7 +326,7 @@ export class PlayerHUD {
     // 他のライダー
     for (const o of race.riders) {
       if (o === r) continue;
-      const od = race.isRace ? Math.min(o.dist, total) : o.dist;
+      const od = race.isRace ? Math.min(o.dist, race.finishDist) : o.dist;
       if (od < offset || od > offset + total) continue;
       const ox = x(od);
       const oy = y(c.heightAt(od)) - 4 * d;
@@ -345,7 +350,7 @@ export class PlayerHUD {
     // ゴール旗
     if (race.isRace) {
       g.font = `${14 * d}px sans-serif`;
-      g.fillText('🏁', x(total) - 16 * d, 16 * d);
+      g.fillText('🏁', x(offset + total) - 16 * d, 16 * d);
     }
   }
 

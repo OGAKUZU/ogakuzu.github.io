@@ -211,5 +211,13 @@
     <noscript><div class="noscript">このゲームを遊ぶには JavaScript を有効にしてください。</div></noscript>
   </div>
   <script type="module" src="js/main.js"></script>
+  <script>
+    // 古いブラウザ（import map 非対応など）で起動できなかった場合の案内
+    setTimeout(function () {
+      if (window.__booted) return;
+      var ld = document.getElementById('loading');
+      if (ld) ld.innerHTML = '<div class="spin" style="animation:none">🙀</div><div class="fatal">ゲームを起動できませんでした。<br>最新の Chrome / Edge / Safari でお試しください。</div>';
+    }, 15000);
+  </script>
 </body>
 </html>

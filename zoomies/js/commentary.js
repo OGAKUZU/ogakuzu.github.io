@@ -190,7 +190,7 @@ export class Commentary {
         if (photo) this.all((hh) => hh.notify('📸 写真判定！！', 'photo', 2));
         this.onFinishFx?.(rider, place);
       } else if (place === 1) {
-        const pl = R.players.find((p) => !p.finished && p.dist > R.raceDist - 400);
+        const pl = R.players.find((p) => !p.finished && p.dist > R.finishDist - 400);
         this.tick(`${this.name(rider)}が先頭でゴール！${pl ? ' まだ表彰台は狙える！' : ''}`, !R.players.some((p) => p.finished), 3);
         A.cheer();
       }

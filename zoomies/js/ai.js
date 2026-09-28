@@ -293,10 +293,10 @@ export class Director {
     const lead = race.order[0];
     if (!lead) return;
     const D = race.raceDist;
-    const prog = clamp(lead.dist / D, 0, 1);
+    const prog = clamp((lead.dist - race.startDist) / D, 0, 1);
     const main = race.groups[race.mainGroup];
     const mainFront = main ? main.riders[0] : lead;
-    const remainingMain = D - mainFront.dist;
+    const remainingMain = race.finishDist - mainFront.dist;
 
     // 逃げ集団とのタイム差
     let breakGapSec = 0;

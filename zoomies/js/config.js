@@ -118,6 +118,7 @@ export const COURSES = [
       [0.66, 0.74, 3.0], [0.74, 0.82, -3.0], [0.82, 0.90, 1.0], [0.90, 1.00, 0.4],
     ],
     kom: { name: 'もふもふ峠', u0: 0.24, u1: 0.40 },
+    shortStart: 0.53,
     sprint: { name: 'ひまわりスプリント', u0: 0.59, u1: 0.66 },
     theme: 'meadow',
   },
@@ -135,6 +136,7 @@ export const COURSES = [
       [0.62, 0.72, 2.0], [0.72, 0.80, -2.0], [0.80, 0.88, 1.0], [0.88, 1.00, 0.0],
     ],
     kom: { name: '灯台坂', u0: 0.26, u1: 0.40 },
+    shortStart: 0.5,
     sprint: { name: 'なぎさスプリント', u0: 0.55, u1: 0.62 },
     theme: 'coast',
   },
@@ -152,6 +154,7 @@ export const COURSES = [
       [0.80, 0.88, 2.0], [0.88, 1.00, -0.5],
     ],
     kom: { name: 'ネオン大橋', u0: 0.12, u1: 0.30 },
+    shortStart: 0.38,
     sprint: { name: 'シティスプリント', u0: 0.73, u1: 0.80 },
     theme: 'night',
   },
@@ -191,7 +194,7 @@ export const THEMES = {
   },
 };
 
-export const LAP_OPTIONS = [1, 2, 3];
+export const LAP_OPTIONS = [0.5, 1, 2, 3]; // 0.5 = ショート（後半だけ）
 export const RIVAL_OPTIONS = [1, 7, 11, 15];
 
 export const DEFAULT_PROFILE = {

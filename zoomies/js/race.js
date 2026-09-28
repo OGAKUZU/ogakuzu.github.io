@@ -88,7 +88,12 @@ export class Race extends Emitter {
     this.quality = quality;
     this.isRace = mode === 'race';
     this.laps = settings.laps || 1;
-    this.raceDist = this.isRace ? this.laps * course.length : Infinity;
+    // startDist / finishDist は周回をまたいだ通算距離（コース上の位置 = mod(dist, L)）
+    const L = course.length;
+    if (!this.isRace) { this.startDist = 0; this.finishDist = Infinity; }
+    else if (this.laps < 1) { this.startDist = Math.round(L * (course.def.shortStart ?? 0.5)); this.finishDist = L; }
+    else { this.startDist = 0; this.finishDist = this.laps * L; }
+    this.raceDist = this.finishDist - this.startDist;
     this.rng = mulberry32(seed);
     this.riders = [];
     this.players = [];
@@ -113,7 +118,8 @@ export class Race extends Emitter {
     this._ctx = {};
     this.createRiders(players);
     this.placeOnGrid();
-    const N = this.isRace ? Math.ceil(this.raceDist / MARK) + 60 : 4000;
+    if (this.isRace && mod(this.startDist, L) > 1) this.startLine = world.addStartLine(this.startDist);
+    const N = this.isRace ? Math.ceil(this.raceDist / MARK) + 80 : 4000;
     for (const r of this.riders) {
       r.passT = new Float32Array(N).fill(NaN);
       r.passN = N;
@@ -221,7 +227,7 @@ export class Race extends Emitter {
       const r = assigned.get(k) || ai[ai_i++];
       if (!r) continue;
       const sl = slots[k];
-      r.dist = -1.4 - sl.row * 2.5;
+      r.dist = this.startDist - 1.4 - sl.row * 2.5;
       r.lat = sl.lane;
       r.targetLat = sl.lane;
       r.prevDist = r.dist;
@@ -247,7 +253,7 @@ export class Race extends Emitter {
     return p > k.s0 && p < k.s1;
   }
   remainingFor(r) {
-    return this.raceDist - r.dist;
+    return this.finishDist - r.dist;
   }
   groupOf(r) {
     return r.gi;
@@ -322,7 +328,7 @@ export class Race extends Emitter {
     const smp = this.course.sample(r.dist, this._smp);
     c.grade = smp.grade;
     c.wind = r.wind;
-    c.remaining = this.raceDist - r.dist;
+    c.remaining = this.finishDist - r.dist;
     c.lap = this.lapOf(r.dist);
     const L = this.course.length;
     const lp = this.lapPos(r.dist);
@@ -674,7 +680,7 @@ export class Race extends Emitter {
     if (crossed(0) && r.prevDist > 0) {
       r.lap = this.lapOf(r.dist);
       if (r.isPlayer) this.emit('lap', { rider: r, lap: r.lap });
-      if (!r.finished && r.dist < this.raceDist - 10) this.giveItem(r);
+      if (!r.finished && r.dist < this.finishDist - 10) this.giveItem(r);
     }
   }
 
@@ -693,9 +699,9 @@ export class Race extends Emitter {
   }
 
   checkFinish(r) {
-    if (r.finished || r.dist < this.raceDist) return;
+    if (r.finished || r.dist < this.finishDist) return;
     r.finished = true;
-    const over = (r.dist - this.raceDist) / Math.max(r.v, 0.1);
+    const over = (r.dist - this.finishDist) / Math.max(r.v, 0.1);
     r.finishTime = this.t - over;
     this.finishers.push(r);
     // 同着付近は時間でソートし直す
@@ -705,7 +711,7 @@ export class Race extends Emitter {
     r.celebrate = r.place <= 3;
     r.happyT = r.place <= 3 ? 8 : 0;
     const winnerTime = this.finishers[0].finishTime;
-    const close = this.riders.filter((o) => o !== r && Math.abs((o.finished ? o.finishTime : this.t + (this.raceDist - o.dist) / Math.max(o.v, 1)) - r.finishTime) < 0.35);
+    const close = this.riders.filter((o) => o !== r && Math.abs((o.finished ? o.finishTime : this.t + (this.finishDist - o.dist) / Math.max(o.v, 1)) - r.finishTime) < 0.35);
     this.emit('finish', { rider: r, place: r.place, time: r.finishTime, gap: r.finishTime - winnerTime, photo: close.length > 0 });
     if (r.place === 1 && !r.isPlayer) this.say(r, lineFor(r, 'win', this.rng), 1);
     if (r.rival && !r.isPlayer) {
@@ -722,7 +728,7 @@ export class Race extends Emitter {
       }
       p._lastPos = p.pos;
       if (this.isRace && !p.finished) {
-        const rem = this.raceDist - p.dist;
+        const rem = this.finishDist - p.dist;
         for (const mark of [3000, 1000, 500, 200]) {
           p._marks ||= new Set();
           if (rem < mark && !p._marks.has(mark)) {
@@ -782,7 +788,7 @@ export class Race extends Emitter {
       let time = r.finishTime;
       let est = false;
       if (!r.finished) {
-        time = this.t + (this.raceDist - r.dist) / Math.max(r.v, 5);
+        time = this.t + (this.finishDist - r.dist) / Math.max(r.v, 5);
         est = true;
       }
       return { r, time, est };
@@ -792,6 +798,7 @@ export class Race extends Emitter {
   }
 
   dispose() {
+    if (this.startLine) this.world.removeObject(this.startLine);
     for (const r of this.riders) {
       this.scene.remove(r.model.root);
       r.model.dispose();

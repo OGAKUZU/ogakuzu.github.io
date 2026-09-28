@@ -429,6 +429,7 @@ kbd { font-family: var(--font); font-weight: 800; background: #fff; border: 2px 
 #loading.done { opacity: 0; pointer-events: none; }
 #loading.gone { display: none; }
 #loading .spin { font-size: 60px; animation: spin 1s linear infinite; }
+#loading .fatal { font-size: 17px; text-align: center; line-height: 1.7; padding: 0 20px; }
 @keyframes spin { to { transform: rotate(360deg); } }
 .noscript { position: fixed; inset: 0; display: flex; align-items: center; justify-content: center; background: #fff; font-size: 18px; z-index: 99; }
 

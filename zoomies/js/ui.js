@@ -247,7 +247,8 @@ export class UI {
   refreshLaps() {
     const g = this.g, st = g.settings;
     const len = g.courseLength(st.course);
-    const opts = this.mode === 'group' ? [[1, 'エンドレス']] : LAP_OPTIONS.map((n) => [n, `${n}周 ${(n * len / 1000).toFixed(1)}km`]);
+    const def = COURSES.find((c) => c.id === st.course) || COURSES[0];
+    const opts = this.mode === 'group' ? [[1, 'エンドレス']] : LAP_OPTIONS.map((n) => [n, n < 1 ? `ショート ${((1 - (def.shortStart ?? 0.5)) * len / 1000).toFixed(1)}km` : `${n}周 ${(n * len / 1000).toFixed(1)}km`]);
     if (this.mode !== 'group' && !LAP_OPTIONS.includes(st.laps)) st.laps = 1;
     this.segment('#seg-laps', opts, () => (this.mode === 'group' ? 1 : st.laps), (v) => { if (this.mode !== 'group') { st.laps = v; store.saveSettings(st); } });
   }

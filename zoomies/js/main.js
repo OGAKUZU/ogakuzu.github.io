@@ -73,6 +73,7 @@ class Game {
     window.addEventListener('resize', () => this.resize());
     document.addEventListener('visibilitychange', () => {
       if (document.hidden && (this.state === 'racing' || this.state === 'countdown')) this.pause();
+      if (!document.hidden && this.race && this.race.players.length && this.state !== 'results') this.requestWakeLock();
     });
     window.addEventListener('pointerdown', () => this.audio.init(), { once: true });
     window.addEventListener('keydown', () => this.audio.init(), { once: true });
@@ -251,7 +252,7 @@ class Game {
     this.showVS(raceMode);
     const courseName = this.course.name;
     if (raceMode === 'race') {
-      this.commentary.tick(`${courseName}、${this.race.laps}周 ${(this.race.raceDist / 1000).toFixed(1)}キロのレース！ まもなくスタート！`, true, 2);
+      this.commentary.tick(`${courseName}、${this.race.laps < 1 ? 'ショート' : this.race.laps + '周'} ${(this.race.raceDist / 1000).toFixed(1)}キロのレース！ まもなくスタート！`, true, 2);
     } else {
       this.commentary.tick(`${courseName}でグループライド！ みんなでゆったり走ろう`, true, 2);
     }
@@ -321,7 +322,7 @@ class Game {
     // 統計
     for (const p of players) {
       const s = p.stats;
-      s.distance = Math.max(0, Math.min(p.dist, race.raceDist));
+      s.distance = Math.max(0, Math.min(p.dist, race.finishDist) - race.startDist);
       s.avgP = s.time > 0 ? s.energy / s.time : 0;
       s.np = s.npN ? Math.pow(s.np4 / s.npN, 0.25) : s.avgP;
       s.avgV = s.time > 0 ? (s.distance / s.time) * 3.6 : 0;
@@ -375,9 +376,9 @@ class Game {
   // 表彰台（ゴール横）
   buildPodium(top3) {
     const g = new THREE.Group();
-    const s = 12;
+    const s = 24;
     const smp = this.course.sample(s, {});
-    const lat = -(this.course.halfWidth + 5);
+    const lat = -(this.course.halfWidth + 9.5);
     const base = new THREE.Vector3();
     this.course.worldPos(s, lat, base);
     base.y = this.world.heightAt(base.x, base.z);
@@ -564,7 +565,7 @@ class Game {
     let targetScale = 1;
     if (race && race.isRace && (this.state === 'racing') && !this.twoP) {
       const p = race.players[0];
-      const rem = race.raceDist - p.dist;
+      const rem = race.finishDist - p.dist;
       if (!p.finished && rem > 0 && rem < 9) {
         const close = race.riders.some((o) => o !== p && !o.finished && Math.abs(o.dist - p.dist) < 2.5);
         if (close) targetScale = 0.35;
@@ -598,7 +599,8 @@ class Game {
       const pc = this.podiumCam;
       pc.a += dt * 0.25;
       const c = this.cameras[0];
-      const off = new THREE.Vector3(Math.sin(pc.a) * 6.5, 2.2, Math.cos(pc.a) * 6.5).applyAxisAngle(new THREE.Vector3(0, 1, 0), this.podium.rotation.y + Math.PI);
+      const sw = Math.sin(pc.a) * 0.9;
+      const off = new THREE.Vector3(Math.sin(sw) * 8.5, 2.6, Math.cos(sw) * 8.5).applyAxisAngle(new THREE.Vector3(0, 1, 0), this.podium.rotation.y);
       c.position.copy(pc.center).add(off);
       // リザルト表示（左側）と重ならないよう、表彰台を画面の右寄りに
       const fwdv = pc.center.clone().sub(c.position).normalize();
@@ -664,7 +666,7 @@ class Game {
         danger: racingNow && !p.finished ? clamp((0.2 - p.wbal.frac) / 0.2, 0, 1) : 0, hr: p.hr || 150, active: !paused, dt,
       });
       if (racingNow && race.isRace && !p.finished) {
-        const rem = race.raceDist - p.dist;
+        const rem = race.finishDist - p.dist;
         this.audio.setLevel(rem < 250 ? 3 : rem < 3000 || race.onKom(p.dist) ? 2 : 1);
       }
     } else if (this.audio.ctx) {
@@ -746,5 +748,20 @@ class Game {
   }
 }
 
-const game = new Game();
-game.boot();
+function fatal(msg) {
+  const ld = document.getElementById('loading');
+  ld.classList.remove('done', 'gone');
+  ld.innerHTML = `<div class="spin" style="animation:none">🙀</div><div class="fatal">${msg}</div>`;
+}
+
+try {
+  const game = new Game();
+  window.__booted = true;
+  game.boot().catch((e) => {
+    console.error(e);
+    fatal('起動中にエラーが発生しました。ページを再読み込みしてください。');
+  });
+} catch (e) {
+  console.error(e);
+  fatal('このブラウザでは 3D 表示（WebGL）が使えないようです。<br>最新の Chrome / Edge / Safari でお試しください。');
+}
