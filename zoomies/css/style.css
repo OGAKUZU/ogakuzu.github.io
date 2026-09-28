@@ -74,6 +74,7 @@ html, body {
 .card-title { font-family: var(--pop); font-size: 21px; margin-bottom: 12px; display: flex; align-items: center; gap: 10px; }
 .card.wide { width: min(880px, calc(100vw - 32px)); }
 .card.narrow { width: min(360px, calc(100vw - 32px)); }
+.card.narrow .menu { width: 100%; }
 .note { font-size: 14px; color: #5b4f70; margin: 6px 0 12px; line-height: 1.6; }
 .note.small { font-size: 12.5px; }
 .note.warn { color: #c2334d; }

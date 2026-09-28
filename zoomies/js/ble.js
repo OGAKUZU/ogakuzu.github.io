@@ -333,13 +333,15 @@ export class DeviceSet extends Emitter {
     return p;
   }
 
-  // 勾配を送る（間引き）
-  setSimulation(gradePct, cw = 0.51) {
+  // 勾配を送る（間引き）。force=true はポーズ時のリセットなど即時送信
+  setSimulation(gradePct, cw = 0.51, force = false) {
     if (!this.cp || !this.power.connected || !this.power.controllable) return;
     const n = this.now();
     const dg = Math.abs(gradePct - this.lastSim.grade);
     const dcw = Math.abs(cw - this.lastSim.cw);
-    if (n - this.lastSim.t < 1000 || (dg < 0.1 && dcw < 0.03 && n - this.lastSim.t < 5000)) return;
+    if (force) {
+      if (dg < 0.05 && dcw < 0.01) return;
+    } else if (n - this.lastSim.t < 1000 || (dg < 0.1 && dcw < 0.03 && n - this.lastSim.t < 5000)) return;
     this.lastSim = { grade: gradePct, cw, t: n };
     this.cpWrite(simCommand(gradePct, 0.004, cw)).catch((e) => console.warn('SIM', e));
   }

@@ -8,7 +8,7 @@ export class SpeedLines {
     this.canvas = canvas;
     this.g = canvas.getContext('2d');
     this.lines = [];
-    for (let i = 0; i < 90; i++) this.lines.push({ a: Math.random() * TAU, w: 1 + Math.random() * 3.5, l: 0.25 + Math.random() * 0.4, ph: Math.random() });
+    for (let i = 0; i < 130; i++) this.lines.push({ a: Math.random() * TAU, w: 2 + Math.random() * 6, l: 0.2 + Math.random() * 0.35, ph: Math.random() });
     this.resize();
   }
 
@@ -41,17 +41,17 @@ export class SpeedLines {
     for (let i = 0; i < n; i++) {
       const ln = this.lines[i];
       const flick = (Math.sin(t * 23 + ln.ph * 40) + 1) / 2;
-      if (flick < 0.35) continue;
+      if (flick < 0.3) continue;
       const a = ln.a + Math.sin(t * 3 + i) * 0.01;
-      const inner = R * (1 - ln.l * (0.6 + intensity * 0.6));
+      const inner = R * (1 - ln.l * (0.7 + intensity * 0.7));
       const ca = Math.cos(a), sa = Math.sin(a);
-      const w = ln.w * d * (0.6 + intensity);
+      const w = ln.w * d * (0.8 + intensity);
       g.beginPath();
       g.moveTo(cx + ca * R, cy + sa * R);
       g.lineTo(cx + ca * inner - sa * w * 0.1, cy + sa * inner + ca * w * 0.1);
       g.lineTo(cx + ca * R - sa * w, cy + sa * R + ca * w);
       g.closePath();
-      g.fillStyle = `rgba(${tint},${0.18 + intensity * 0.45 * flick})`;
+      g.fillStyle = `rgba(${tint},${0.22 + intensity * 0.5 * flick})`;
       g.fill();
     }
     g.restore();

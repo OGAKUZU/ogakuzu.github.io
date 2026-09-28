@@ -302,13 +302,16 @@ export class Director {
     let breakGapSec = 0;
     if (race.mainGroup > 0) {
       const front = race.groups[0].riders[0];
-      breakGapSec = (front.dist - mainFront.dist) / Math.max(5, mainFront.v);
+      breakGapSec = race.gapSec(front, mainFront);
     }
     const hasBreak = race.mainGroup > 0;
     let chase = 0;
     if (hasBreak) {
-      const allowed = (remainingMain / 1000) * (prog < 0.4 ? 14 : 6.5);
-      chase = clamp((breakGapSec - allowed) / 18, 0, 1);
+      // プレイヤーが逃げていると集団は本気で追う
+      const playerAhead = race.players.some((p) => !p.finished && p.gi >= 0 && p.gi < race.mainGroup);
+      let allowed = (remainingMain / 1000) * (prog < 0.4 ? 10 : 5);
+      if (playerAhead) allowed *= 0.4;
+      chase = clamp((breakGapSec - allowed) / 12, 0, 1);
       if (!this.breakAnnounced && breakGapSec > 8) {
         this.breakAnnounced = true;
         race.emit('break', { riders: race.groups.slice(0, race.mainGroup).flatMap((g) => g.riders), gap: breakGapSec });
@@ -396,7 +399,7 @@ export class Director {
       p *= clamp(r.wbal.frac * 1.3, 0, 1);
       if (this.rng() < p) {
         b.target = attacker;
-        b.setMode('respond', 25);
+        b.setMode('respond', attacker.isPlayer ? 40 : 25);
         if (this.rng() < 0.35 || r.rival) race.say(r, lineFor(r, 'respond', this.rng), 0.6);
       } else {
         b.holdCap = 0.92 + this.rng() * 0.12;

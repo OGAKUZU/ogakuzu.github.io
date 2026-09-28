@@ -245,10 +245,8 @@ export class PlayerHUD {
       if (o === r) gap = '';
       else if (o.finished && r.finished) gap = fmtGap(o.finishTime - r.finishTime);
       else if (o.finished) gap = '🏁';
-      else {
-        const dd = r.dist - o.dist;
-        gap = fmtGap(dd / Math.max(r.v, o.v, 4));
-      }
+      else if (r.finished) gap = '';
+      else gap = fmtGap(-race.gapSec(o, r));
       const badges = (o === komLeader && o.komPts > 0 ? '<i class="bdg kom" title="山岳賞">山</i>' : '') + (o === sprLeader && o.sprintPts > 0 ? '<i class="bdg spr" title="スプリント賞">速</i>' : '') + (o.rival ? '<i class="bdg rv">🔥</i>' : '') + (o.exhausted ? '<i class="bdg ex">💫</i>' : '') + (o.active ? `<i class="bdg it">${POWERUPS[o.active.id].icon}</i>` : '');
       html += `<div class="row${o === r ? ' me' : ''}${o.isPlayer && o !== r ? ' pl' : ''}"><span class="p">${o.pos}</span><span class="chip" style="background:${hexToCss(o.jersey)}"></span><span class="nm">${o.emoji} ${escapeHtml(o.name)}</span>${badges}<span class="g">${gap}</span></div>`;
     }
@@ -261,11 +259,11 @@ export class PlayerHUD {
     if (race.isRace && !r.finished && race.state === 'racing') {
       const lead = race.order[0];
       if (lead && lead !== r) {
-        const gs = (lead.dist - r.dist) / Math.max(r.v, 4);
-        if (race.mainGroup > 0 && r.gi === race.mainGroup) info = `逃げ集団まで <b>${fmtTime(gs)}</b>`;
+        const gs = race.gapSec(lead, r);
+        if (race.mainGroup > 0 && r.gi === race.mainGroup) info = `逃げ集団まで <b>${gs < 60 ? gs.toFixed(0) + '秒' : fmtTime(gs)}</b>`;
         else if (gs > 1.5) info = `先頭まで <b>${gs.toFixed(1)}s</b>`;
       } else if (lead === r && race.order[1]) {
-        const gs = (r.dist - race.order[1].dist) / Math.max(race.order[1].v, 4);
+        const gs = race.gapSec(r, race.order[1]);
         if (gs > 1) info = `後続に <b>${gs.toFixed(1)}s</b> 差！`;
       }
     }
@@ -361,7 +359,7 @@ export class PlayerHUD {
       const dd = o.dist - me.dist;
       const b = this.bubbles.get(o.id);
       if (b) { b.t -= dt; if (b.t <= 0) this.bubbles.delete(o.id); }
-      const show = (dd > -30 && dd < 70) || !!b;
+      const show = ((dd > -30 && dd < 70) || !!b) && !(o._camHidden && !this.twoP);
       if (!show) continue;
       o.model.headWorld(v);
       v.project(camera);

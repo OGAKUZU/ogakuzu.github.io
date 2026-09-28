@@ -160,24 +160,27 @@ export class CameraRig {
           break;
         }
         case 'side': {
-          this.at(s + 0.6, lat - 3.9, 1.15, P);
-          this.at(s + 0.3, lat, 0.85, L);
+          this.at(s + 0.6 + v * 0.05, lat - 3.9, 1.15, P);
+          this.at(s + 0.3 + v * 0.05, lat, 0.85, L);
           fov = 48 + clamp((kmh - 30) * 0.2, 0, 10);
-          lambda = 9;
+          lambda = 16;
+          lookLambda = 20;
           break;
         }
         case 'front': {
-          this.at(s + 3.6 + sb * 0.6, lat + 0.5, 1.45, P);
+          this.at(s + 3.6 + sb * 0.6 + v * 0.06, lat + 0.5, 1.45, P);
           this.at(s - 2.5, lat, 1.0, L);
           fov = 55 + sb * 6;
-          lambda = 9;
+          lambda = 16;
+          lookLambda = 20;
           break;
         }
         case 'heli': {
           this.at(s - 15, lat + 5, 12.5, P);
           this.at(s + 8, lat * 0.5, 0.5, L);
           fov = 55;
-          lambda = 3;
+          lambda = 7;
+          lookLambda = 12;
           break;
         }
         case 'fpv': {

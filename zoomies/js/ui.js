@@ -351,13 +351,15 @@ export class UI {
   // ---------------------------------------------------------------
   showResults(data) {
     this.show('results');
-    const { race, players, rows, courseName, isRace, twoP, awards, record } = data;
+    const { race, players, rows, courseName, isRace, twoP, awards, record, retired } = data;
     const p0 = players[0];
     let head = '';
     if (twoP) {
       const [a, b] = players;
       const win = a.place && b.place ? (a.place < b.place ? a : b) : a;
       head = `<div class="res-rank gold">${win.emoji} ${escapeHtml(win.name)} の勝ち！</div><div class="res-sub">P1 ${escapeHtml(a.name)}：${a.place}位 ／ P2 ${escapeHtml(b.name)}：${b.place}位</div>`;
+    } else if (isRace && retired) {
+      head = `<div class="res-rank">🏳 リタイア</div>`;
     } else if (isRace) {
       const pl = p0.place || rows.findIndex((x) => x.r === p0) + 1;
       const medal = ['🏆 優勝！', '🥈 2位！', '🥉 3位！'][pl - 1] || `🏁 ${pl}位`;

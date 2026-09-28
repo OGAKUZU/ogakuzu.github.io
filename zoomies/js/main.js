@@ -140,6 +140,8 @@ class Game {
     this.huds = [];
     if (this.previewModel) { this.scene.remove(this.previewModel.root); this.previewModel.dispose(); this.previewModel = null; }
     if (this.podium) { this.scene.remove(this.podium); this.podium = null; }
+    this.podiumCam = null;
+    this.podiumRiders = [];
     this.ui.hideTouch();
     this.globalHud.classList.add('hidden');
     this.globalHud.classList.remove('split');
@@ -159,7 +161,7 @@ class Game {
 
   goTitle() {
     this.ui.closeModal('pause');
-    this.devices.forEach((d) => d.setSimulation(0));
+    this.devices.forEach((d) => d.setSimulation(0, 0.51, true));
     this.startAttract();
     this.ui.show('title');
     this.ui.updateTitleStats();
@@ -260,7 +262,7 @@ class Game {
   onAllFinished() {
     this.state = 'finished';
     this.finishTimer = 5.5;
-    this.devices.forEach((d) => d.setSimulation(0));
+    this.devices.forEach((d) => d.setSimulation(0, 0.51, true));
   }
 
   finishFx(r, place) {
@@ -286,7 +288,7 @@ class Game {
 
   showResults(retired = false) {
     const race = this.race;
-    this.devices.forEach((d) => d.setSimulation(0));
+    this.devices.forEach((d) => d.setSimulation(0, 0.51, true));
     const players = race.players;
     const rows = race.isRace ? race.results() : [];
     // 統計
@@ -331,15 +333,16 @@ class Game {
     } else if (!this.twoP) {
       store.addStats({ km: p0.stats.distance / 1000 });
     }
-    // 表彰台
+    // 表彰台（グループライドはライダーのまわりを回るカメラ）
     if (race.isRace) this.buildPodium(rows.slice(0, 3).map((x) => x.r));
+    else this.rigs[0].cinematic('finish');
     this.state = 'results';
     this.globalHud.classList.add('hidden');
     this.hudLayer.classList.add('hidden');
     this.ui.hideTouch();
     this.audio.setMusicMode('menu');
     this.releaseWakeLock();
-    this.ui.showResults({ race, players, rows, courseName: this.course.name, isRace: race.isRace, twoP: this.twoP, awards, record });
+    this.ui.showResults({ race, players, rows, courseName: this.course.name, isRace: race.isRace, twoP: this.twoP, awards, record, retired: retired && !p0.finished });
   }
 
   // 表彰台（ゴール横）
@@ -416,7 +419,7 @@ class Game {
     this.prevState = this.state;
     this.state = 'paused';
     this.input.releaseAll();
-    this.devices.forEach((d) => d.setSimulation(0));
+    this.devices.forEach((d) => d.setSimulation(0, 0.51, true));
     document.getElementById('btn-quit').textContent = this.race?.isRace ? '🏳 リタイア' : '🏁 ライド終了';
     this.ui.openModal('pause');
   }
@@ -467,6 +470,7 @@ class Game {
     if (!(dt > 0)) dt = 0.016;
     dt = Math.min(dt, 0.05);
     this.fps = damp(this.fps, 1 / dt, 2, dt);
+    this.adaptQuality(dt);
     try {
       this.frame(dt);
     } catch (e) {
@@ -478,6 +482,25 @@ class Game {
   frame(dt) {
     this.simulate(dt);
     this.render();
+  }
+
+  // 重い端末では解像度を自動で下げる（画質「おまかせ」時）
+  adaptQuality(dt) {
+    if (this.settings.quality !== 'auto' || params.get('quality')) return;
+    this._aq ||= { low: 0, high: 0, pr: this.quality.pixelRatio, max: this.quality.pixelRatio };
+    const aq = this._aq;
+    if (this.fps < 40) { aq.low += dt; aq.high = 0; }
+    else if (this.fps > 57) { aq.high += dt; aq.low = 0; }
+    else { aq.low = Math.max(0, aq.low - dt); aq.high = Math.max(0, aq.high - dt); }
+    let pr = aq.pr;
+    if (aq.low > 4 && pr > 0.75) pr = Math.max(0.75, pr - 0.25);
+    else if (aq.high > 12 && pr < aq.max) pr = Math.min(aq.max, pr + 0.25);
+    if (pr !== aq.pr) {
+      aq.pr = pr;
+      aq.low = aq.high = 0;
+      this.renderer.setPixelRatio(pr);
+      this.resize();
+    }
   }
 
   // テスト・デバッグ用：描画せずに時間を進める
@@ -541,7 +564,7 @@ class Game {
     }
 
     // カメラ
-    if (this.state === 'results' && this.podiumCam) {
+    if (this.state === 'results' && this.podiumCam && this.podium) {
       const pc = this.podiumCam;
       pc.a += dt * 0.25;
       const c = this.cameras[0];
@@ -641,7 +664,8 @@ class Game {
       if (d2 < 2.2 * 2.2 || (behindCam && r.dist < keep.dist - 0.4 && r.dist > keep.dist - 7 && d2 < 5.2 * 5.2)) {
         root.visible = false;
         hidden.push(root);
-      }
+        r._camHidden = 2;
+      } else if (r._camHidden) r._camHidden--;
     }
     return hidden;
   }

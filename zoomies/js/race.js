@@ -7,6 +7,7 @@ import { RiderModel } from './rider-model.js';
 import { Emitter, clamp, mod, mulberry32, shuffle, lerp } from './util.js';
 
 const GROUP_GAP = 22; // m：これ以上離れたら別集団
+const MARK = 5; // m：タイム差計測用の通過記録の間隔
 const PTS = [10, 6, 4, 2, 1];
 
 export class Rider {
@@ -112,6 +113,31 @@ export class Race extends Emitter {
     this._ctx = {};
     this.createRiders(players);
     this.placeOnGrid();
+    const N = this.isRace ? Math.ceil(this.raceDist / MARK) + 60 : 4000;
+    for (const r of this.riders) {
+      r.passT = new Float32Array(N).fill(NaN);
+      r.passN = N;
+      r.nextMark = Math.max(0, Math.ceil(r.dist / MARK) * MARK);
+    }
+  }
+
+  // 距離 d を通過した時刻（記録がなければ null）
+  timeAt(r, d) {
+    if (d < 0) return null;
+    const i = Math.floor(d / MARK);
+    const top = r.nextMark / MARK;
+    if (i + 1 >= top || i <= top - r.passN) return null;
+    const t0 = r.passT[i % r.passN], t1 = r.passT[(i + 1) % r.passN];
+    if (Number.isNaN(t0) || Number.isNaN(t1)) return null;
+    return t0 + (t1 - t0) * ((d - i * MARK) / MARK);
+  }
+
+  // a が b より何秒前にいるか（同じ地点の通過時刻差）
+  gapSec(a, b) {
+    if (a.dist < b.dist) return -this.gapSec(b, a);
+    const ta = this.timeAt(a, b.dist);
+    if (ta === null) return (a.dist - b.dist) / Math.max(4, b.v);
+    return this.t - ta;
   }
 
   // ---------------------------------------------------------------
@@ -466,6 +492,11 @@ export class Race extends Emitter {
       }
       r.prevDist = r.dist;
       r.dist += r.v * dt;
+      while (r.dist >= r.nextMark) {
+        const f = clamp((r.nextMark - r.prevDist) / Math.max(1e-6, r.dist - r.prevDist), 0, 1);
+        r.passT[Math.floor(r.nextMark / MARK) % r.passN] = this.t - dt + f * dt;
+        r.nextMark += MARK;
+      }
       // 横移動
       const err = r.targetLat - r.lat;
       const dv = clamp(err * 1.6, -1.3, 1.3);
