@@ -364,7 +364,9 @@ export class PlayerHUD {
       const dd = o.dist - me.dist;
       const b = this.bubbles.get(o.id);
       if (b) { b.t -= dt; if (b.t <= 0) this.bubbles.delete(o.id); }
-      const show = ((dd > -30 && dd < 70) || !!b) && !(o._camHidden && !this.twoP);
+      // 名札は近くのライダー・ライバル・しゃべっているライダーだけ（ごちゃつき防止）
+      const near = (dd > -12 && dd < 40) || (o.rival && dd > -30 && dd < 120) || (o.isPlayer && dd > -60 && dd < 150);
+      const show = (near || !!b) && !(o._camHidden && !this.twoP);
       if (!show) continue;
       o.model.headWorld(v);
       v.project(camera);

@@ -204,11 +204,16 @@ function addEar(pl, a, side) {
 function buildHead(a, helmet, opts = {}) {
   const pl = new PartList();
   const fur = a.fur;
-  pl.sphere(HEAD_C.toArray(), HEAD_R, fur, [1.06, 0.97, 1.0], [0, 0, 0], 24, 18);
-  // ほっぺ・口元
   if (a.extra === 'penguin') {
-    pl.sphere([0, HEAD_C.y - 0.025, HEAD_C.z + 0.09], 0.21, a.fur2, [1.05, 0.85, 0.75], [0, 0, 0], 18, 14);
+    // 白い顔に黒いフード（頭頂と後ろ側）
+    pl.sphere(HEAD_C.toArray(), HEAD_R, a.fur2, [1.06, 0.97, 1.0], [0, 0, 0], 24, 18);
+    const hood = (phiStart, phiLen, thStart, thLen) => pl.geo(new THREE.SphereGeometry(HEAD_R + 0.004, 24, 14, phiStart, phiLen, thStart, thLen), fur, mat(HEAD_C.toArray(), [0, 0, 0], [1.06, 0.97, 1.0]));
+    hood(Math.PI / 2 + 0.95, Math.PI * 2 - 1.9, 0, Math.PI);
+    hood(0, Math.PI * 2, 0, 0.72);
+  } else {
+    pl.sphere(HEAD_C.toArray(), HEAD_R, fur, [1.06, 0.97, 1.0], [0, 0, 0], 24, 18);
   }
+  // ほっぺ・口元
   if (a.extra === 'cheeks') {
     for (const s of [1, -1]) pl.sphere([0.14 * s, HEAD_C.y - 0.085, HEAD_C.z + 0.12], 0.105, a.fur2, [1, 0.85, 0.9], [0, 0, 0], 14, 10);
   }
@@ -358,10 +363,11 @@ function buildTail(a) {
   return pl.build();
 }
 
-function limbGeo(len, r, color, sock = null, sockColor = 0xffffff) {
+function limbGeo(len, r, color, sock = null, sockColor = 0xffffff, paw = null) {
   const pl = new PartList();
   pl.capsule([0, 0, 0], [0, len, 0], r, color, 10);
   if (sock) pl.cyl([0, len - sock, 0], r * 1.08, r * 1.08, 0.05, sockColor, [0, 0, 0], 10);
+  if (paw !== null) pl.sphere([0, len, 0], 0.052, paw, [1, 0.9, 1.1]);
   return pl.build();
 }
 
@@ -372,11 +378,6 @@ function buildShoe(color) {
   return pl.build();
 }
 
-function buildPaw(color) {
-  const pl = new PartList();
-  pl.sphere([0, 0, 0], 0.052, color, [1, 0.9, 1.1]);
-  return pl.build();
-}
 
 function starGeo() {
   const pl = new PartList();
@@ -471,11 +472,12 @@ export class RiderModel {
     this.shoeR = mk(this.shoeL.geometry);
     this.upperL = mk(limbGeo(UPPER, 0.052, jersey));
     this.upperR = mk(this.upperL.geometry);
-    this.foreL = mk(limbGeo(FORE, 0.043, limb));
+    // 前腕と手（肉球）は1つのメッシュに
+    this.foreL = mk(limbGeo(FORE, 0.043, limb, null, 0xffffff, limb));
     this.foreR = mk(this.foreL.geometry);
-    this.pawL = mk(buildPaw(limb));
-    this.pawR = mk(this.pawL.geometry);
-    this.lean.add(this.thighL, this.thighR, this.shinL, this.shinR, this.shoeL, this.shoeR, this.upperL, this.upperR, this.foreL, this.foreR, this.pawL, this.pawR);
+    this.lean.add(this.thighL, this.thighR, this.shinL, this.shinR, this.shoeL, this.shoeR, this.upperL, this.upperR, this.foreL, this.foreR);
+    // 小さな部品は影を落とさない（描画負荷の軽減）
+    for (const m of [this.shoeL, this.shoeR, this.upperL, this.upperR, this.foreL, this.foreR, this.tail]) m.castShadow = false;
 
     // パワーアップのオーラ
     this.aura = new THREE.Sprite(new THREE.SpriteMaterial({ map: glowTexture(), color: 0xffffff, transparent: true, blending: THREE.AdditiveBlending, depthWrite: false, opacity: 0 }));
@@ -610,12 +612,8 @@ export class RiderModel {
         ik2(this._sh, this._hand, UPPER, FORE, side > 0 ? ARM_BEND_L : ARM_BEND_R, this._elbow);
         const up = side > 0 ? this.upperL : this.upperR;
         const fo = side > 0 ? this.foreL : this.foreR;
-        const paw = side > 0 ? this.pawL : this.pawR;
         orientY(up, this._sh, this._elbow);
-        _v1.subVectors(this._hand, this._elbow);
-        if (_v1.length() > FORE) this._hand.copy(this._elbow).addScaledVector(_v1.normalize(), FORE);
         orientY(fo, this._elbow, this._hand);
-        paw.position.copy(this._hand);
       }
     }
 
