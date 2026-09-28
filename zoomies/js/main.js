@@ -14,6 +14,7 @@ import { SpeedLines, WindStreaks, Confetti } from './fx.js';
 import { Commentary } from './commentary.js';
 import { UI } from './ui.js';
 import { store } from './storage.js';
+import { canvasTexture, FONT_POP } from './geom.js';
 import { clamp, params, fmtTime, damp, escapeHtml, pick } from './util.js';
 
 function detectQuality(setting) {
@@ -383,10 +384,9 @@ class Game {
     this.course.worldPos(s, lat, base);
     base.y = this.world.heightAt(base.x, base.z);
     const heights = [1.2, 0.85, 0.6];
-    const offs = [0, 1, -1];
+    const offs = [0, -1, 1]; // 2位は正面から見て左、3位は右
     const cols = [0xffd23f, 0xd9dde6, 0xe8a060];
     const fwd = new THREE.Vector3(smp.tx, 0, smp.tz);
-    const mat = new THREE.MeshToonMaterial({ color: 0xffffff });
     top3.forEach((r, i) => {
       if (!r) return;
       const block = new THREE.Mesh(new THREE.BoxGeometry(1.4, heights[i], 1.6), new THREE.MeshToonMaterial({ color: cols[i] }));
@@ -394,7 +394,18 @@ class Game {
       block.castShadow = true;
       block.receiveShadow = true;
       g.add(block);
-      const num = new THREE.Mesh(new THREE.CircleGeometry(0.32, 20), mat);
+      const tex = canvasTexture(128, 128, (cx, w, h) => {
+        cx.fillStyle = '#fff';
+        cx.beginPath();
+        cx.arc(w / 2, h / 2, w / 2 - 2, 0, Math.PI * 2);
+        cx.fill();
+        cx.fillStyle = ['#e0a100', '#8a93a6', '#b86a2c'][i];
+        cx.font = `92px ${FONT_POP}`;
+        cx.textAlign = 'center';
+        cx.textBaseline = 'middle';
+        cx.fillText(String(i + 1), w / 2, h / 2 + 6);
+      });
+      const num = new THREE.Mesh(new THREE.CircleGeometry(0.34, 24), new THREE.MeshBasicMaterial({ map: tex, transparent: true }));
       num.position.set(offs[i] * 1.5, heights[i] * 0.55, 0.81);
       g.add(num);
       r.podium = { x: offs[i] * 1.5, y: heights[i] };
