@@ -14,7 +14,7 @@ import { SpeedLines, WindStreaks, Confetti } from './fx.js';
 import { Commentary } from './commentary.js';
 import { UI } from './ui.js';
 import { store } from './storage.js';
-import { clamp, params, fmtTime, damp } from './util.js';
+import { clamp, params, fmtTime, damp, escapeHtml, pick } from './util.js';
 
 function detectQuality(setting) {
   const q = params.get('quality') || setting;
@@ -145,6 +145,9 @@ class Game {
     this.ui.hideTouch();
     this.globalHud.classList.add('hidden');
     this.globalHud.classList.remove('split');
+    document.getElementById('vs').classList.add('hidden');
+    this.vsShown = false;
+    this.hudLayer.classList.remove('intro-hide');
     this.timeScale = 1;
     this.releaseWakeLock();
   }
@@ -223,6 +226,7 @@ class Game {
     this.globalHud.classList.remove('hidden');
     this.globalHud.classList.toggle('split', twoP);
     this.hudLayer.classList.remove('hidden');
+    this.hudLayer.classList.add('intro-hide');
     if (matchMedia('(pointer: coarse)').matches || params.get('touch')) this.ui.buildTouch(controls, twoP);
     this.commentary = new Commentary({
       race: this.race, huds: this.huds, audio: this.audio, ticker: document.getElementById('ticker'), camRigs: this.rigs,
@@ -239,17 +243,40 @@ class Game {
       rig.cinematic('intro', { center: p.dist });
     });
     this.state = 'intro';
-    this.introT = mode === 'group' ? 1.2 : 2.6;
+    this.introT = mode === 'group' ? 1.2 : 3.2;
     this.audio.setMusicMode('race');
     this.audio.setLevel(1);
     this.finishTimer = 0;
     this.requestWakeLock();
+    this.showVS(raceMode);
     const courseName = this.course.name;
     if (raceMode === 'race') {
       this.commentary.tick(`${courseName}、${this.race.laps}周 ${(this.race.raceDist / 1000).toFixed(1)}キロのレース！ まもなくスタート！`, true, 2);
     } else {
       this.commentary.tick(`${courseName}でグループライド！ みんなでゆったり走ろう`, true, 2);
     }
+  }
+
+  // スタート前の VS 演出
+  showVS(raceMode) {
+    const el = document.getElementById('vs');
+    const race = this.race;
+    const card = (r, side, label) => `<div class="vs-card ${side}" style="--c:${'#' + r.jersey.toString(16).padStart(6, '0')}"><span class="em">${r.emoji}</span><span class="nm">${escapeHtml(r.name)}</span><small>${label}</small></div>`;
+    const title = `${this.course.def.emoji} ${escapeHtml(this.course.name)}${raceMode === 'race' ? ` ・ ${(race.raceDist / 1000).toFixed(1)}km` : ''}`;
+    let html = '';
+    if (this.twoP) {
+      html = card(race.players[0], 'l', 'P1') + '<div class="vs-mid">VS</div>' + card(race.players[1], 'r', 'P2');
+    } else if (raceMode === 'race') {
+      const rival = race.riders.find((r) => r.rival);
+      if (rival) {
+        html = card(race.players[0], 'l', `FTP ${Math.round(race.players[0].cp)}W`) + '<div class="vs-mid">VS</div>' + card(rival, 'r', '🔥 ライバル');
+        setTimeout(() => this.race === race && race.say(rival, pick(Math.random, ['今日こそ決着をつけようぜ！', 'オレの背中、見せてやるよ。', '全力でかかってこい！']), 1), 900);
+      }
+    }
+    if (!html) { el.classList.add('hidden'); return; }
+    el.innerHTML = `<div class="vs-title">${title}</div>` + html;
+    el.classList.remove('hidden', 'out');
+    this.vsShown = true;
   }
 
   onPlayerFinish(r) {
@@ -517,7 +544,10 @@ class Game {
 
     if (st === 'intro') {
       this.introT -= dt;
+      if (this.vsShown && this.introT < 0.45) document.getElementById('vs').classList.add('out');
       if (this.introT <= 0) {
+        if (this.vsShown) { document.getElementById('vs').classList.add('hidden'); this.vsShown = false; }
+        this.hudLayer.classList.remove('intro-hide');
         this.state = 'countdown';
         if (race.mode === 'group') {
           race.state = 'racing';
@@ -649,19 +679,35 @@ class Game {
     }
   }
 
-  // カメラの直前にいるライダーは視界をふさぐので隠す
+  // カメラとプレイヤーの間にいるライダーは視界をふさぐので隠す
   hideNearCamera(cam, keep) {
     const hidden = [];
     const race = this.race;
     if (!race) return hidden;
-    const behindCam = keep && ['chase', 'close'].includes(this.rigs[keep.playerIndex]?.mode) && !this.rigs[keep.playerIndex]?.cine;
+    const rig = keep ? this.rigs[keep.playerIndex] : null;
+    const checkLine = keep && rig && !rig.cine && rig.mode !== 'heli';
+    const A = cam.position;
+    const B = this._hB || (this._hB = new THREE.Vector3());
+    const P = this._hP || (this._hP = new THREE.Vector3());
+    let ab2 = 0;
+    if (checkLine) {
+      B.copy(keep.model.root.position).y += 0.9;
+      ab2 = B.distanceToSquared(A);
+    }
     for (const r of race.riders) {
       if (r === keep || r.onPodium) continue;
       const root = r.model.root;
       if (!root.visible) continue;
-      const d2 = root.position.distanceToSquared(cam.position);
-      // すぐ目の前、または追走カメラとプレイヤーの間にいるライダー
-      if (d2 < 2.2 * 2.2 || (behindCam && r.dist < keep.dist - 0.4 && r.dist > keep.dist - 7 && d2 < 5.2 * 5.2)) {
+      let hide = root.position.distanceToSquared(A) < 2.2 * 2.2;
+      if (!hide && checkLine && ab2 > 0.01) {
+        P.copy(root.position).y += 0.8;
+        const t = ((P.x - A.x) * (B.x - A.x) + (P.y - A.y) * (B.y - A.y) + (P.z - A.z) * (B.z - A.z)) / ab2;
+        if (t > 0 && t < 0.92) {
+          const cx = A.x + (B.x - A.x) * t - P.x, cy = A.y + (B.y - A.y) * t - P.y, cz = A.z + (B.z - A.z) * t - P.z;
+          hide = cx * cx + cy * cy + cz * cz < 1.15 * 1.15;
+        }
+      }
+      if (hide) {
         root.visible = false;
         hidden.push(root);
         r._camHidden = 2;

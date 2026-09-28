@@ -207,7 +207,8 @@ kbd { font-family: var(--font); font-weight: 800; background: #fff; border: 2px 
 .res-table .chip { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 6px; vertical-align: middle; }
 
 /* ---------- HUD ---------- */
-#hud-layer { position: absolute; inset: 0; pointer-events: none; z-index: 10; }
+#hud-layer { position: absolute; inset: 0; pointer-events: none; z-index: 10; transition: opacity 0.5s; }
+#hud-layer.intro-hide { opacity: 0; }
 .hud { position: absolute; inset: 0; overflow: hidden; color: #fff; }
 .panel, .hud-tr, .hud-tc {
   background: var(--panel);
@@ -377,6 +378,31 @@ kbd { font-family: var(--font); font-weight: 800; background: #fff; border: 2px 
 #cam-label { position: absolute; right: 14px; top: 66px; background: var(--panel-strong); color: #fff; font-size: 13px; font-weight: 800; padding: 4px 10px; border-radius: 10px; opacity: 0; transition: opacity 0.4s; }
 #cam-label.show { opacity: 1; }
 #global-hud.split #cam-label { right: auto; left: 50%; transform: translateX(-50%); }
+
+/* VS 演出 */
+#vs { position: absolute; left: 0; right: 0; top: 18%; display: flex; align-items: center; justify-content: center; gap: 18px; }
+#vs .vs-card {
+  background: #fff; border-radius: 24px; padding: 12px 22px; min-width: 190px; text-align: center; box-shadow: 0 10px 30px rgba(40, 10, 60, 0.35);
+  font-family: var(--pop); color: var(--ink);
+}
+#vs .vs-card .em { font-size: 56px; line-height: 1.1; display: block; }
+#vs .vs-card .nm { font-size: 24px; }
+#vs .vs-card small { display: block; font-family: var(--font); font-weight: 800; font-size: 13px; color: #7a6d90; }
+#vs .vs-card.l { animation: vsl 0.6s cubic-bezier(0.2, 1.4, 0.4, 1) both; border-bottom: 8px solid var(--c, var(--pink)); }
+#vs .vs-card.r { animation: vsr 0.6s cubic-bezier(0.2, 1.4, 0.4, 1) both; border-bottom: 8px solid var(--c, #333); }
+#vs .vs-mid { font-family: var(--pop); font-size: 64px; color: var(--yellow); -webkit-text-stroke: 4px var(--pink2); paint-order: stroke fill; animation: pop 0.5s 0.35s both cubic-bezier(0.2, 1.8, 0.4, 1); }
+#vs .vs-title { position: absolute; top: -52px; left: 0; right: 0; text-align: center; font-family: var(--pop); color: #fff; font-size: 26px; text-shadow: 0 3px 0 var(--pink2), 0 6px 14px rgba(60, 20, 80, 0.5); animation: pop 0.4s both; }
+#vs.out { opacity: 0; transform: scale(1.1); transition: all 0.4s; }
+@keyframes vsl { from { transform: translateX(-60vw) rotate(-8deg); } to { transform: none; } }
+@keyframes vsr { from { transform: translateX(60vw) rotate(8deg); } to { transform: none; } }
+@media (max-width: 640px) {
+  #vs { gap: 8px; top: 22%; }
+  #vs .vs-card { min-width: 0; padding: 8px 12px; }
+  #vs .vs-card .em { font-size: 40px; }
+  #vs .vs-card .nm { font-size: 17px; }
+  #vs .vs-mid { font-size: 40px; }
+  #vs .vs-title { font-size: 18px; top: -40px; }
+}
 
 /* タッチ操作 */
 #touch { position: absolute; inset: 0; pointer-events: none; z-index: 13; }

@@ -6,7 +6,7 @@ import { PartList, mergeParts, mat, canvasTexture, glowTexture, FONT_POP, FONT_R
 
 const TERRAIN = {
   meadow: { hills: [16, 82], peak: 175, bank: 14, fall: [110, 480], snow: 128 },
-  coast: { hills: [10, 55], peak: 115, bank: 8, fall: [45, 300], snow: 999 },
+  coast: { hills: [10, 55], peak: 115, bank: 2.5, fall: [22, 230], snow: 999 },
   night: { hills: [0.5, 4], peak: 0, bank: 2.5, fall: [80, 360], snow: 999 },
 };
 
