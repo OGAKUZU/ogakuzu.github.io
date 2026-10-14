@@ -1,0 +1,857 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>コマドリ！ かんたんストップモーション</title>
+  <meta name="description" content="写真を撮って並べるだけ。少ない枚数でもなめらかにつなぐ「かんたん」モードと、1枚＝1コマの「そのまま」モードでストップモーション動画が作れます。">
+  <meta name="theme-color" content="#ff8a5c">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="コマドリ！ かんたんストップモーション">
+  <meta property="og:description" content="写真を撮って並べるだけでストップモーション動画に。2〜3枚からでもOK！">
+  <meta property="og:url" content="https://ogakuzu.github.io/stopmotion/">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎞️</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@500;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #fff7f0;
+      --card: #ffffff;
+      --ink: #3a2e2a;
+      --sub: #8a7a72;
+      --line: #f0e2d8;
+      --accent: #ff7a45;
+      --accent-ink: #ffffff;
+      --accent-soft: #ffe7da;
+      --mint: #2fb59a;
+      --danger: #e5484d;
+      --shadow: 0 4px 16px rgba(120, 70, 40, .10);
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #1d1916;
+        --card: #2a2420;
+        --ink: #f6ece6;
+        --sub: #b5a59c;
+        --line: #3d3430;
+        --accent: #ff8a5c;
+        --accent-ink: #1d1916;
+        --accent-soft: #4a2f22;
+        --mint: #4fd1b5;
+        --danger: #ff6b6f;
+        --shadow: 0 4px 16px rgba(0, 0, 0, .35);
+      }
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; }
+    body {
+      background: var(--bg);
+      color: var(--ink);
+      font-family: "M PLUS Rounded 1c", system-ui, -apple-system, "Hiragino Maru Gothic ProN", sans-serif;
+      font-weight: 500;
+      -webkit-tap-highlight-color: transparent;
+      padding-bottom: env(safe-area-inset-bottom);
+    }
+    button { font: inherit; color: inherit; cursor: pointer; }
+    .wrap { max-width: 720px; margin: 0 auto; padding: 12px 16px 40px; }
+
+    header { text-align: center; padding: 10px 0 6px; }
+    header h1 { margin: 0; font-size: 26px; font-weight: 800; letter-spacing: .02em; }
+    header h1 span { color: var(--accent); }
+    header p { margin: 4px 0 0; color: var(--sub); font-size: 13px; }
+
+    /* モード切替 */
+    .modes { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 14px 0 6px; }
+    .mode {
+      border: 2px solid var(--line); background: var(--card); border-radius: 16px;
+      padding: 10px 8px; text-align: center; box-shadow: var(--shadow);
+      transition: border-color .15s, background .15s;
+    }
+    .mode b { display: block; font-size: 17px; font-weight: 800; }
+    .mode small { display: block; color: var(--sub); font-size: 12px; margin-top: 2px; }
+    .mode[aria-pressed="true"] { border-color: var(--accent); background: var(--accent-soft); }
+    .mode-hint { text-align: center; font-size: 13px; color: var(--sub); margin: 6px 0 0; min-height: 1.4em; }
+
+    /* カード */
+    .card { background: var(--card); border-radius: 20px; padding: 14px; margin-top: 14px; box-shadow: var(--shadow); }
+    .card h2 { margin: 0 0 10px; font-size: 17px; font-weight: 800; display: flex; align-items: center; gap: 8px; }
+    .step { display: inline-grid; place-items: center; width: 26px; height: 26px; border-radius: 50%; background: var(--accent); color: var(--accent-ink); font-size: 14px; }
+    .count { margin-left: auto; font-size: 13px; color: var(--sub); font-weight: 500; }
+
+    .btn {
+      border: none; border-radius: 14px; padding: 14px 12px; font-size: 16px; font-weight: 800;
+      background: var(--accent-soft); color: var(--ink); display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+      min-height: 52px; transition: transform .08s; text-decoration: none;
+    }
+    .btn:active { transform: scale(.97); }
+    .btn.primary { background: var(--accent); color: var(--accent-ink); }
+    .btn.small { min-height: 40px; padding: 8px 10px; font-size: 14px; border-radius: 12px; }
+    .btn:disabled { opacity: .4; pointer-events: none; }
+    .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+
+    /* カメラ */
+    .cam { display: none; margin-top: 10px; }
+    .cam.on { display: block; }
+    .viewer { position: relative; background: #000; border-radius: 14px; overflow: hidden; aspect-ratio: 4 / 3; }
+    .viewer video, .viewer .onion { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; }
+    .viewer .onion { opacity: .35; pointer-events: none; display: none; }
+    .viewer .flash { position: absolute; inset: 0; background: #fff; opacity: 0; pointer-events: none; }
+    .viewer .flash.go { animation: flash .25s ease-out; }
+    @keyframes flash { from { opacity: .85; } to { opacity: 0; } }
+    .cam-bar { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 8px; margin-top: 10px; }
+    .cam-bar .side { display: flex; gap: 6px; }
+    .cam-bar .side.right { justify-content: flex-end; }
+    .shutter {
+      width: 76px; height: 76px; border-radius: 50%; border: 5px solid var(--accent); background: var(--card);
+      display: grid; place-items: center; padding: 0;
+    }
+    .shutter::after { content: ""; width: 56px; height: 56px; border-radius: 50%; background: var(--accent); transition: transform .08s; }
+    .shutter:active::after { transform: scale(.88); }
+    .chip { border: 2px solid var(--line); background: var(--card); border-radius: 12px; padding: 8px 10px; font-size: 13px; font-weight: 800; min-height: 44px; }
+    .chip[aria-pressed="true"] { border-color: var(--accent); background: var(--accent-soft); }
+
+    /* コマ一覧 */
+    .strip { display: flex; gap: 8px; overflow-x: auto; padding: 4px 2px 10px; scroll-snap-type: x proximity; }
+    .strip:empty::before { content: "まだ写真がありません"; color: var(--sub); font-size: 14px; padding: 22px 4px; }
+    .thumb {
+      position: relative; flex: 0 0 auto; width: 84px; height: 84px; border-radius: 12px; overflow: hidden;
+      border: 3px solid transparent; padding: 0; background: var(--line); scroll-snap-align: start;
+    }
+    .thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .thumb span { position: absolute; left: 4px; top: 4px; background: rgba(0,0,0,.6); color: #fff; font-size: 11px; border-radius: 8px; padding: 1px 6px; }
+    .thumb.sel { border-color: var(--accent); }
+    .frame-tools { display: none; grid-template-columns: repeat(4, 1fr); gap: 6px; }
+    .frame-tools.on { display: grid; }
+    .frame-tools .btn.del { color: var(--danger); }
+    .tiny-link { background: none; border: none; color: var(--sub); font-size: 13px; text-decoration: underline; padding: 8px 0 0; }
+
+    /* プレビュー */
+    .stage { position: relative; background: #000; border-radius: 14px; overflow: hidden; }
+    .stage canvas { display: block; width: 100%; height: auto; }
+    .stage .play {
+      position: absolute; right: 10px; bottom: 10px; width: 52px; height: 52px; border-radius: 50%; border: none;
+      background: rgba(0,0,0,.55); color: #fff; font-size: 22px;
+    }
+    .settings { display: grid; gap: 12px; margin-top: 12px; }
+    .set label.title { display: flex; justify-content: space-between; font-size: 14px; font-weight: 800; margin-bottom: 4px; }
+    .set label.title output { color: var(--accent); }
+    .set input[type=range] { width: 100%; accent-color: var(--accent); height: 32px; }
+    .set .ends { display: flex; justify-content: space-between; font-size: 11px; color: var(--sub); margin-top: -4px; }
+    .chips { display: flex; flex-wrap: wrap; gap: 6px; }
+    .only-easy, .only-simple { display: none; }
+    body.easy .only-easy, body.simple .only-simple { display: block; }
+    .info { font-size: 12px; color: var(--sub); text-align: center; margin: 10px 0 0; }
+    .make { width: 100%; margin-top: 12px; font-size: 18px; min-height: 60px; }
+
+    /* モーダル */
+    .modal { position: fixed; inset: 0; background: rgba(0,0,0,.6); display: none; align-items: center; justify-content: center; padding: 16px; z-index: 10; }
+    .modal.on { display: flex; }
+    .sheet { background: var(--card); border-radius: 20px; padding: 16px; width: 100%; max-width: 520px; max-height: 92vh; overflow: auto; }
+    .sheet h3 { margin: 0 0 10px; font-size: 18px; font-weight: 800; text-align: center; }
+    .sheet video, .sheet canvas { width: 100%; border-radius: 12px; background: #000; display: block; }
+    .bar { height: 10px; border-radius: 6px; background: var(--line); overflow: hidden; margin: 12px 0 4px; }
+    .bar i { display: block; height: 100%; width: 0; background: var(--accent); }
+    .sheet .row2 { margin-top: 12px; }
+    .sheet .note { font-size: 12px; color: var(--sub); text-align: center; margin: 8px 0 0; }
+
+    .toast {
+      position: fixed; left: 50%; bottom: calc(20px + env(safe-area-inset-bottom)); transform: translateX(-50%) translateY(20px);
+      background: var(--ink); color: var(--bg); padding: 10px 16px; border-radius: 12px; font-size: 14px; opacity: 0;
+      transition: .2s; pointer-events: none; z-index: 20; max-width: calc(100% - 32px); text-align: center;
+    }
+    .toast.on { opacity: 1; transform: translateX(-50%); }
+  </style>
+</head>
+<body class="easy">
+<div class="wrap">
+  <header>
+    <h1>🎞️ コマ<span>ドリ！</span></h1>
+    <p>写真を撮って並べるだけ。ストップモーション動画がすぐできる</p>
+  </header>
+
+  <div class="modes" role="group" aria-label="作り方">
+    <button class="mode" data-mode="easy" aria-pressed="true"><b>✨ かんたん</b><small>2〜5枚でもOK</small></button>
+    <button class="mode" data-mode="simple" aria-pressed="false"><b>📸 そのまま</b><small>1枚＝1コマ</small></button>
+  </div>
+  <p class="mode-hint" id="modeHint"></p>
+
+  <!-- ① 撮る -->
+  <section class="card">
+    <h2><span class="step">1</span>写真を撮る・選ぶ</h2>
+    <div class="row2">
+      <button class="btn primary" id="openCam">📷 カメラで撮る</button>
+      <button class="btn" id="pickBtn">🖼 写真を選ぶ</button>
+    </div>
+    <input type="file" id="picker" accept="image/*" multiple hidden>
+
+    <div class="cam" id="cam">
+      <div class="viewer">
+        <video id="video" playsinline muted autoplay></video>
+        <img class="onion" id="onion" alt="">
+        <div class="flash" id="flash"></div>
+      </div>
+      <div class="cam-bar">
+        <div class="side">
+          <button class="chip" id="onionBtn" aria-pressed="true" title="前のコマを薄く重ねて表示">👻 重ね</button>
+          <button class="chip" id="flipBtn" title="カメラ切り替え">🔄</button>
+        </div>
+        <button class="shutter" id="shutter" aria-label="撮影"></button>
+        <div class="side right">
+          <button class="chip" id="closeCam">✓ 完了</button>
+        </div>
+      </div>
+      <p class="info">👻 前のコマが薄く重なるので、少しずつ動かして撮ってね</p>
+    </div>
+  </section>
+
+  <!-- ② 並べる -->
+  <section class="card">
+    <h2><span class="step">2</span>並べる<span class="count" id="count">0枚</span></h2>
+    <div class="strip" id="strip"></div>
+    <div class="frame-tools" id="frameTools">
+      <button class="btn small" id="mvLeft">◀ 前へ</button>
+      <button class="btn small" id="mvRight">後へ ▶</button>
+      <button class="btn small" id="dupBtn">⧉ 複製</button>
+      <button class="btn small del" id="delBtn">🗑 削除</button>
+    </div>
+    <button class="tiny-link" id="clearAll">ぜんぶ消してやり直す</button>
+  </section>
+
+  <!-- ③ 動画にする -->
+  <section class="card">
+    <h2><span class="step">3</span>見て・動画にする</h2>
+    <div class="stage">
+      <canvas id="preview" width="1280" height="960"></canvas>
+      <button class="play" id="playBtn" aria-label="再生/停止">⏸</button>
+    </div>
+
+    <div class="settings">
+      <div class="set only-easy">
+        <label class="title" for="hold">1枚の長さ <output id="holdOut"></output></label>
+        <input type="range" id="hold" min="0.2" max="2" step="0.1" value="0.6">
+        <div class="ends"><span>はやい</span><span>ゆっくり</span></div>
+      </div>
+      <div class="set only-simple">
+        <label class="title" for="fps">速さ <output id="fpsOut"></output></label>
+        <input type="range" id="fps" min="2" max="24" step="1" value="8">
+        <div class="ends"><span>ゆっくり</span><span>はやい</span></div>
+      </div>
+      <div class="set">
+        <label class="title">効果</label>
+        <div class="chips">
+          <button class="chip only-easy" data-opt="smooth" aria-pressed="true">🌫 なめらかにつなぐ</button>
+          <button class="chip only-easy" data-opt="zoom" aria-pressed="true">🔍 ゆっくりズーム</button>
+          <button class="chip only-simple" data-opt="jitter" aria-pressed="false">✋ 手作りゆれ</button>
+          <button class="chip" data-opt="boomerang" aria-pressed="false">🔁 行って戻る</button>
+        </div>
+      </div>
+      <div class="set">
+        <label class="title">くり返し</label>
+        <div class="chips" id="repeatChips">
+          <button class="chip" data-repeat="1" aria-pressed="false">1回</button>
+          <button class="chip" data-repeat="2" aria-pressed="true">2回</button>
+          <button class="chip" data-repeat="3" aria-pressed="false">3回</button>
+          <button class="chip" data-repeat="5" aria-pressed="false">5回</button>
+        </div>
+      </div>
+      <div class="set">
+        <label class="title">形</label>
+        <div class="chips" id="aspectChips">
+          <button class="chip" data-aspect="auto" aria-pressed="true">自動</button>
+          <button class="chip" data-aspect="16:9" aria-pressed="false">横長</button>
+          <button class="chip" data-aspect="9:16" aria-pressed="false">縦長</button>
+          <button class="chip" data-aspect="1:1" aria-pressed="false">正方形</button>
+        </div>
+      </div>
+    </div>
+    <p class="info" id="lengthInfo"></p>
+    <button class="btn primary make" id="makeBtn">🎬 動画にする</button>
+  </section>
+</div>
+
+<div class="modal" id="modal">
+  <div class="sheet">
+    <h3 id="mTitle">動画を作っています…</h3>
+    <div id="mBody"></div>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+(() => {
+  'use strict';
+  const $ = (id) => document.getElementById(id);
+  const MAX_SIDE = 1280;
+
+  // ---------- 状態 ----------
+  const state = {
+    mode: 'easy',
+    frames: [],           // { id, blob, url, img }
+    sel: -1,
+    hold: 0.6,
+    fps: 8,
+    smooth: true, zoom: true, jitter: false, boomerang: false,
+    repeat: 2,
+    aspect: 'auto',
+  };
+
+  // ---------- 保存 (IndexedDB) ----------
+  const db = (() => {
+    let p;
+    const open = () => p || (p = new Promise((res, rej) => {
+      const r = indexedDB.open('komadori', 1);
+      r.onupgradeneeded = () => r.result.createObjectStore('kv');
+      r.onsuccess = () => res(r.result);
+      r.onerror = () => rej(r.error);
+    }));
+    const tx = async (mode, fn) => {
+      const d = await open();
+      return new Promise((res, rej) => {
+        const t = d.transaction('kv', mode);
+        const req = fn(t.objectStore('kv'));
+        t.oncomplete = () => res(req && req.result);
+        t.onerror = () => rej(t.error);
+      });
+    };
+    return {
+      get: (k) => tx('readonly', (s) => s.get(k)),
+      set: (k, v) => tx('readwrite', (s) => s.put(v, k)),
+    };
+  })();
+
+  let saveTimer;
+  function save() {
+    clearTimeout(saveTimer);
+    saveTimer = setTimeout(() => {
+      const { mode, hold, fps, smooth, zoom, jitter, boomerang, repeat, aspect } = state;
+      db.set('project', {
+        frames: state.frames.map((f) => ({ id: f.id, blob: f.blob })),
+        settings: { mode, hold, fps, smooth, zoom, jitter, boomerang, repeat, aspect },
+      }).catch(() => {});
+    }, 300);
+  }
+
+  // ---------- 画像 ----------
+  const uid = () => Math.random().toString(36).slice(2) + Date.now().toString(36);
+
+  function loadImg(url) {
+    return new Promise((res, rej) => {
+      const img = new Image();
+      img.onload = () => res(img);
+      img.onerror = rej;
+      img.src = url;
+    });
+  }
+
+  function scaledCanvas(src, w, h) {
+    const s = Math.min(1, MAX_SIDE / Math.max(w, h));
+    const c = document.createElement('canvas');
+    c.width = Math.round(w * s);
+    c.height = Math.round(h * s);
+    c.getContext('2d').drawImage(src, 0, 0, c.width, c.height);
+    return c;
+  }
+
+  const toBlob = (c) => new Promise((res) => c.toBlob(res, 'image/jpeg', 0.9));
+
+  async function frameFromBlob(blob, id = uid()) {
+    const url = URL.createObjectURL(blob);
+    const img = await loadImg(url);
+    return { id, blob, url, img };
+  }
+
+  async function addFromFile(file) {
+    const tmpUrl = URL.createObjectURL(file);
+    try {
+      const img = await loadImg(tmpUrl);
+      const blob = await toBlob(scaledCanvas(img, img.naturalWidth, img.naturalHeight));
+      return await frameFromBlob(blob);
+    } finally {
+      URL.revokeObjectURL(tmpUrl);
+    }
+  }
+
+  function insertFrames(list) {
+    if (!list.length) return;
+    const at = state.sel >= 0 ? state.sel + 1 : state.frames.length;
+    state.frames.splice(at, 0, ...list);
+    state.sel = -1;
+    changed();
+    const strip = $('strip');
+    requestAnimationFrame(() => {
+      const el = strip.children[at + list.length - 1];
+      if (el) el.scrollIntoView({ behavior: 'smooth', inline: 'nearest', block: 'nearest' });
+    });
+  }
+
+  // ---------- コマ一覧 ----------
+  function renderStrip() {
+    const strip = $('strip');
+    strip.textContent = '';
+    state.frames.forEach((f, i) => {
+      const b = document.createElement('button');
+      b.className = 'thumb' + (i === state.sel ? ' sel' : '');
+      b.setAttribute('aria-label', `${i + 1}枚目`);
+      const im = document.createElement('img');
+      im.src = f.url; im.alt = ''; im.loading = 'lazy';
+      const n = document.createElement('span');
+      n.textContent = i + 1;
+      b.append(im, n);
+      b.onclick = () => { state.sel = state.sel === i ? -1 : i; renderStrip(); };
+      strip.append(b);
+    });
+    $('count').textContent = `${state.frames.length}枚`;
+    $('frameTools').classList.toggle('on', state.sel >= 0);
+    $('mvLeft').disabled = state.sel <= 0;
+    $('mvRight').disabled = state.sel < 0 || state.sel >= state.frames.length - 1;
+    $('clearAll').style.display = state.frames.length ? '' : 'none';
+    updateOnion();
+  }
+
+  function changed() {
+    renderStrip();
+    resizeCanvas();
+    updateInfo();
+    save();
+  }
+
+  $('mvLeft').onclick = () => move(-1);
+  $('mvRight').onclick = () => move(1);
+  function move(d) {
+    const i = state.sel, j = i + d;
+    if (i < 0 || j < 0 || j >= state.frames.length) return;
+    [state.frames[i], state.frames[j]] = [state.frames[j], state.frames[i]];
+    state.sel = j;
+    changed();
+  }
+  $('dupBtn').onclick = async () => {
+    const i = state.sel;
+    if (i < 0) return;
+    const f = await frameFromBlob(state.frames[i].blob);
+    state.frames.splice(i + 1, 0, f);
+    state.sel = i + 1;
+    changed();
+  };
+  $('delBtn').onclick = () => {
+    const i = state.sel;
+    if (i < 0) return;
+    URL.revokeObjectURL(state.frames[i].url);
+    state.frames.splice(i, 1);
+    state.sel = Math.min(i, state.frames.length - 1);
+    if (!state.frames.length) state.sel = -1;
+    changed();
+  };
+  $('clearAll').onclick = () => {
+    if (!confirm('写真をぜんぶ消しますか？')) return;
+    state.frames.forEach((f) => URL.revokeObjectURL(f.url));
+    state.frames = [];
+    state.sel = -1;
+    changed();
+  };
+
+  // ---------- 写真を選ぶ ----------
+  $('pickBtn').onclick = () => $('picker').click();
+  $('picker').onchange = async (e) => {
+    const files = [...e.target.files].sort((a, b) => a.lastModified - b.lastModified || a.name.localeCompare(b.name));
+    e.target.value = '';
+    if (!files.length) return;
+    toast(`${files.length}枚を読み込み中…`);
+    const list = [];
+    for (const f of files) {
+      try { list.push(await addFromFile(f)); } catch (_) { /* 読めない画像はスキップ */ }
+    }
+    insertFrames(list);
+    toast(`${list.length}枚 追加しました`);
+  };
+
+  // ---------- カメラ ----------
+  let stream = null, facing = 'environment';
+  const video = $('video');
+
+  async function startCam() {
+    stopStream();
+    try {
+      stream = await navigator.mediaDevices.getUserMedia({
+        video: { facingMode: facing, width: { ideal: 1920 }, height: { ideal: 1080 } }, audio: false,
+      });
+      video.srcObject = stream;
+      $('cam').classList.add('on');
+      $('openCam').disabled = true;
+      $('cam').scrollIntoView({ behavior: 'smooth', block: 'center' });
+    } catch (err) {
+      toast('カメラが使えませんでした。「写真を選ぶ」から追加してね');
+    }
+  }
+  function stopStream() {
+    if (stream) stream.getTracks().forEach((t) => t.stop());
+    stream = null;
+  }
+  $('openCam').onclick = () => {
+    if (!navigator.mediaDevices?.getUserMedia) { toast('この端末ではカメラが使えません。「写真を選ぶ」を使ってね'); return; }
+    startCam();
+  };
+  $('closeCam').onclick = () => {
+    stopStream();
+    video.srcObject = null;
+    $('cam').classList.remove('on');
+    $('openCam').disabled = false;
+  };
+  $('flipBtn').onclick = () => { facing = facing === 'environment' ? 'user' : 'environment'; startCam(); };
+
+  let onionOn = true;
+  $('onionBtn').onclick = (e) => {
+    onionOn = !onionOn;
+    e.currentTarget.setAttribute('aria-pressed', onionOn);
+    updateOnion();
+  };
+  function updateOnion() {
+    const o = $('onion');
+    const ref = state.sel >= 0 ? state.frames[state.sel] : state.frames[state.frames.length - 1];
+    if (onionOn && ref) { o.src = ref.url; o.style.display = 'block'; }
+    else { o.style.display = 'none'; }
+  }
+
+  let shooting = false;
+  $('shutter').onclick = async () => {
+    if (!stream || shooting || !video.videoWidth) return;
+    shooting = true;
+    const fl = $('flash');
+    fl.classList.remove('go'); void fl.offsetWidth; fl.classList.add('go');
+    try {
+      const blob = await toBlob(scaledCanvas(video, video.videoWidth, video.videoHeight));
+      const f = await frameFromBlob(blob);
+      // 選択中のコマがあればその後ろ、なければ最後に追加
+      if (state.sel >= 0) {
+        state.frames.splice(state.sel + 1, 0, f);
+        state.sel += 1;
+        changed();
+      } else {
+        insertFrames([f]);
+      }
+      if (navigator.vibrate) navigator.vibrate(20);
+    } finally {
+      shooting = false;
+    }
+  };
+
+  // ---------- 再生の計算 ----------
+  function sequence() {
+    const n = state.frames.length;
+    const idx = [...Array(n).keys()];
+    if (state.boomerang && n > 2) for (let i = n - 2; i >= 1; i--) idx.push(i);
+    else if (state.boomerang && n === 2) { /* 2枚なら 0→1 の往復はループで十分 */ }
+    return idx;
+  }
+  const perFrame = () => (state.mode === 'easy' ? state.hold : 1 / state.fps);
+  const loopLen = () => sequence().length * perFrame();
+  const totalLen = () => loopLen() * state.repeat;
+
+  function outSize() {
+    let a = state.aspect;
+    let r;
+    if (a === 'auto') {
+      const im = state.frames[0]?.img;
+      r = im ? im.naturalWidth / im.naturalHeight : 4 / 3;
+    } else {
+      const [w, h] = a.split(':').map(Number);
+      r = w / h;
+    }
+    // 長辺 1280、偶数ピクセル（動画エンコーダ向け）
+    let W, H;
+    if (r >= 1) { W = MAX_SIDE; H = Math.round(MAX_SIDE / r); }
+    else { H = MAX_SIDE; W = Math.round(MAX_SIDE * r); }
+    return { W: W & ~1, H: H & ~1 };
+  }
+
+  // 疑似乱数（同じコマは同じゆれ方にする）
+  const rand = (n) => { const x = Math.sin(n * 12.9898 + 78.233) * 43758.5453; return x - Math.floor(x); };
+
+  function drawImg(ctx, W, H, img, alpha, scale, dx, dy, rot) {
+    const iw = img.naturalWidth, ih = img.naturalHeight;
+    const s = Math.max(W / iw, H / ih) * scale; // cover
+    ctx.save();
+    ctx.globalAlpha = alpha;
+    ctx.translate(W / 2 + dx * W, H / 2 + dy * H);
+    if (rot) ctx.rotate(rot);
+    ctx.drawImage(img, -iw * s / 2, -ih * s / 2, iw * s, ih * s);
+    ctx.restore();
+  }
+
+  const smoothstep = (x) => { x = Math.max(0, Math.min(1, x)); return x * x * (3 - 2 * x); };
+
+  // easy モードのズーム：コマごとに方向を変えて、ゆっくり寄る
+  function zoomParams(k, f) {
+    if (!state.zoom) return [1, 0, 0];
+    const dir = [[1, 0], [-1, 0], [0, 1], [0, -1]][k % 4];
+    const p = Math.max(0, Math.min(1, f));
+    return [1.03 + 0.06 * p, dir[0] * 0.012 * p, dir[1] * 0.012 * p];
+  }
+
+  // 時刻 t(秒) の絵を描く。wrap=true なら最後のコマから先頭へもつなぐ（プレビュー用）
+  function drawAt(ctx, W, H, t, wrap) {
+    ctx.fillStyle = '#000';
+    ctx.fillRect(0, 0, W, H);
+    const seq = sequence();
+    const fr = state.frames;
+    if (!seq.length) return;
+    const per = perFrame();
+    const total = seq.length * per;
+    const local = ((t % total) + total) % total;
+    const i = Math.min(seq.length - 1, Math.floor(local / per));
+    const f = local / per - i;
+    const step = Math.floor(t / per); // 通しのコマ番号
+
+    if (state.mode === 'simple') {
+      let sc = 1, dx = 0, dy = 0, rot = 0;
+      if (state.jitter) {
+        sc = 1.03;
+        dx = (rand(step) - 0.5) * 0.012;
+        dy = (rand(step + 99) - 0.5) * 0.012;
+        rot = (rand(step + 7) - 0.5) * 0.012;
+      }
+      drawImg(ctx, W, H, fr[seq[i]].img, 1, sc, dx, dy, rot);
+      return;
+    }
+
+    const [s1, x1, y1] = zoomParams(step, f);
+    drawImg(ctx, W, H, fr[seq[i]].img, 1, s1, x1, y1, 0);
+    const hasNext = i + 1 < seq.length || wrap;
+    if (state.smooth && hasNext && seq.length > 1 && f > 0.45) {
+      const a = smoothstep((f - 0.45) / 0.55);
+      const [s2, x2, y2] = zoomParams(step + 1, 0);
+      drawImg(ctx, W, H, fr[seq[(i + 1) % seq.length]].img, a, s2, x2, y2, 0);
+    }
+  }
+
+  // ---------- プレビュー ----------
+  const pv = $('preview');
+  const pctx = pv.getContext('2d');
+  let playing = true, t0 = performance.now(), pausedAt = 0;
+
+  function resizeCanvas() {
+    const { W, H } = outSize();
+    // プレビューは半分の解像度で十分
+    const w = W >> 1, h = H >> 1;
+    if (pv.width !== w || pv.height !== h) { pv.width = w; pv.height = h; }
+  }
+
+  function tick(now) {
+    if (!exporting) {
+      const t = playing ? (now - t0) / 1000 : pausedAt;
+      if (state.frames.length) {
+        drawAt(pctx, pv.width, pv.height, t, true);
+      } else {
+        pctx.fillStyle = '#000';
+        pctx.fillRect(0, 0, pv.width, pv.height);
+        pctx.fillStyle = '#bbb';
+        pctx.font = `${Math.round(pv.width / 22)}px "M PLUS Rounded 1c", sans-serif`;
+        pctx.textAlign = 'center';
+        pctx.fillText('写真を追加すると、ここで動きます', pv.width / 2, pv.height / 2);
+      }
+    }
+    requestAnimationFrame(tick);
+  }
+  $('playBtn').onclick = () => {
+    if (playing) { pausedAt = (performance.now() - t0) / 1000; playing = false; }
+    else { t0 = performance.now() - pausedAt * 1000; playing = true; }
+    $('playBtn').textContent = playing ? '⏸' : '▶';
+  };
+
+  // ---------- 設定 ----------
+  const HINTS = {
+    easy: '写真と写真のあいだを自動でなめらかにつなぎます。2〜5枚でも動画っぽくなるよ',
+    simple: '撮った写真を1枚ずつパラパラ再生。たくさん撮るほどなめらかに動きます',
+  };
+  function setMode(m) {
+    state.mode = m;
+    document.body.className = m;
+    document.querySelectorAll('.mode').forEach((b) => b.setAttribute('aria-pressed', b.dataset.mode === m));
+    $('modeHint').textContent = HINTS[m];
+    updateInfo();
+    save();
+  }
+  document.querySelectorAll('.mode').forEach((b) => (b.onclick = () => setMode(b.dataset.mode)));
+
+  $('hold').oninput = (e) => { state.hold = +e.target.value; updateInfo(); save(); };
+  $('fps').oninput = (e) => { state.fps = +e.target.value; updateInfo(); save(); };
+
+  document.querySelectorAll('[data-opt]').forEach((b) => {
+    b.onclick = () => {
+      const k = b.dataset.opt;
+      state[k] = !state[k];
+      b.setAttribute('aria-pressed', state[k]);
+      updateInfo(); save();
+    };
+  });
+  function pickChip(groupId, attr, key, parse = (v) => v) {
+    $(groupId).querySelectorAll('.chip').forEach((b) => {
+      b.onclick = () => {
+        state[key] = parse(b.dataset[attr]);
+        syncChips();
+        resizeCanvas(); updateInfo(); save();
+      };
+    });
+  }
+  pickChip('repeatChips', 'repeat', 'repeat', Number);
+  pickChip('aspectChips', 'aspect', 'aspect');
+
+  function syncChips() {
+    document.querySelectorAll('[data-opt]').forEach((b) => b.setAttribute('aria-pressed', !!state[b.dataset.opt]));
+    document.querySelectorAll('[data-repeat]').forEach((b) => b.setAttribute('aria-pressed', +b.dataset.repeat === state.repeat));
+    document.querySelectorAll('[data-aspect]').forEach((b) => b.setAttribute('aria-pressed', b.dataset.aspect === state.aspect));
+    $('hold').value = state.hold;
+    $('fps').value = state.fps;
+  }
+
+  function updateInfo() {
+    $('holdOut').textContent = `${state.hold.toFixed(1)}秒`;
+    $('fpsOut').textContent = `1秒に${state.fps}コマ`;
+    const n = state.frames.length;
+    $('makeBtn').disabled = n < 2;
+    if (n === 0) $('lengthInfo').textContent = '';
+    else if (n < 2) $('lengthInfo').textContent = 'あと1枚以上 追加すると動画にできます';
+    else $('lengthInfo').textContent = `できあがり：約${totalLen().toFixed(1)}秒`;
+  }
+
+  // ---------- 書き出し ----------
+  let exporting = false;
+
+  function pickMime() {
+    const list = [
+      ['video/mp4;codecs=avc1.42E01E', 'mp4'],
+      ['video/mp4', 'mp4'],
+      ['video/webm;codecs=vp9', 'webm'],
+      ['video/webm;codecs=vp8', 'webm'],
+      ['video/webm', 'webm'],
+    ];
+    if (!window.MediaRecorder) return null;
+    for (const [m, ext] of list) if (MediaRecorder.isTypeSupported(m)) return { mime: m, ext };
+    return { mime: '', ext: 'webm' };
+  }
+
+  const modal = $('modal');
+  function openModal(title, body) {
+    $('mTitle').textContent = title;
+    $('mBody').textContent = '';
+    $('mBody').append(...body);
+    modal.classList.add('on');
+  }
+  function el(tag, props = {}, ...kids) {
+    const e = Object.assign(document.createElement(tag), props);
+    e.append(...kids);
+    return e;
+  }
+
+  $('makeBtn').onclick = async () => {
+    if (state.frames.length < 2 || exporting) return;
+    const fmt = pickMime();
+    const { W, H } = outSize();
+    const canvas = el('canvas', { width: W, height: H });
+    if (!fmt || !canvas.captureStream) {
+      toast('このブラウザは動画の書き出しに対応していません（Chrome・Safari最新版でお試しください）');
+      return;
+    }
+
+    exporting = true;
+    const bar = el('i');
+    const pct = el('p', { className: 'note', textContent: '0%' });
+    openModal('動画を作っています…', [canvas, el('div', { className: 'bar' }, bar), pct,
+      el('p', { className: 'note', textContent: 'このままお待ちください（画面を切り替えると止まることがあります）' })]);
+
+    const ctx = canvas.getContext('2d');
+    drawAt(ctx, W, H, 0, false);
+    const cs = canvas.captureStream(30);
+    const track = cs.getVideoTracks()[0];
+    const rec = new MediaRecorder(cs, { mimeType: fmt.mime || undefined, videoBitsPerSecond: 6_000_000 });
+    const chunks = [];
+    rec.ondataavailable = (e) => e.data.size && chunks.push(e.data);
+    const done = new Promise((res) => (rec.onstop = res));
+
+    const total = totalLen();
+    rec.start(250);
+    const start = performance.now();
+    await new Promise((res) => {
+      const step = () => {
+        const t = (performance.now() - start) / 1000;
+        const tt = Math.min(t, total - 0.001);
+        drawAt(ctx, W, H, tt, false);
+        if (track.requestFrame) track.requestFrame();
+        const p = Math.min(1, t / total);
+        bar.style.width = `${p * 100}%`;
+        pct.textContent = `${Math.round(p * 100)}%`;
+        if (t >= total + 0.15) res();
+        else requestAnimationFrame(step);
+      };
+      requestAnimationFrame(step);
+    });
+    rec.stop();
+    await done;
+    cs.getTracks().forEach((t) => t.stop());
+    exporting = false;
+
+    const type = (fmt.mime || 'video/webm').split(';')[0];
+    const blob = new Blob(chunks, { type });
+    showResult(blob, fmt.ext);
+  };
+
+  function showResult(blob, ext) {
+    const url = URL.createObjectURL(blob);
+    const d = new Date();
+    const pad = (n) => String(n).padStart(2, '0');
+    const name = `komadori-${d.getFullYear()}${pad(d.getMonth() + 1)}${pad(d.getDate())}-${pad(d.getHours())}${pad(d.getMinutes())}.${ext}`;
+    const file = new File([blob], name, { type: blob.type });
+
+    const v = el('video', { src: url, controls: true, loop: true, autoplay: true, muted: true, playsInline: true });
+    const dl = el('a', { className: 'btn primary', href: url, download: name, textContent: '💾 保存する' });
+    const canShare = navigator.canShare && navigator.canShare({ files: [file] });
+    const share = el('button', { className: 'btn', textContent: '📤 送る・共有' });
+    share.onclick = async () => {
+      try { await navigator.share({ files: [file], title: 'コマドリ！で作った動画' }); }
+      catch (e) { if (e.name !== 'AbortError') toast('共有できませんでした。「保存する」を使ってね'); }
+    };
+    const close = el('button', { className: 'btn', textContent: '✕ 閉じる' });
+    close.style.width = '100%';
+    close.style.marginTop = '8px';
+    close.onclick = () => { modal.classList.remove('on'); v.pause(); URL.revokeObjectURL(url); };
+
+    const buttons = canShare ? el('div', { className: 'row2' }, dl, share) : el('div', { className: 'row2' }, dl, close);
+    const body = [v, buttons];
+    if (canShare) body.push(close);
+    body.push(el('p', { className: 'note', textContent: `${(blob.size / 1024 / 1024).toFixed(1)}MB・${ext.toUpperCase()}形式` }));
+    if (canShare) body.push(el('p', { className: 'note', textContent: 'iPhoneは「送る・共有」→「ビデオを保存」で写真アプリに入ります' }));
+    openModal('できあがり！🎉', body);
+  }
+
+  // ---------- トースト ----------
+  let toastTimer;
+  function toast(msg) {
+    const t = $('toast');
+    t.textContent = msg;
+    t.classList.add('on');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => t.classList.remove('on'), 2600);
+  }
+
+  // ---------- 起動 ----------
+  async function init() {
+    try {
+      const p = await db.get('project');
+      if (p) {
+        Object.assign(state, p.settings || {});
+        for (const f of p.frames || []) {
+          try { state.frames.push(await frameFromBlob(f.blob, f.id)); } catch (_) {}
+        }
+      }
+    } catch (_) { /* 保存が使えない環境でも動かす */ }
+    syncChips();
+    setMode(state.mode);
+    changed();
+    requestAnimationFrame(tick);
+    if (state.frames.length) toast(`前回の続き（${state.frames.length}枚）を開きました`);
+  }
+  init();
+})();
+</script>
+</body>
+</html>
