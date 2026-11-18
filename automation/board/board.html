@@ -146,58 +146,64 @@ footer{font-size:11px;color:var(--ink-3);line-height:1.65;border-top:1px solid v
 
   <div class="top">
     <h1>朝イチ判定ボード</h1>
-    <div class="stamp">11/18 (水) 夕方 ／ 判定は外れ</div>
+    <div class="stamp">11/19 (木)</div>
   </div>
 
   <section class="verdict">
-    <div class="verdict-bar" style="background:var(--go)"></div>
+    <div class="verdict-bar" style="background:var(--hold)"></div>
     <div class="verdict-in">
       <div class="eyebrow">今日の判定</div>
-      <p class="verdict-line" style="color:var(--go)">安く始まる日。<br>選ぶならニチレイ（50%）</p>
+      <p class="verdict-line" style="color:var(--hold)">やや安く始まる日。<br>候補は40%まで</p>
       <p class="verdict-why">
-        <b>ゆうべの米国は、ダウが約1,000ドル安（終わる1時間前）。</b>エヌビディアの決算を前に、AI株がまた売られました。<br>
-        <b>CMEの日経先物は58,540円。</b>昨日の終値より約320円安い水準です。<br>
-        <b>エヌビディアの決算は、今朝6時20分ごろ発表です。このボードを作った時点では、中身は取得不可です。</b>
+        <b>ゆうべの米国は、ダウ −513ドル、ナスダック +0.41%（終わる40分前の値）。</b>利上げの見方とドル高で、金（ゴールド）が −3.16% と急に下げました。<br>
+        <b>CMEの日経先物は58,760円。</b>昨日の終値より約264円安い水準です。<br>
+        <b>今夜、米国でアンソロピックが上場します。</b>AI株の流れが変わるかもしれません。
       </p>
     </div>
   </section>
 
   <div class="ask">
-    <b>11/18の結果：</b>日経 <b>+163.85円（59,024.28円）</b>。エヌビディアは売上1,158億ドルで予想を超え、<b>寄りは +147円で安く始まりませんでした。</b><br><b>筆頭のニチレイは −2.2%。</b>優待の拡充は「300株以上」への引き下げで、100株からではありませんでした。優待を新しく始めたテックファームは +13.0%。判定は外れ（×）です。
+    <b>昨日（11/18）の結果：</b>日経 <b>+163.85円（59,024.28円）</b>。安く始まらず、筆頭のニチレイは −2.2%（×）。優待の拡充は「300株から」でした。<b>今日から、100株からでない優待の拡充は加点しません。</b>
   </div>
 
   <section class="strip">
-    <div class="cell"><span class="k">日経平均 11/17</span><span class="v dn">58,860.43</span><span class="d dn">−801.59</span></div>
-    <div class="cell"><span class="k">NYダウ 11/17</span><span class="v dn">約 −1,000</span><span class="d">終わる1時間前</span></div>
-    <div class="cell"><span class="k">ナスダック 11/17</span><span class="v dn">−1.1%</span><span class="d">終わる2時間前</span></div>
-    <div class="cell"><span class="k">エヌビディア決算</span><span class="v">取得不可</span><span class="d">6時20分ごろ発表</span></div>
-    <div class="cell"><span class="k">CME日経先物</span><span class="v dn">58,540</span><span class="d dn">終値より約 −320</span></div>
+    <div class="cell"><span class="k">日経平均 11/18</span><span class="v up">59,024.28</span><span class="d up">+163.85</span></div>
+    <div class="cell"><span class="k">NYダウ 11/18</span><span class="v dn">50,245.53</span><span class="d dn">−513.89（途中）</span></div>
+    <div class="cell"><span class="k">ナスダック 11/18</span><span class="v up">24,428.05</span><span class="d up">+0.41%（途中）</span></div>
+    <div class="cell"><span class="k">SOX</span><span class="v">取得不可</span><span class="d">—</span></div>
+    <div class="cell"><span class="k">CME日経先物</span><span class="v dn">58,760</span><span class="d dn">終値より約 −264</span></div>
   </section>
 
   <section class="no">
-    <div class="no-h" style="color:var(--ink)">🧮 昨日の引け後の材料（開示は158件）</div>
+    <div class="no-h" style="color:var(--ink)">🧮 昨日の引け後の材料（開示は150件）</div>
     <div class="tbl-wrap" style="padding:4px 10px 12px">
       <table>
         <tr><th>銘柄</th><th>中身</th><th>見込み</th></tr>
-        <tr><td><b>ニチレイ</b><br><span class="code">2871</span></td><td><b>株主優待を広げる</b>（15:30）。中身は取得不可。食品の会社で、AIの騒ぎとは関係が薄い</td><td class="num">50%</td></tr>
-        <tr><td><b>テックファーム</b><br><span class="code">3625</span></td><td><b>株主優待を新しく始める</b>（15:30）。何株からかは取得不可。グロース市場</td><td class="num">50%</td></tr>
+        <tr><td><b>アズ企画設計</b><br><span class="code">3490</span></td><td>株式分割・配当の修正・株主優待の拡充（17:00）。今の優待は100株からQUOカード年8,000円分。<b>拡充の中身は取得不可</b>なので加点していない。スタンダード市場</td><td class="num">40%</td></tr>
       </table>
     </div>
-    <p class="why" style="padding-top:0"><b>どちらも優待の中身が取れていません。</b>寄りの気配を見てから決めてください。</p>
+    <p class="why" style="padding-top:0"><b>開示が少ない日です。</b>40%ちょうどなので、寄りの気配が強いときだけ考えてください。</p>
+  </section>
+
+  <section class="no">
+    <div class="no-h">👀 見るだけ</div>
+    <ul>
+      <li><b>キーホルダー（4712）</b>：HYBE JAPANのTOBについて、会社が意見を出した（16:00）。賛成か、価格はいくらかは取得不可</li>
+      <li><b>ベルグアース（1383）</b>：終わった期の経常を大きく上方修正。もう終わった期の話なので、加点していない</li>
+    </ul>
   </section>
 
   <section class="plan">
     <div class="plan-h">今日の動き方</div>
     <ol class="steps">
-      <li><b>寄りの前に、エヌビディアの決算を確かめる</b><span class="sub">売上の予想は約1,087億ドル。次の3か月の見通しが約1,250億ドルを超えるかが焦点</span></li>
-      <li><b>決算が良くても、半導体は寄りで追わない</b><span class="sub">良い決算でも下げることがある。前場の動きを見る</span></li>
-      <li><b>買うなら、AIと関係の薄い候補</b><span class="sub">ニチレイ。テックファームは小さい会社なので少しだけ</span></li>
+      <li><b>新しく買うなら、アズ企画設計だけ</b><span class="sub">寄りの気配が強いときだけ</span></li>
+      <li><b>半導体は追わない</b><span class="sub">今夜のアンソロピック上場で、AI株が上下に振れやすい</span></li>
+      <li><b>金の関連株は寄りを見る</b><span class="sub">金の値段が急に下がった</span></li>
     </ol>
   </section>
 
   <section class="events">
-    <div class="ev hot"><span class="when">今朝</span><span class="what">エヌビディアの決算（6時20分ごろ）</span><span class="lv">★★★</span></div>
-    <div class="ev hot"><span class="when">11/19</span><span class="what">アンソロピックの上場</span><span class="lv">★★</span></div>
+    <div class="ev hot"><span class="when">今夜</span><span class="what">アンソロピックの上場（米国）</span><span class="lv">★★</span></div>
     <div class="ev"><span class="when">12/3</span><span class="what">東武住販のTOB期限</span><span class="lv">★★</span></div>
     <div class="ev"><span class="when">12/8〜9</span><span class="what">米国の金融政策の会合（FOMC）</span><span class="lv">★★★</span></div>
   </section>
@@ -210,9 +216,9 @@ footer{font-size:11px;color:var(--ink-3);line-height:1.65;border-top:1px solid v
     <div class="body">
       <div class="tbl-wrap"><table>
         <tr><th>言葉</th><th>意味</th></tr>
-        <tr><td><b>株主優待</b></td><td>株を持っている人に、会社が商品や券を贈るしくみ</td></tr>
-        <tr><td><b>見通し</b></td><td>会社が「次の3か月はこれくらい売れる」と出す予想</td></tr>
-        <tr><td><b>寄り付き</b></td><td>朝9時に、その日はじめて値段が決まること</td></tr>
+        <tr><td><b>株式分割</b></td><td>1株を何株かに分けること。1株の値段が下がり、買いやすくなる</td></tr>
+        <tr><td><b>意見表明</b></td><td>TOBを受けた会社が「賛成」「反対」などの考えを出すこと</td></tr>
+        <tr><td><b>上場</b></td><td>会社の株が、取引所で誰でも売り買いできるようになること</td></tr>
       </table></div>
     </div>
   </details>
@@ -294,9 +300,9 @@ footer{font-size:11px;color:var(--ink-3);line-height:1.65;border-top:1px solid v
   <details>
     <summary><span class="tag">正直</span>取れていないもの</summary>
     <div class="body">
-      <p><b>今朝はドライブのCSV（11/17、158件）を読みました。</b>開示が少ない日です。</p>
-      <p><b>エヌビディアの決算は、ボードを作った時点で発表前でした。</b>米国株の終値、SOX、ドル円も取得不可です。</p>
-      <p><b>ニチレイとテックファームの優待の中身は、取得不可です。</b></p>
+      <p><b>今朝はドライブのCSV（11/18、150件）を読みました。</b>開示が少ない日です。</p>
+      <p><b>米国の終値、SOX、ドル円、米10年債は取得不可です。</b>米国株の値は、終わる40分前のものです。</p>
+      <p><b>アズ企画設計の分割の比率と優待の新しい中身、キーホルダーのTOBの価格は取得不可です。</b></p>
     </div>
   </details>
 
